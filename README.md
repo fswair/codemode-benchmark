@@ -15,7 +15,7 @@ python -m codemode-benchmark
 If your environment uses the `py` launcher, this is equivalent:
 
 ```bash
-py -m codemode_benchmark
+py -m codemode-benchmark
 ```
 
 ## What It Benchmarks
@@ -45,19 +45,19 @@ Default pairs come from code defaults unless overridden by CLI or env vars.
 ### Run all scenarios with defaults
 
 ```bash
-python -m codemode_benchmark
+python -m codemode-benchmark
 ```
 
 ### Run only selected scenarios
 
 ```bash
-python -m codemode_benchmark --only flatten group_by
+python -m codemode-benchmark --only flatten group_by
 ```
 
 ### Provide model pairs from CLI
 
 ```bash
-python -m codemode_benchmark \
+python -m codemode-benchmark \
   --spec-models openrouter:google/gemini-3-flash-preview openrouter:google/gemini-3.1-flash-lite-preview \
   --explore-models openrouter:google/gemini-3-flash-preview openrouter:google/gemini-3.1-flash-lite-preview
 ```
@@ -65,29 +65,29 @@ python -m codemode_benchmark \
 ### Show effective model config and exit
 
 ```bash
-python -m codemode_benchmark --show-config
+python -m codemode-benchmark --show-config
 ```
 
 ### Set a custom run directory id
 
 ```bash
-python -m codemode_benchmark --id sonnet46_vs_flash_preview
+python -m codemode-benchmark --id sonnet46_vs_flash_preview
 ```
 
-This writes to `codemode_benchmark/sonnet46_vs_flash_preview` instead of `codemode_benchmark/run_<timestamp>`.
+This writes to `codemode-benchmark/sonnet46_vs_flash_preview` instead of `codemode-benchmark/run_<timestamp>`.
 
 ## Replay Existing Runs
 
 ### Replay one run directly
 
 ```bash
-python -m codemode_benchmark --replay codemode_benchmark/run_20260312_181510
+python -m codemode-benchmark --replay codemode-benchmark/run_20260312_181510
 ```
 
 ### Pick a run interactively from a directory
 
 ```bash
-python -m codemode_benchmark --replay-dir codemode_benchmark
+python -m codemode-benchmark --replay-dir codemode-benchmark
 ```
 
 ## Environment Variables
@@ -102,17 +102,17 @@ Example:
 ```bash
 export BENCHMARK_SPEC_MODELS="openrouter:anthropic/claude-opus-4.1,openrouter:google/gemini-3-flash-preview"
 export BENCHMARK_EXPLORATION_MODELS="openrouter:anthropic/claude-sonnet-4.6,openrouter:google/gemini-3.1-flash-lite-preview"
-python -m codemode_benchmark
+python -m codemode-benchmark
 ```
 
 CLI args override env vars.
 
 ## Output Structure
 
-A run creates a directory under `codemode_benchmark/`:
+A run creates a directory under `codemode-benchmark/`:
 
 ```text
-codemode_benchmark/
+codemode-benchmark/
   run_YYYYMMDD_HHMMSS/
     meta.json
     summary.json
