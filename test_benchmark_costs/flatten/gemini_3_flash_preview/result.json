@@ -1,0 +1,28 @@
+{
+  "scenario": "flatten",
+  "spec_model": "openrouter:google/gemini-3-flash-preview",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 27.0,
+  "cases": 34,
+  "raises_cases": 6,
+  "snippets": 35,
+  "error_snippets": 10,
+  "refinements": 0,
+  "cost_usd": 0.015552,
+  "cost_cents": 1.5552,
+  "input_tokens": 16488,
+  "output_tokens": 2436,
+  "requests": 3,
+  "price_sources": [
+    "costs.yml"
+  ],
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

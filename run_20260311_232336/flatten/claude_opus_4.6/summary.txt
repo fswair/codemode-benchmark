@@ -1,0 +1,9 @@
+Scenario : flatten
+Model    : openrouter:anthropic/claude-opus-4.6
+Success  : True
+Coverage : 100.0%
+Cases    : 30  (raises=7)
+Snippets : 26  (error_snippets=7)
+Refines  : 0
+Time     : 36.7s
+Evals    : assertion, expected, raises

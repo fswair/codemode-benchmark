@@ -1,0 +1,20 @@
+{
+  "scenario": "flatten",
+  "spec_model": "openrouter:anthropic/claude-opus-4.6",
+  "exploration_model": "openrouter:anthropic/claude-opus-4.6",
+  "model_slug": "claude_opus_4.6",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 36.67,
+  "cases": 30,
+  "raises_cases": 7,
+  "snippets": 26,
+  "error_snippets": 7,
+  "refinements": 0,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

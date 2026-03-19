@@ -1,0 +1,270 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    FlatteningProperty:
+      assertion: all(not isinstance(x, list) for x in output)
+    OrderPreservation:
+      assertion: len(output) >= 0
+    FastExecution:
+      duration: 0.005
+  dataset:
+  - case:
+      id: simple_flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: single_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: mixed_strings
+      input:
+      - a
+      - - b
+        - c
+      - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: mixed_types_none_bool_float
+      input:
+      - 1
+      - null
+      - - true
+        - false
+      - 3.14
+      expected:
+      - 1
+      - null
+      - true
+      - false
+      - 3.14
+  - case:
+      id: extreme_nesting_single_element
+      input:
+      - - - - 1
+      expected:
+      - 1
+  - case:
+      id: mixed_nesting_and_empties
+      input:
+      - 1
+      - - 2
+        - 3
+      - []
+      - - 4
+        - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: idempotency_check
+      input:
+      - 1
+      - 2
+      - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: tuples_as_atoms
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      assertion: output == [1, 2, 3, 4]
+  - case:
+      id: dicts_as_atoms
+      input:
+      - a: 1
+      - - b: 2
+      expected:
+      - a: 1
+      - b: 2
+  - case:
+      id: structural_invariance_1
+      input:
+      - 1
+      - - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: structural_invariance_2
+      input:
+      - - 1
+      - 2
+      - - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: deeply_nested_empty_structure
+      input:
+      - - - - []
+      - []
+      expected: []
+  - case:
+      id: single_element_list
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: nested_single_element
+      input:
+      - - 42
+      expected:
+      - 42
+  - case:
+      id: complex_mixed_nesting
+      input:
+      - - 1
+        - 2
+      - 3
+      - - 4
+        - - 5
+          - 6
+      - - - 7
+      - 8
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+  - case:
+      id: items_with_spaces_strings
+      input:
+      - hello world
+      - - foo bar
+      expected:
+      - hello world
+      - foo bar
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_int_input
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_str_input
+      input: string
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_dict_input
+      input:
+        key: value
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_tuple_input
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: output == [1, 2, 3]
+  - case:
+      id: error_actual_tuple_input
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: isinstance(output, list)
+  - case:
+      id: raised_tuple_error
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: output == [1, 2, 3]
+  - case:
+      id: actual_raises_tuple
+      assertion: 'True'
+      input:
+      - 1
+      expected:
+      - 1
+  - case:
+      id: error_res_1
+      input: null
+      raises: TypeError
+  - case:
+      id: error_res_2
+      input: 123
+      raises: TypeError
+  - case:
+      id: error_res_3
+      input: string
+      raises: TypeError
+  - case:
+      id: error_res_4
+      input:
+        key: value
+      raises: TypeError
+  - case:
+      id: error_res_5
+      assertion: 'True'
+      input: []
+      expected: []

@@ -1,0 +1,20 @@
+{
+  "scenario": "flatten",
+  "spec_model": "claude-sonnet-4.6",
+  "exploration_model": "gemini-3-flash-preview",
+  "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 62.05,
+  "cases": 37,
+  "raises_cases": 9,
+  "snippets": 36,
+  "error_snippets": 11,
+  "refinements": 1,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

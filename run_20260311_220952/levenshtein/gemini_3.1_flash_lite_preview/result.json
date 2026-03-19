@@ -1,0 +1,19 @@
+{
+  "scenario": "levenshtein",
+  "spec_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "exploration_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "model_slug": "gemini_3.1_flash_lite_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 5.48,
+  "cases": 20,
+  "raises_cases": 3,
+  "snippets": 20,
+  "error_snippets": 3,
+  "refinements": 0,
+  "evaluator_types": [
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

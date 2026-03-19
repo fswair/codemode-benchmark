@@ -1,0 +1,78 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    FlatOutput:
+      assertion: "not any(isinstance(x, list) for x in output)"
+
+  dataset:
+    - case:
+        id: "empty_list"
+        input: []
+        expected: []
+    - case:
+        id: "flat_list_integers"
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: "one_level_nesting"
+        input: [1, [2, 3], 4]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "deeply_nested"
+        input: [1, [2, [3, 4], 5], 6]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: "nested_empty_lists"
+        input: [[], [[]], [[[]]]]
+        expected: []
+    - case:
+        id: "mixed_types"
+        input: [1, "a", 2.5, true]
+        expected: [1, "a", 2.5, true]
+    - case:
+        id: "list_of_singles"
+        input: [[1], [2], [3]]
+        expected: [1, 2, 3]
+    - case:
+        id: "highly_skewed_end"
+        input: [1, [2, [3, [4, [5]]]]]
+        expected: [1, 2, 3, 4, 5]
+    - case:
+        id: "highly_skewed_nesting"
+        input: [[[[[1]]]]]
+        expected: [1]
+    - case:
+        id: "nested_with_none"
+        input: [null, [null], [[null]]]
+        expected: [null, null, null]
+    - case:
+        id: "symmetrical"
+        input: [[[1, 2], 3], [4, [5, 6]]]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: "range_input"
+        input: [0, 1, 2, 3, 4]
+        expected: [0, 1, 2, 3, 4]
+    - case:
+        id: "large_flat_list"
+        input: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        assertion: "len(output) == 100"
+    - case:
+        id: "skewed_nesting_mid"
+        input: [1, [], 2, [], 3]
+        expected: [1, 2, 3]
+
+    # Error cases
+    - case:
+        id: "input_none"
+        input: null
+        raises: TypeError
+    - case:
+        id: "input_int"
+        input: 123
+        raises: TypeError
+    - case:
+        id: "input_str"
+        input: "string"
+        raises: TypeError

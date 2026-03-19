@@ -1,0 +1,147 @@
+--- Snippet 1 [normal]: Distance between two empty strings (identity) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 2 [normal]: Distance between identical non-empty strings ---
+Code: levenshtein("kitten", "kitten")
+Output: 0
+
+--- Snippet 3 [normal]: Distance from empty string to non-empty (all insertions) ---
+Code: levenshtein("", "hello")
+Output: 5
+
+--- Snippet 4 [normal]: Distance from non-empty string to empty (all deletions) ---
+Code: levenshtein("world", "")
+Output: 5
+
+--- Snippet 5 [normal]: Classic example: kitten to sitting (3 edits) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 6 [normal]: Distance involving both substitution and shift ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 7 [normal]: Complete substitution (all characters different) ---
+Code: levenshtein("abc", "def")
+Output: 3
+
+--- Snippet 8 [normal]: Transposition distance (requires 2 edits: 1 sub + 1 sub or 1 del + 1 ins) ---
+Code: levenshtein("ab", "ba")
+Output: 2
+
+--- Snippet 9 [normal]: Large difference in string lengths ---
+Code: levenshtein("short", "muchlongerstring")
+Output: 12
+
+--- Snippet 10 [normal]: Case sensitivity check ---
+Code: levenshtein("case", "CASE")
+Output: 4
+
+--- Snippet 11 [normal]: Unicode/Emoji support (single substitution) ---
+Code: levenshtein("😊", "😂")
+Output: 1
+
+--- Snippet 12 [normal]: Unicode composition difference (normalization not handled) ---
+Code: levenshtein("cafe", "café")
+Output: 1
+
+--- Snippet 13 [normal]: Appending many spaces ---
+Code: levenshtein("python", "python" + " " * 10)
+Output: 10
+
+--- Snippet 14 [normal]: Large identical strings ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 15 [normal]: Large strings with complete mismatch ---
+Code: levenshtein("a" * 50, "b" * 50)
+Output: 50
+
+--- Snippet 16 [normal]: Commutativity check: d(s, t) == d(t, s) ---
+Code: levenshtein("abc", "acb") == levenshtein("acb", "abc")
+Output: True
+
+--- Snippet 17 [error]: TypeError when first argument is None ---
+Code: levenshtein(None, "test")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 18 [error]: TypeError when second argument is an integer ---
+Code: levenshtein("test", 123)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError when first argument is a list ---
+Code: levenshtein(["list"], "string")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: TypeError when both arguments are None ---
+Code: levenshtein(None, None)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 21 [normal]: Single character substitution in the middle of the string ---
+Code: levenshtein("abc", "axc")
+Output: 1
+
+--- Snippet 22 [normal]: Single character insertion at the end (boundary of length) ---
+Code: levenshtein("string", "strings")
+Output: 1
+
+--- Snippet 23 [normal]: Single character deletion from the end ---
+Code: levenshtein("strings", "string")
+Output: 1
+
+--- Snippet 24 [normal]: Insertion in the middle of a string ---
+Code: levenshtein("ab", "acb")
+Output: 1
+
+--- Snippet 25 [normal]: Deletion from the middle of a string ---
+Code: levenshtein("acb", "ab")
+Output: 1
+
+--- Snippet 26 [normal]: Comparison of different whitespace characters (escape sequences) ---
+Code: levenshtein("\n\t", "  ")
+Output: 2
+
+--- Snippet 27 [normal]: Shifted similar strings (1 insertion + 1 deletion) ---
+Code: levenshtein("A" * 10 + "B", "B" + "A" * 10)
+Output: 2
+
+--- Snippet 28 [normal]: Invariant: distance to self is always zero (identity) ---
+Code: levenshtein("levenshtein", "levenshtein") == 0
+Output: True
+
+--- Snippet 29 [normal]: Upper bound check: distance never exceeds sum of lengths ---
+Code: levenshtein("book", "back") <= (len("book") + len("back"))
+Output: True
+
+--- Snippet 30 [normal]: Classic example with mixed edits: 3 substitutions/deletions ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 31 [normal]: Strings containing digit characters only ---
+Code: levenshtein("123", "123456789")
+Output: 6
+
+--- Snippet 32 [normal]: Stripping punctuation via deletions ---
+Code: levenshtein("..!!..", "!!")
+Output: 4
+
+--- Snippet 33 [normal]: Asymmetric mismatch: different lengths and different characters ---
+Code: levenshtein("a" * 10, "b" * 5)
+Output: 10
+
+--- Snippet 34 [normal]: Comparing single space to double space (minimal length difference) ---
+Code: levenshtein(" ", "  ")
+Output: 1
+
+--- Snippet 35 [error]: Both arguments are integers instead of strings ---
+Code: levenshtein(123, 456)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 36 [error]: Second argument is bytes, which is not a string type in Python 3 ---
+Code: levenshtein("valid", b"bytes")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 37 [error]: First argument is a dictionary ---
+Code: levenshtein({"key": "val"}, "string")
+RAISED TypeError: TypeError: Both arguments must be strings

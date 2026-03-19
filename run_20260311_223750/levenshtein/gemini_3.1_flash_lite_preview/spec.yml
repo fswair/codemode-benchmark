@@ -1,0 +1,94 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: "output >= 0"
+    TriangleInequality:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+  dataset:
+    - case:
+        id: kitten_sitting
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: both_empty
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: first_non_empty_second_empty
+        inputs: ["a", ""]
+        expected: 1
+    - case:
+        id: first_empty_second_non_empty
+        inputs: ["", "a"]
+        expected: 1
+    - case:
+        id: identical_strings
+        inputs: ["abc", "abc"]
+        expected: 0
+    - case:
+        id: single_sub
+        inputs: ["a", "b"]
+        expected: 1
+    - case:
+        id: single_ins_end
+        inputs: ["abc", "abcd"]
+        expected: 1
+    - case:
+        id: single_del_end
+        inputs: ["abcd", "abc"]
+        expected: 1
+    - case:
+        id: single_del_mid
+        inputs: ["abc", "ac"]
+        expected: 1
+    - case:
+        id: single_ins_mid
+        inputs: ["abc", "axbc"]
+        expected: 1
+    - case:
+        id: sub_at_start
+        inputs: ["hello", "yello"]
+        expected: 1
+    - case:
+        id: sub_at_end
+        inputs: ["hello", "hellx"]
+        expected: 1
+    - case:
+        id: transposition
+        inputs: ["ab", "ba"]
+        expected: 2
+    - case:
+        id: identity_non_empty
+        inputs: ["same", "same"]
+        expected: 0
+    - case:
+        id: long_strings_equal
+        inputs: ["abcdefgh", "abcdefgh"]
+        expected: 0
+    - case:
+        id: error_none_first
+        inputs: [null, "abc"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: error_none_second
+        inputs: ["abc", null]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: error_int_first
+        inputs: [123, "abc"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: error_int_second
+        inputs: ["abc", 123]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: error_list_inputs
+        inputs: [[], []]
+        raises: TypeError
+        match: "Both arguments must be strings"

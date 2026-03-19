@@ -1,0 +1,9 @@
+Scenario : parse_cron
+Model    : openrouter:google/gemini-3.1-flash-lite-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 40  (raises=17)
+Snippets : 42  (error_snippets=19)
+Refines  : 0
+Time     : 78.5s
+Evals    : expected, raises

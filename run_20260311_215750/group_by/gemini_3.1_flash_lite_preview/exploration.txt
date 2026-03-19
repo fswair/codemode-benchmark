@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Empty list input ---
+Code: group_by([], "id")
+Output: {}
+
+--- Snippet 2 [normal]: Standard grouping with existing integer values ---
+Code: group_by([{"a": 1}, {"a": 2}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}], 2: [{'a': 2}]}
+
+--- Snippet 3 [normal]: Standard grouping with string values ---
+Code: group_by([{"type": "fruit", "name": "apple"}, {"type": "vegetable", "name": "carrot"}], "type")
+Output: {'fruit': [{'type': 'fruit', 'name': 'apple'}], 'vegetable': [{'type': 'vegetable', 'name': 'carrot'}]}
+
+--- Snippet 4 [normal]: Key missing in dict (should group under None) ---
+Code: group_by([{"id": 1}], "nonexistent")
+Output: {None: [{'id': 1}]}
+
+--- Snippet 5 [normal]: Multiple items missing the key ---
+Code: group_by([{"id": 1}, {"id": 1}], "other")
+Output: {None: [{'id': 1}, {'id': 1}]}
+
+--- Snippet 6 [normal]: Mixed presence of keys ---
+Code: group_by([{"a": 1}, {"b": 2}], "a")
+Output: {1: [{'a': 1}], None: [{'b': 2}]}
+
+--- Snippet 7 [normal]: Grouping by float values ---
+Code: group_by([{"a": 1.5}, {"a": 1.5}], "a")
+Output: {1.5: [{'a': 1.5}, {'a': 1.5}]}
+
+--- Snippet 8 [normal]: Grouping by hashable object (tuple) ---
+Code: group_by([{"a": tuple([1])}], "a")
+Output: {(1,): [{'a': (1,)}]}
+
+--- Snippet 9 [normal]: Case sensitivity of values ---
+Code: group_by([{"a": "val"}, {"a": "VAL"}], "a")
+Output: {'val': [{'a': 'val'}], 'VAL': [{'a': 'VAL'}]}
+
+--- Snippet 10 [normal]: All items in same group ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}]}
+
+--- Snippet 11 [normal]: No items have the key ---
+Code: group_by([{"a": 1}, {"b": 2}, {"c": 3}], "x")
+Output: {None: [{'a': 1}, {'b': 2}, {'c': 3}]}
+
+--- Snippet 12 [normal]: Value of key is explicitly None ---
+Code: group_by([{"x": None}], "x")
+Output: {None: [{'x': None}]}
+
+--- Snippet 13 [normal]: Distinction between None value and missing key (both end up in None) ---
+Code: group_by([{"x": None}, {"y": 1}], "x")
+Output: {None: [{'x': None}, {'y': 1}]}
+
+--- Snippet 14 [normal]: Verifying structure of returned dictionary values (list) ---
+Code: group_by([{"a": 1}], "a")[1]
+Output: [{'a': 1}]
+
+--- Snippet 15 [normal]: Checking result dictionary length ---
+Code: len(group_by([{"a": 1}, {"a": 1}, {"b": 2}], "a"))
+Output: 2
+
+--- Snippet 16 [error]: Passing None instead of a list of dicts ---
+Code: group_by(None, "key")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [normal]: Passing a key that is not a string (if the dict keys are strings) ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 18 [error]: Passing a string instead of a list of dicts ---
+Code: group_by("not a list", "key")
+RAISED AttributeError: 'str' object has no attribute 'get'

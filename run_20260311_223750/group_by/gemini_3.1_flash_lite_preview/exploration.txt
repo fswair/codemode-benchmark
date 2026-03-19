@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Happy path with simple grouping. ---
+Code: group_by([{"a": 1}, {"a": 2}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}], 2: [{'a': 2}]}
+
+--- Snippet 2 [normal]: Empty list of dicts. ---
+Code: group_by([], "any_key")
+Output: {}
+
+--- Snippet 3 [normal]: Dicts missing the key (should group under None). ---
+Code: group_by([{"b": 1}, {"a": 2}], "a")
+Output: {None: [{'b': 1}], 2: [{'a': 2}]}
+
+--- Snippet 4 [normal]: Mix of dicts with and without key. ---
+Code: group_by([{"type": "fruit"}, {"type": "vegetable"}, {"v": 1}], "type")
+Output: {'fruit': [{'type': 'fruit'}], 'vegetable': [{'type': 'vegetable'}], None: [{'v': 1}]}
+
+--- Snippet 5 [normal]: Group by string values. ---
+Code: group_by([{"a": "x"}, {"a": "y"}], "a")
+Output: {'x': [{'a': 'x'}], 'y': [{'a': 'y'}]}
+
+--- Snippet 6 [normal]: Group by numeric values (integer vs float equivalent). ---
+Code: group_by([{"id": 1}, {"id": 1.0}], "id")
+Output: {1: [{'id': 1}, {'id': 1.0}]}
+
+--- Snippet 7 [error]: Group by boolean values. ---
+Code: group_by([{"a": True}, {"a": False}, {"a": True}], "a"),description:
+RAISED SyntaxError: invalid syntax (<vowel-session>, line 1)
+
+--- Snippet 8 [normal]: Group by tuple values. ---
+Code: group_by([{"a": (1, 2)}, {"a": (1, 2)}], "a")
+Output: {(1, 2): [{'a': (1, 2)}, {'a': (1, 2)}]}
+
+--- Snippet 9 [normal]: Verify that all matching items are included. ---
+Code: group_by([{"key": "a"}, {"key": "a"}], "key")
+Output: {'a': [{'key': 'a'}, {'key': 'a'}]}
+
+--- Snippet 10 [normal]: Key exists in none of the dicts. ---
+Code: group_by([{"key": "val1"}, {"key": "val2"}], "non_existent")
+Output: {None: [{'key': 'val1'}, {'key': 'val2'}]}
+
+--- Snippet 11 [normal]: Resulting number of groups. ---
+Code: len(group_by([{"a": 1}, {"a": 1}, {"a": 2}], "a"))
+Output: 2
+
+--- Snippet 12 [normal]: Explicit None value in dictionary. ---
+Code: group_by([{"a": None}, {"a": 1}], "a")
+Output: {None: [{'a': None}], 1: [{'a': 1}]}
+
+--- Snippet 13 [normal]: Single dict list. ---
+Code: group_by([{"a": 1}], "a")
+Output: {1: [{'a': 1}]}
+
+--- Snippet 14 [normal]: Use None as the key (should work if all items lack that key, grouping all under None). ---
+Code: group_by([{"a": 1}, {"b": 2}], None)
+Output: {None: [{'a': 1}, {'b': 2}]}
+
+--- Snippet 15 [normal]: Large input list. ---
+Code: len(group_by([{"k": i} for i in range(100)], "k"))
+Output: 100
+
+--- Snippet 16 [error]: Passing None instead of a list of dicts. ---
+Code: group_by(None, "key")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [error]: Passing a list of non-dicts. ---
+Code: group_by([1, 2, 3], "key")
+RAISED AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 18 [normal]: Passing a non-string as the grouping key. ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}

@@ -1,0 +1,206 @@
+{
+  "per_model": {
+    "gemini_3_flash_preview": {
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "pass_rate": "4/5",
+      "avg_coverage": 0.8,
+      "avg_time_s": 22.51,
+      "avg_cases": 17.6,
+      "avg_raises": 5.0,
+      "avg_snippets": 21.6
+    },
+    "gemini_3.1_flash_lite_preview": {
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "pass_rate": "5/5",
+      "avg_coverage": 1.0,
+      "avg_time_s": 8.3,
+      "avg_cases": 20.8,
+      "avg_raises": 5.0,
+      "avg_snippets": 20.4
+    }
+  },
+  "per_scenario": [
+    {
+      "scenario": "group_by",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 17.49,
+      "cases": 19,
+      "raises_cases": 4,
+      "snippets": 19,
+      "error_snippets": 5,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "group_by",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 11.73,
+      "cases": 18,
+      "raises_cases": 4,
+      "snippets": 18,
+      "error_snippets": 4,
+      "refinements": 1,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "flatten",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": false,
+      "coverage": "0.0%",
+      "time_s": 29.1,
+      "cases": 0,
+      "raises_cases": 0,
+      "snippets": 20,
+      "error_snippets": 5,
+      "refinements": 3,
+      "evaluator_types": [],
+      "error": "Eval run error: could not determine a constructor for the tag 'tag:yaml.org,2002:python/tuple'\n  in \"<unicode string>\", line 246, column 14:\n          input: !!python/tuple\n                 ^"
+    },
+    {
+      "scenario": "flatten",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 6.13,
+      "cases": 18,
+      "raises_cases": 3,
+      "snippets": 18,
+      "error_snippets": 3,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 45.16,
+      "cases": 29,
+      "raises_cases": 12,
+      "snippets": 29,
+      "error_snippets": 12,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 11.51,
+      "cases": 26,
+      "raises_cases": 9,
+      "snippets": 24,
+      "error_snippets": 9,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "eval_rpn",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 10.87,
+      "cases": 21,
+      "raises_cases": 6,
+      "snippets": 21,
+      "error_snippets": 6,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "eval_rpn",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 6.66,
+      "cases": 22,
+      "raises_cases": 6,
+      "snippets": 22,
+      "error_snippets": 6,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "levenshtein",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 9.91,
+      "cases": 19,
+      "raises_cases": 3,
+      "snippets": 19,
+      "error_snippets": 3,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "levenshtein",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 5.48,
+      "cases": 20,
+      "raises_cases": 3,
+      "snippets": 20,
+      "error_snippets": 3,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    }
+  ]
+}

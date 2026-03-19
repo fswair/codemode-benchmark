@@ -1,0 +1,143 @@
+--- Snippet 1 [normal]: Standard edit distance case (kitten -> sitting is 3). ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Two empty strings (distance should be 0). ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: One empty string (distance should be the length of the other string). ---
+Code: levenshtein("apple", "")
+Output: 5
+
+--- Snippet 4 [normal]: First string empty (distance should be the length of the second string). ---
+Code: levenshtein("", "banana")
+Output: 6
+
+--- Snippet 5 [normal]: Identical strings (distance should be 0). ---
+Code: levenshtein("same", "same")
+Output: 0
+
+--- Snippet 6 [normal]: Single character substitution. ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 7 [normal]: Single character deletion from the end. ---
+Code: levenshtein("abc", "ab")
+Output: 1
+
+--- Snippet 8 [normal]: Single character insertion at the end. ---
+Code: levenshtein("ab", "abc")
+Output: 1
+
+--- Snippet 9 [normal]: Single character substitution in the middle. ---
+Code: levenshtein("abc", "axc")
+Output: 1
+
+--- Snippet 10 [normal]: Combination of deletion and insertion. ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 11 [normal]: Longer strings with multiple edits. ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 12 [normal]: Idempotency check. ---
+Code: levenshtein("levenshtein", "levenshtein") == levenshtein("levenshtein", "levenshtein")
+Output: True
+
+--- Snippet 13 [normal]: Symmetry: distance from s to t is same as t to s. ---
+Code: levenshtein("abc", "def") == levenshtein("def", "abc")
+Output: True
+
+--- Snippet 14 [normal]: Case sensitivity: distance between upper and lower case. ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 15 [normal]: Special characters distance. ---
+Code: levenshtein("!@#", "$%^")
+Output: 3
+
+--- Snippet 16 [normal]: Strings containing only spaces. ---
+Code: levenshtein(" " * 5, " " * 3)
+Output: 2
+
+--- Snippet 17 [normal]: Verify the return type is an integer. ---
+Code: type(levenshtein("test", "toast"))
+Output: <class 'int'>
+
+--- Snippet 18 [error]: TypeError when the first argument is None instead of a string. ---
+Code: levenshtein(None, "test")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError when the second argument is an integer instead of a string. ---
+Code: levenshtein("test", 123)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: TypeError when both arguments are lists instead of strings. ---
+Code: levenshtein([], [])
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 21 [normal]: Transposition handled as two substitutions (or one delete/one insert). ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 22 [normal]: Leading whitespace insertion. ---
+Code: levenshtein("indentation", "    indentation")
+Output: 4
+
+--- Snippet 23 [normal]: Unicode/Emoji surrogate pair substitution. ---
+Code: levenshtein("emoji \ud83d\ude00", "emoji \ud83d\ude01")
+Output: 0
+
+--- Snippet 24 [normal]: Accented vs non-accented characters. ---
+Code: levenshtein("café", "cafe")
+Output: 1
+
+--- Snippet 25 [normal]: Large identical strings (100 chars). ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 26 [normal]: Large strings with 100% substitution. ---
+Code: levenshtein("a" * 100, "b" * 100)
+Output: 100
+
+--- Snippet 27 [normal]: Triangle inequality verification. ---
+Code: levenshtein("python", "py") + levenshtein("py", "th") >= levenshtein("python", "th")
+Output: True
+
+--- Snippet 28 [normal]: Checking if distance equals length difference for substrings. ---
+Code: levenshtein("longword", "word") == len("longword") - len("word")
+Output: True
+
+--- Snippet 29 [normal]: Control characters vs spaces. ---
+Code: levenshtein("\n\t", "  ")
+Output: 2
+
+--- Snippet 30 [normal]: Numeric characters inside strings. ---
+Code: levenshtein("1234567890", "1230007890")
+Output: 3
+
+--- Snippet 31 [normal]: Mix of matching and non-matching characters in middle. ---
+Code: levenshtein("Brief", "Belief")
+Output: 2
+
+--- Snippet 32 [normal]: Two substitutions in a short word. ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 33 [error]: TypeError when first argument is an integer. ---
+Code: levenshtein(123, "string")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 34 [error]: TypeError when second argument is None. ---
+Code: levenshtein("string", None)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 35 [error]: TypeError when arguments are booleans (which are int subclasses but not strings). ---
+Code: levenshtein(True, False)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 36 [error]: TypeError when arguments are bytes objects instead of strings. ---
+Code: levenshtein(b"bytes", b"bytes")
+RAISED TypeError: TypeError: Both arguments must be strings

@@ -1,0 +1,9 @@
+Scenario : group_by
+Model    : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 35  (raises=7)
+Snippets : 35  (error_snippets=7)
+Refines  : 2
+Time     : 95.9s
+Evals    : assertion, expected, raises

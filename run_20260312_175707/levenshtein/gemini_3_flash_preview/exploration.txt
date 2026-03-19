@@ -1,0 +1,155 @@
+--- Snippet 1 [normal]: Standard example: kitten to sitting (distance 3) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Distance between two empty strings (0) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Distance from string to empty string (length of string) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Distance from empty string to string (length of string) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Distance between identical strings (0) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 6 [normal]: Single character substitution (1) ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 7 [normal]: Insertion only (2) ---
+Code: levenshtein("a", "abc")
+Output: 2
+
+--- Snippet 8 [normal]: Deletion only (2) ---
+Code: levenshtein("abc", "a")
+Output: 2
+
+--- Snippet 9 [normal]: Combination of insertion and deletion (2) ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 10 [normal]: Standard example: saturday to sunday (distance 3) ---
+Code: levenshtein("saturday", "sunday")
+Output: 3
+
+--- Snippet 11 [normal]: Case sensitivity (distance 1) ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 12 [normal]: Space character deletion (1) ---
+Code: levenshtein(" ", "")
+Output: 1
+
+--- Snippet 13 [normal]: Distance between reversed strings (2) ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 14 [normal]: Large identical strings (0) ---
+Code: levenshtein("x" * 100, "x" * 100)
+Output: 0
+
+--- Snippet 15 [normal]: Prefix match suffix delete (5) ---
+Code: levenshtein("indentation", "indent")
+Output: 5
+
+--- Snippet 16 [normal]: Complete substitution (3) ---
+Code: levenshtein("abc", "def")
+Output: 3
+
+--- Snippet 17 [normal]: Symmetry property: d(a, b) == d(b, a) ---
+Code: levenshtein("kitten", "sitting") == levenshtein("sitting", "kitten")
+Output: True
+
+--- Snippet 18 [error]: TypeError when first argument is None ---
+Code: levenshtein(None, "test")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError when second argument is an integer ---
+Code: levenshtein("test", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: TypeError when first argument is a list ---
+Code: levenshtein(["a", "b"], "ab")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 21 [error]: TypeError when second argument is None ---
+Code: levenshtein("abc", None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 22 [normal]: Multiple substitutions in middle of string ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 23 [normal]: One string is a prefix of the other with significant length difference ---
+Code: levenshtein("abc", "abc" + "d" * 5)
+Output: 5
+
+--- Snippet 24 [normal]: Two strings of same length with no characters in common ---
+Code: levenshtein("a" * 10, "b" * 10)
+Output: 10
+
+--- Snippet 25 [normal]: Distance between different whitespace characters (escape sequences) ---
+Code: levenshtein("\n\t", "  ")
+Output: 2
+
+--- Snippet 26 [normal]: Deletion of a multi-byte unicode character/emoji ---
+Code: levenshtein("emoji😀", "emoji")
+Output: 1
+
+--- Snippet 27 [normal]: Mixed script and leading space (Cyrillic vs Latin characters) ---
+Code: levenshtein(" кафе", "cafe")
+Output: 5
+
+--- Snippet 28 [normal]: Substitution of inner numeric characters ---
+Code: levenshtein("1234567890", "1230007890")
+Output: 3
+
+--- Snippet 29 [normal]: Verification of identity property for a medium length string ---
+Code: levenshtein("levenshtein", "levenshtein") == 0
+Output: True
+
+--- Snippet 30 [normal]: Verification of triangle inequality property ---
+Code: levenshtein("a", "b") + levenshtein("b", "c") >= levenshtein("a", "c")
+Output: True
+
+--- Snippet 31 [normal]: Transposition handled as two edits (substitution/insertion/deletion) rather than one swap ---
+Code: levenshtein("abc", "acb")
+Output: 2
+
+--- Snippet 32 [normal]: Prefix deletion where suffix is identical ---
+Code: levenshtein("reset", "set")
+Output: 2
+
+--- Snippet 33 [normal]: Repetitive patterns with interleaved differences ---
+Code: levenshtein("ab" * 5, "ba" * 5)
+Output: 2
+
+--- Snippet 34 [normal]: Extreme length disparity between two non-empty strings ---
+Code: levenshtein("verylongstring" * 2, "short")
+Output: 25
+
+--- Snippet 35 [normal]: Strings containing only special punctuation symbols ---
+Code: levenshtein("!@#$", "%^&*")
+Output: 4
+
+--- Snippet 36 [normal]: Only spaces, different lengths ---
+Code: levenshtein("   ", " ")
+Output: 2
+
+--- Snippet 37 [error]: Float as first argument instead of string ---
+Code: levenshtein(1.5, "test")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 38 [error]: List as second argument instead of string ---
+Code: levenshtein("test", ["t", "e", "s", "t"])
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 39 [error]: Bytes objects instead of strings ---
+Code: levenshtein(b"abc", b"abc")
+RAISED TypeError: Both arguments must be strings

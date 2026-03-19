@@ -1,0 +1,9 @@
+Scenario : parse_cron
+Model    : claude-sonnet-4.6 | gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 63  (raises=19)
+Snippets : 48  (error_snippets=19)
+Refines  : 0
+Time     : 76.5s
+Evals    : assertion, expected, raises

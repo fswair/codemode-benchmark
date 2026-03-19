@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Flat empty list. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 2 [normal]: Simple flat list of integers. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 3 [normal]: Single level of nesting. ---
+Code: flatten([1, [2, 3], 4]),
+Output: ([1, 2, 3, 4],)
+
+--- Snippet 4 [normal]: Multiple levels of nesting. ---
+Code: flatten([1, [2, [3, 4], 5], 6])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 5 [normal]: Deeply nested empty lists. ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: List containing heterogeneous types. ---
+Code: flatten([1, 'a', 2.5, True])
+Output: [1, 'a', 2.5, True]
+
+--- Snippet 7 [normal]: Asymmetric nesting. ---
+Code: flatten([[1], 2, [3, [4]]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 8 [normal]: Deeply nested single element. ---
+Code: flatten([[[[[1]]]]])
+Output: [1]
+
+--- Snippet 9 [normal]: List containing an empty sub-list. ---
+Code: flatten([1, [], 2])
+Output: [1, 2]
+
+--- Snippet 10 [normal]: Nested lists of strings. ---
+Code: flatten(['a', ['b', ['c']]])
+Output: ['a', 'b', 'c']
+
+--- Snippet 11 [normal]: Identity property for flat structures. ---
+Code: flatten([]) == [] and flatten([1, 2]) == [1, 2]
+Output: True
+
+--- Snippet 12 [normal]: Verifying the length of the flattened result. ---
+Code: len(flatten([[[1, 2], 3], 4]))
+Output: 4
+
+--- Snippet 13 [normal]: Mixed nesting depths. ---
+Code: flatten([1, [2], [[3]], [[[4]]]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 14 [normal]: Increasing depth of lists. ---
+Code: flatten([1, 2, [3, 4, [5, 6, [7, 8]]]])
+Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+--- Snippet 15 [normal]: Alternating flat and nested segments. ---
+Code: flatten([1, [2], 3, [4]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 16 [error]: Passing None as input, which is not a list. ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Passing a primitive string instead of a list. ---
+Code: flatten("not a list")
+RAISED TypeError: Expected list, got str
+
+--- Snippet 18 [error]: Passing an integer instead of a list. ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int

@@ -1,0 +1,9 @@
+Scenario : flatten
+Model    : claude-sonnet-4.6 | gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 37  (raises=9)
+Snippets : 36  (error_snippets=11)
+Refines  : 1
+Time     : 62.1s
+Evals    : assertion, expected, raises

@@ -1,0 +1,131 @@
+--- Snippet 1 [normal]: Empty list input ---
+Code: group_by([], "id")
+Output: {}
+
+--- Snippet 2 [normal]: Standard grouping by a key present in all dicts ---
+Code: group_by([{"name": "a", "type": "fruit"}, {"name": "b", "type": "veg"}], "type")
+Output: {'fruit': [{'name': 'a', 'type': 'fruit'}], 'veg': [{'name': 'b', 'type': 'veg'}]}
+
+--- Snippet 3 [normal]: Dict missing key maps to None key ---
+Code: group_by([{"a": 1}], "missing_key")
+Output: {None: [{'a': 1}]}
+
+--- Snippet 4 [normal]: Grouping when all values are unique ---
+Code: group_by([{"a": 1}, {"a": 2}], "a")
+Output: {1: [{'a': 1}], 2: [{'a': 2}]}
+
+--- Snippet 5 [normal]: Grouping when all values are same ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}]}
+
+--- Snippet 6 [normal]: Mixed case: some dicts have key, some do not ---
+Code: group_by([{"a": 1}, {"b": 2}], "a")
+Output: {1: [{'a': 1}], None: [{'b': 2}]}
+
+--- Snippet 7 [normal]: Grouping where key value is explicitly None ---
+Code: group_by([{"a": None}, {"a": 1}], "a")
+Output: {None: [{'a': None}], 1: [{'a': 1}]}
+
+--- Snippet 8 [error]: Grouping by unhashable value (list) as key value ---
+Code: group_by([{"a": [1, 2]}, {"a": [1, 2]}], "a")
+RAISED TypeError: unhashable type: 'list'
+
+--- Snippet 9 [normal]: Multiple items in a single group verification ---
+Code: group_by([{"a": 1}, {"a": 1}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}, {'a': 1}]}
+
+--- Snippet 10 [normal]: Key does not exist in any dict ---
+Code: group_by([{"1": 1}, {"2": 2}], "0")
+Output: {None: [{'1': 1}, {'2': 2}]}
+
+--- Snippet 11 [normal]: Empty dict input ---
+Code: group_by([{}], "key")
+Output: {None: [{}]}
+
+--- Snippet 12 [normal]: Non-consecutive grouping keys interleaving ---
+Code: group_by([{"k": 1}, {"k": 2}, {"k": 1}], "k")
+Output: {1: [{'k': 1}, {'k': 1}], 2: [{'k': 2}]}
+
+--- Snippet 13 [normal]: Grouping by key with zero value ---
+Code: group_by([{"x": 0}], "x")
+Output: {0: [{'x': 0}]}
+
+--- Snippet 14 [normal]: Grouping by integer vs float representation (1 vs 1.0) ---
+Code: group_by([{"a": 1}, {"a": 1.0}], "a")
+Output: {1: [{'a': 1}, {'a': 1.0}]}
+
+--- Snippet 15 [normal]: Case sensitivity in grouping keys ---
+Code: group_by([{"k": "a"}, {"k": "A"}], "k")
+Output: {'a': [{'k': 'a'}], 'A': [{'k': 'A'}]}
+
+--- Snippet 16 [error]: Input is None instead of list ---
+Code: group_by(None, "key")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [normal]: Key is not a string ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 18 [error]: Input is a string instead of a list of dicts ---
+Code: group_by("not_a_list", "key")
+RAISED AttributeError: 'str' object has no attribute 'get'
+
+--- Snippet 19 [normal]: Boolean values as group keys. ---
+Code: group_by([{"a": True}, {"a": False}], "a")
+Output: {True: [{'a': True}], False: [{'a': False}]}
+
+--- Snippet 20 [normal]: Interaction between 1 and True (keys are 1 and True, True evaluates to key 1). ---
+Code: group_by([{"a": 1}, {"a": True}], "a")
+Output: {1: [{'a': 1}, {'a': True}]}
+
+--- Snippet 21 [normal]: Interaction between 0 and False (keys are 0 and False, False evaluates to key 0). ---
+Code: group_by([{"a": 0}, {"a": False}], "a")
+Output: {0: [{'a': 0}, {'a': False}]}
+
+--- Snippet 22 [normal]: Grouping by NaN values (NaN != NaN, so these should be in separate groups). ---
+Code: group_by([{"k": float('nan')}, {"k": float('nan')}], "k")
+Output: {nan: [{'k': nan}], nan: [{'k': nan}]}
+
+--- Snippet 23 [normal]: Grouping by positive infinity. ---
+Code: group_by([{"k": float('inf')}, {"k": float('inf')}], "k")
+Output: {inf: [{'k': inf}, {'k': inf}]}
+
+--- Snippet 24 [normal]: Grouping by signed zeros (-0.0 == 0.0 in Python dictionary keys). ---
+Code: group_by([{"k": -0.0}, {"k": 0.0}], "k")
+Output: {-0.0: [{'k': -0.0}, {'k': 0.0}]}
+
+--- Snippet 25 [normal]: Grouping by a non-existent key across multiple distinct dicts. ---
+Code: group_by([{"a": "value"}, {"b": "value"}], "missing")
+Output: {None: [{'a': 'value'}, {'b': 'value'}]}
+
+--- Snippet 26 [normal]: Grouping by string values. ---
+Code: group_by([{"a": "s"}, {"a": "s"}], "a")
+Output: {'s': [{'a': 's'}, {'a': 's'}]}
+
+--- Snippet 27 [normal]: Grouping by tuple (hashable) as group key. ---
+Code: group_by([{"a": (1, 2)}, {"a": (1, 2)}], "a")
+Output: {(1, 2): [{'a': (1, 2)}, {'a': (1, 2)}]}
+
+--- Snippet 28 [normal]: Large number of identical dicts. ---
+Code: group_by([{"key": "value"} for _ in range(100)], "key")
+Output: {'value': [{'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}, {'key': 'value'}]}
+
+--- Snippet 29 [normal]: Large number of distinct groups. ---
+Code: group_by([{"k": i} for i in range(100)], "k")
+Output: {0: [{'k': 0}], 1: [{'k': 1}], 2: [{'k': 2}], 3: [{'k': 3}], 4: [{'k': 4}], 5: [{'k': 5}], 6: [{'k': 6}], 7: [{'k': 7}], 8: [{'k': 8}], 9: [{'k': 9}], 10: [{'k': 10}], 11: [{'k': 11}], 12: [{'k': 12}], 13: [{'k': 13}], 14: [{'k': 14}], 15: [{'k': 15}], 16: [{'k': 16}], 17: [{'k': 17}], 18: [{'k': 18}], 19: [{'k': 19}], 20: [{'k': 20}], 21: [{'k': 21}], 22: [{'k': 22}], 23: [{'k': 23}], 24: [{'k': 24}], 25: [{'k': 25}], 26: [{'k': 26}], 27: [{'k': 27}], 28: [{'k': 28}], 29: [{'k': 29}], 30: [{'k': 30}], 31: [{'k': 31}], 32: [{'k': 32}], 33: [{'k': 33}], 34: [{'k': 34}], 35: [{'k': 35}], 36: [{'k': 36}], 37: [{'k': 37}], 38: [{'k': 38}], 39: [{'k': 39}], 40: [{'k': 40}], 41: [{'k': 41}], 42: [{'k': 42}], 43: [{'k': 43}], 44: [{'k': 44}], 45: [{'k': 45}], 46: [{'k': 46}], 47: [{'k': 47}], 48: [{'k': 48}], 49: [{'k': 49}], 50: [{'k': 50}], 51: [{'k': 51}], 52: [{'k': 52}], 53: [{'k': 53}], 54: [{'k': 54}], 55: [{'k': 55}], 56: [{'k': 56}], 57: [{'k': 57}], 58: [{'k': 58}], 59: [{'k': 59}], 60: [{'k': 60}], 61: [{'k': 61}], 62: [{'k': 62}], 63: [{'k': 63}], 64: [{'k': 64}], 65: [{'k': 65}], 66: [{'k': 66}], 67: [{'k': 67}], 68: [{'k': 68}], 69: [{'k': 69}], 70: [{'k': 70}], 71: [{'k': 71}], 72: [{'k': 72}], 73: [{'k': 73}], 74: [{'k': 74}], 75: [{'k': 75}], 76: [{'k': 76}], 77: [{'k': 77}], 78: [{'k': 78}], 79: [{'k': 79}], 80: [{'k': 80}], 81: [{'k': 81}], 82: [{'k': 82}], 83: [{'k': 83}], 84: [{'k': 84}], 85: [{'k': 85}], 86: [{'k': 86}], 87: [{'k': 87}], 88: [{'k': 88}], 89: [{'k': 89}], 90: [{'k': 90}], 91: [{'k': 91}], 92: [{'k': 92}], 93: [{'k': 93}], 94: [{'k': 94}], 95: [{'k': 95}], 96: [{'k': 96}], 97: [{'k': 97}], 98: [{'k': 98}], 99: [{'k': 99}]}
+
+--- Snippet 30 [normal]: Grouping by an empty string key. ---
+Code: group_by([{"": 1}], "")
+Output: {1: [{'': 1}]}
+
+--- Snippet 31 [error]: Items list contains non-dict element (int) which lacks .get() method. ---
+Code: group_by([1, 2, 3], "a")
+RAISED AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 32 [error]: Grouping by a dict (unhashable) as a value. ---
+Code: group_by([{"a": {1: 2}}], "a")
+RAISED TypeError: unhashable type: 'dict'
+
+--- Snippet 33 [error]: Grouping by a set (unhashable) as a value. ---
+Code: group_by([{"a": {1, 2}}], "a"),
+RAISED TypeError: unhashable type: 'set'

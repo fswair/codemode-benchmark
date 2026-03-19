@@ -1,0 +1,82 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    FastEnough:
+      duration: 0.1
+  dataset:
+    - case:
+        id: "empty_list"
+        input: []
+        expected: []
+    - case:
+        id: "flat_list"
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: "single_level_nesting"
+        input: [1, [2, 3], 4]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "deeply_nested"
+        input: [1, [2, [3, 4], 5], 6]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: "nested_empty_lists"
+        input: [[], [[]], [[], 1]]
+        expected: [1]
+    - case:
+        id: "list_strings"
+        input: ["a", ["b", ["c"]]]
+        expected: ["a", "b", "c"]
+    - case:
+        id: "list_floats"
+        input: [1.1, [2.2, 3.3]]
+        expected: [1.1, 2.2, 3.3]
+    - case:
+        id: "list_booleans"
+        input: [true, [false, [true]]]
+        expected: [true, false, true]
+    - case:
+        id: "list_nones"
+        input: [null, [1, null]]
+        expected: [null, 1, null]
+    - case:
+        id: "deep_single_element"
+        input: [[[[1]]]]
+        expected: [1]
+    - case:
+        id: "mixed_flat_nested"
+        input: [1, [2], 3, [4, 5], 6]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: "multiple_singular_nested"
+        input: [[1], [2], [3]]
+        expected: [1, 2, 3]
+    - case:
+        id: "structure_preservation_length"
+        input: [1, [2, [3, [4]]]]
+        assertion: "len(output) == 4"
+    - case:
+        id: "identity_property_empty"
+        input: []
+        assertion: "output == []"
+    - case:
+        id: "identity_property_flat"
+        input: [1, 2]
+        assertion: "output == [1, 2]"
+    - case:
+        id: "error_none"
+        input: null
+        raises: TypeError
+        match: "Expected list, got NoneType"
+    - case:
+        id: "error_string"
+        input: "not a list"
+        raises: TypeError
+        match: "Expected list, got str"
+    - case:
+        id: "error_integer"
+        input: 123
+        raises: TypeError
+        match: "Expected list, got int"

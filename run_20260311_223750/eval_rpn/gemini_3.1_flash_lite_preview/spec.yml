@@ -1,0 +1,92 @@
+eval_rpn:
+  evals:
+    IsInt:
+      type: int
+    FastEnough:
+      duration: 10
+  dataset:
+    - case:
+        id: "addition"
+        input: ["3", "4", "+"]
+        expected: 7
+    - case:
+        id: "subtraction"
+        input: ["3", "4", "-"]
+        expected: -1
+    - case:
+        id: "multiplication"
+        input: ["3", "4", "*"]
+        expected: 12
+    - case:
+        id: "division"
+        input: ["8", "4", "/"]
+        expected: 2
+    - case:
+        id: "division_positive_truncate"
+        input: ["10", "3", "/"]
+        expected: 3
+    - case:
+        id: "division_negative_truncate"
+        input: ["-10", "3", "/"]
+        expected: -3
+    - case:
+        id: "complex_expression"
+        input: ["2", "3", "+", "4", "*"]
+        expected: 20
+    - case:
+        id: "mixed_operators"
+        input: ["4", "13", "5", "/", "+"]
+        expected: 6
+    - case:
+        id: "long_expression"
+        input: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
+        expected: 22
+    - case:
+        id: "single_operand"
+        input: ["0"]
+        expected: 0
+    - case:
+        id: "negative_single_operand"
+        input: ["-5"]
+        expected: -5
+    - case:
+        id: "chain_of_ops"
+        input: ["100", "50", "-", "20", "/"]
+        expected: 2
+    - case:
+        id: "equal_subexpressions"
+        input: ["5", "5", "*", "5", "5", "*", "+"]
+        expected: 50
+    - case:
+        id: "left_associative_chain"
+        input: ["1", "1", "+", "1", "+", "1", "+"]
+        expected: 4
+    - case:
+        id: "zero_as_operand"
+        input: ["0", "5", "+"]
+        expected: 5
+    - case:
+        id: "empty_list_error"
+        input: []
+        raises: ValueError
+        match: "Empty expression"
+    - case:
+        id: "insufficient_operands_error"
+        input: ["+"]
+        raises: ValueError
+        match: "Not enough operands for '\\+'"
+    - case:
+        id: "division_by_zero_error"
+        input: ["10", "0", "/"]
+        raises: ZeroDivisionError
+        match: "Division by zero"
+    - case:
+        id: "invalid_token_error"
+        input: ["10", "abc"]
+        raises: ValueError
+        match: "Invalid token: 'abc'"
+    - case:
+        id: "stack_remaining_values_error"
+        input: ["1", "2", "3"]
+        raises: ValueError
+        match: "Invalid expression: 3 values remaining on stack"

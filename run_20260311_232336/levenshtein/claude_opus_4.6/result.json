@@ -1,0 +1,20 @@
+{
+  "scenario": "levenshtein",
+  "spec_model": "openrouter:anthropic/claude-opus-4.6",
+  "exploration_model": "openrouter:anthropic/claude-opus-4.6",
+  "model_slug": "claude_opus_4.6",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 92.08,
+  "cases": 42,
+  "raises_cases": 9,
+  "snippets": 33,
+  "error_snippets": 8,
+  "refinements": 0,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

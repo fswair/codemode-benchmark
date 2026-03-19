@@ -1,0 +1,309 @@
+parse_cron:
+  evals:
+    ReturnType:
+      type: dict
+    HasAllFields:
+      assertion: "all(k in output for k in ['minute', 'hour', 'day_of_month', 'month', 'day_of_week'])"
+    SortedValues:
+      assertion: "all(output[k] == sorted(output[k]) for k in output)"
+
+  dataset:
+    # --- Typical Cases (from Verified Execution) ---
+    - case:
+        id: all_wildcards
+        input: "* * * * *"
+        expected:
+          minute: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: boundary_start
+        input: "0 0 1 1 0"
+        expected:
+          minute: [0]
+          hour: [0]
+          day_of_month: [1]
+          month: [1]
+          day_of_week: [0]
+
+    - case:
+        id: boundary_end
+        input: "59 23 31 12 6"
+        expected:
+          minute: [59]
+          hour: [23]
+          day_of_month: [31]
+          month: [12]
+          day_of_week: [6]
+
+    - case:
+        id: mixed_commas_ranges
+        input: "1,2,3 0-2 1-5 1,6,12 0-6"
+        expected:
+          minute: [1, 2, 3]
+          hour: [0, 1, 2]
+          day_of_month: [1, 2, 3, 4, 5]
+          month: [1, 6, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: wildcard_step
+        input: "*/15 * * * *"
+        expected:
+          minute: [0, 15, 30, 45]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: range_step
+        input: "0-10/2 * * * *"
+        expected:
+          minute: [0, 2, 4, 6, 8, 10]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: single_value_step
+        input: "45/5 * * * *"
+        expected:
+          minute: [45, 50, 55]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    # --- Formatting and Edge Logic (from Verified Execution) ---
+    - case:
+        id: extra_whitespace
+        input: " \t *  *  *  *  *\n "
+        expected:
+          minute: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: duplicates_in_list
+        input: "1,1,1 * * * *"
+        assertion: "output['minute'] == [1]"
+
+    - case:
+        id: unordered_list
+        input: "3,2,1 * * * *"
+        expected:
+          minute: [1, 2, 3]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: overlapping_ranges
+        input: "10-12,1-3 * * * *"
+        expected:
+          minute: [1, 2, 3, 10, 11, 12]
+          hour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+          day_of_month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+          month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+          day_of_week: [0, 1, 2, 3, 4, 5, 6]
+
+    - case:
+        id: steps_all_fields
+        input: "*/30 0-23/6 1-31/10 1-12/3 0-6/2"
+        expected:
+          minute: [0, 30]
+          hour: [0, 6, 12, 18]
+          day_of_month: [1, 11, 21, 31]
+          month: [1, 4, 7, 10]
+          day_of_week: [0, 2, 4, 6]
+
+    - case:
+        id: complex_minute_field
+        input: "5,10-12,*/20 * * * *"
+        assertion: "output['minute'] == [0, 5, 10, 11, 12, 20, 40]"
+
+    - case:
+        id: range_start_equals_end
+        input: "1-1 * * * *"
+        assertion: "output['minute'] == [1]"
+
+    - case:
+        id: all_boundary_commas
+        input: "0,59 0,23 1,31 1,12 0,6"
+        expected:
+          minute: [0, 59]
+          hour: [0, 23]
+          day_of_month: [1, 31]
+          month: [1, 12]
+          day_of_week: [0, 6]
+
+    - case:
+        id: step_near_limit
+        input: "*/59 * * * *"
+        assertion: "output['minute'] == [0, 59]"
+
+    - case:
+        id: step_equal_range
+        input: "0-59/60 * * * *"
+        assertion: "output['minute'] == [0]"
+
+    - case:
+        id: step_larger_than_range
+        input: "0-59/100 * * * *"
+        assertion: "output['minute'] == [0]"
+
+    - case:
+        id: redundant_step
+        input: "5-6/1 * * * *"
+        assertion: "output['minute'] == [5, 6]"
+
+    - case:
+        id: overlap_single_range_step
+        input: "1,1-2,*/30 * * * *"
+        assertion: "output['minute'] == [0, 1, 2, 30]"
+
+    - case:
+        id: start_val_with_step
+        input: "2/20 * * * *"
+        assertion: "output['minute'] == [2, 22, 42]"
+
+    - case:
+        id: complex_combination_multiple_ranges
+        input: "0-3,10-13,20-23/2 * * * *"
+        assertion: "output['minute'] == [0, 1, 2, 3, 10, 11, 12, 13, 20, 22]"
+
+    - case:
+        id: many_small_ranges
+        input: "1-2,3-4,5-6,7-8,9-10 * * * *"
+        assertion: "output['minute'] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+
+    - case:
+        id: identical_ranges_comma
+        input: "1-31,1-31 * * * *"
+        assertion: "len(output['day_of_month']) == 31"
+
+    - case:
+        id: single_val_boundary_day_of_week
+        input: "* * * * 6"
+        assertion: "output['day_of_week'] == [6]"
+
+    - case:
+        id: single_val_low_boundary_day_of_week
+        input: "* * * * 0"
+        assertion: "output['day_of_week'] == [0]"
+
+    - case:
+        id: specific_month_range
+        input: "* * * 2-4 *"
+        assertion: "output['month'] == [2, 3, 4]"
+
+    # --- Error Cases (exactly 17 from Raiseds) ---
+    - case:
+        id: too_few_fields_4
+        input: "* * * *"
+        raises: ValueError
+        match: "Expected 5 fields, got 4"
+
+    - case:
+        id: too_many_fields_6
+        input: "* * * * * *"
+        raises: ValueError
+        match: "Expected 5 fields, got 6"
+
+    - case:
+        id: too_many_fields_7
+        input: "* * * * * * *"
+        raises: ValueError
+        match: "Expected 5 fields, got 7"
+
+    - case:
+        id: step_zero
+        input: "*/0 * * * *"
+        raises: ValueError
+        match: "Step must be positive, got 0"
+
+    - case:
+        id: step_negative
+        input: "*/-5 * * * *"
+        raises: ValueError
+        match: "Step must be positive, got -5"
+
+    - case:
+        id: minute_out_of_range
+        input: "60 * * * *"
+        raises: ValueError
+        match: "minute: 60 out of range 0-59"
+
+    - case:
+        id: hour_out_of_range
+        input: "* 24 * * *"
+        raises: ValueError
+        match: "hour: 24 out of range 0-23"
+
+    - case:
+        id: day_of_month_under_range
+        input: "* * 0 * *"
+        raises: ValueError
+        match: "day_of_month: 0 out of range 1-31"
+
+    - case:
+        id: month_out_of_range
+        input: "* * * 13 *"
+        raises: ValueError
+        match: "month: 13 out of range 1-12"
+
+    - case:
+        id: day_of_week_out_of_range
+        input: "* * * * 7"
+        raises: ValueError
+        match: "day_of_week: 7 out of range 0-6"
+
+    - case:
+        id: range_start_gt_end
+        input: "10-5 * * * *"
+        raises: ValueError
+        match: "minute: invalid range 10-5"
+
+    - case:
+        id: range_with_step_exceeds_limit
+        input: "1-70/2 * * * *"
+        raises: ValueError
+        match: "minute: 1-70 out of range 0-59"
+
+    - case:
+        id: non_integer_field
+        input: "abc * * * *"
+        raises: ValueError
+        match: "invalid literal for int()"
+
+    - case:
+        id: invalid_format_range_inside_step
+        input: "10/2-5 * * * *"
+        raises: ValueError
+        match: "invalid literal for int()"
+
+    - case:
+        id: multiple_slashes
+        input: "*/2/2 * * * *"
+        raises: ValueError
+        match: "invalid literal for int()"
+
+    - case:
+        id: multiple_dashes
+        input: "1-5-10 * * * *"
+        raises: ValueError
+        match: "invalid literal for int()"
+
+    - case:
+        id: empty_string
+        input: ""
+        raises: ValueError
+        match: "Expected 5 fields, got 0"

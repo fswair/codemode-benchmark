@@ -1,0 +1,147 @@
+eval_rpn:
+  evals:
+    IsInt:
+      type: int
+  dataset:
+  - case:
+      id: simple_addition
+      input:
+      - '2'
+      - '3'
+      - +
+      expected: 5
+  - case:
+      id: simple_division
+      input:
+      - '10'
+      - '2'
+      - /
+      expected: 5
+  - case:
+      id: simple_multiplication
+      input:
+      - '2'
+      - '5'
+      - '*'
+      expected: 10
+  - case:
+      id: simple_subtraction
+      input:
+      - '10'
+      - '3'
+      - '-'
+      expected: 7
+  - case:
+      id: complex_mixed_expression
+      input:
+      - '4'
+      - '13'
+      - '5'
+      - /
+      - +
+      expected: 6
+  - case:
+      id: input_with_negative_operand
+      input:
+      - '-2'
+      - '3'
+      - +
+      expected: 1
+  - case:
+      id: division_with_negative_result_truncation_toward_zero_1
+      input:
+      - '10'
+      - '-2'
+      - /
+      expected: -5
+  - case:
+      id: division_with_negative_result_truncation_toward_zero_3
+      input:
+      - '10'
+      - '-3'
+      - /
+      expected: -3
+  - case:
+      id: zero_operand_usage
+      input:
+      - '0'
+      - '5'
+      - +
+      expected: 5
+  - case:
+      id: sequence_of_operations
+      input:
+      - '3'
+      - '2'
+      - '*'
+      - '1'
+      - '-'
+      expected: 5
+  - case:
+      id: chained_multiplication
+      input:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      - '5'
+      - '*'
+      - '*'
+      - '*'
+      - '*'
+      expected: 120
+  - case:
+      id: single_number_input
+      input:
+      - '100'
+      expected: 100
+  - case:
+      id: long_chain_of_addition
+      input:
+      - '1'
+      - '1'
+      - +
+      - '1'
+      - +
+      - '1'
+      - +
+      expected: 4
+  - case:
+      id: expression_resulting_in_zero
+      input:
+      - '5'
+      - '5'
+      - '-'
+      - '0'
+      - '*'
+      expected: 0
+  - case:
+      id: empty_list_input
+      input: []
+      raises: ValueError
+  - case:
+      id: not_enough_operands
+      input:
+      - '1'
+      - +
+      raises: ValueError
+  - case:
+      id: division_by_zero
+      input:
+      - '1'
+      - '0'
+      - /
+      raises: ZeroDivisionError
+  - case:
+      id: too_many_values_on_stack
+      input:
+      - '1'
+      - '2'
+      - '3'
+      raises: ValueError
+  - case:
+      id: invalid_token
+      input:
+      - '1'
+      - abc
+      raises: ValueError

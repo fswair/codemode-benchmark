@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Empty list returns empty list ---
+Code: flatten([])
+Output: []
+
+--- Snippet 2 [normal]: Flat list remains flat ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 3 [normal]: Single level nesting ---
+Code: flatten([1, [2, 3], 4])
+Output: [1, 2, 3, 4]
+
+--- Snippet 4 [normal]: Deeply nested list ---
+Code: flatten([1, [2, [3, 4], 5], 6])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 5 [normal]: Nested empty lists ---
+Code: flatten([[], [[]], [[], 1]])
+Output: [1]
+
+--- Snippet 6 [normal]: List containing strings ---
+Code: flatten(["a", ["b", ["c"]]])
+Output: ['a', 'b', 'c']
+
+--- Snippet 7 [normal]: List containing floats ---
+Code: flatten([1.1, [2.2, 3.3]])
+Output: [1.1, 2.2, 3.3]
+
+--- Snippet 8 [normal]: List containing booleans ---
+Code: flatten([True, [False, [True]]])
+Output: [True, False, True]
+
+--- Snippet 9 [normal]: List containing None types ---
+Code: flatten([None, [1, None]])
+Output: [None, 1, None]
+
+--- Snippet 10 [normal]: Very deep single element list ---
+Code: flatten([[[[1]]]])
+Output: [1]
+
+--- Snippet 11 [normal]: Identity property for trivial inputs ---
+Code: flatten([]) == [] and flatten([1, 2]) == [1, 2]
+Output: True
+
+--- Snippet 12 [normal]: Additivity of list concatenation ---
+Code: flatten([1, 2] + [3, 4]) == flatten([1, 2, 3, 4])
+Output: True
+
+--- Snippet 13 [normal]: Structure preservation verification (length) ---
+Code: len(flatten([1, [2, [3, [4]]]])) == 4
+Output: True
+
+--- Snippet 14 [normal]: Flattening multiple singular nested lists ---
+Code: flatten([[1], [2], [3]]) == [1, 2, 3]
+Output: True
+
+--- Snippet 15 [normal]: Mixed flat and nested elements ---
+Code: flatten([1, [2], 3, [4, 5], 6])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 16 [error]: None input raises TypeError ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: String input raises TypeError ---
+Code: flatten("not a list")
+RAISED TypeError: Expected list, got str
+
+--- Snippet 18 [error]: Integer input raises TypeError ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int

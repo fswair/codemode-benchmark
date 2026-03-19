@@ -1,0 +1,79 @@
+--- Snippet 1 [normal]: Simple addition ---
+Code: eval_rpn(["2", "3", "+"])
+Output: 5
+
+--- Snippet 2 [normal]: Simple division ---
+Code: eval_rpn(["10", "2", "/"])
+Output: 5
+
+--- Snippet 3 [normal]: Simple multiplication ---
+Code: eval_rpn(["2", "5", "*"])
+Output: 10
+
+--- Snippet 4 [normal]: Simple subtraction ---
+Code: eval_rpn(["10", "3", "-"])
+Output: 7
+
+--- Snippet 5 [normal]: Complex mixed expression ---
+Code: eval_rpn(["4", "13", "5", "/", "+"])
+Output: 6
+
+--- Snippet 6 [normal]: Input with negative operand ---
+Code: eval_rpn(["-2", "3", "+"])
+Output: 1
+
+--- Snippet 7 [normal]: Division with negative result truncation toward zero test 1 ---
+Code: eval_rpn(["10", "-2", "/"])
+Output: -5
+
+--- Snippet 8 [error]: Division with negative result truncation toward zero test 2 ---
+Code: eval_rpn(["-10", "3", "/"]),description:
+RAISED SyntaxError: invalid syntax (<vowel-session>, line 1)
+
+--- Snippet 9 [normal]: Division with negative result truncation toward zero test 3 ---
+Code: eval_rpn(["10", "-3", "/"])
+Output: -3
+
+--- Snippet 10 [normal]: Zero operand usage ---
+Code: eval_rpn(["0", "5", "+"])
+Output: 5
+
+--- Snippet 11 [normal]: Sequence of operations ---
+Code: eval_rpn(["3", "2", "*", "1", "-"])
+Output: 5
+
+--- Snippet 12 [normal]: Chained multiplication ---
+Code: eval_rpn(["1", "2", "3", "4", "5", "*", "*", "*", "*"])
+Output: 120
+
+--- Snippet 13 [normal]: Single number input (a valid expression) ---
+Code: eval_rpn(["100"])
+Output: 100
+
+--- Snippet 14 [normal]: Long chain of addition ---
+Code: eval_rpn(['1', '1', '+', '1', '+', '1', '+'])
+Output: 4
+
+--- Snippet 15 [normal]: Expression resulting in zero ---
+Code: eval_rpn(["5", "5", "-", "0", "*"])
+Output: 0
+
+--- Snippet 16 [error]: Empty list input triggers ValueError ---
+Code: eval_rpn([])
+RAISED ValueError: Empty expression
+
+--- Snippet 17 [error]: Not enough operands trigger ValueError ---
+Code: eval_rpn(['1', '+'])
+RAISED ValueError: Not enough operands for '+'
+
+--- Snippet 18 [error]: Division by zero triggers ZeroDivisionError ---
+Code: eval_rpn(['1', '0', '/'])
+RAISED ZeroDivisionError: Division by zero
+
+--- Snippet 19 [error]: Too many values remaining on stack trigger ValueError ---
+Code: eval_rpn(['1', '2', '3'])
+RAISED ValueError: Invalid expression: 3 values remaining on stack
+
+--- Snippet 20 [error]: Invalid token non-integer and non-operator string triggers ValueError ---
+Code: eval_rpn(['1', 'abc'])
+RAISED ValueError: Invalid token: 'abc'

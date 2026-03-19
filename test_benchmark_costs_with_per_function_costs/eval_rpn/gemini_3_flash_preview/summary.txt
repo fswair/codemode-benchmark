@@ -1,0 +1,14 @@
+Scenario : eval_rpn
+Spec Model : openrouter:google/gemini-3-flash-preview
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 37  (raises=11)
+Snippets : 38  (error_snippets=11)
+Refines  : 1
+Cost USD : 0.02848150
+Cost/Fn  : 0.02848150
+Tokens   : in=30833 out=4355 req=4
+Pricing  : costs.yml
+Time     : 38.6s
+Evals    : expected, raises

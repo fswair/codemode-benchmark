@@ -1,0 +1,139 @@
+--- Snippet 1 [normal]: Happy path: grouping by an integer key present in all dicts ---
+Code: group_by([{"id": 1, "name": "A"}, {"id": 2, "name": "B"}, {"id": 1, "name": "C"}], "id")
+Output: {1: [{'id': 1, 'name': 'A'}, {'id': 1, 'name': 'C'}], 2: [{'id': 2, 'name': 'B'}]}
+
+--- Snippet 2 [normal]: Boundary case: empty list of items returns an empty dict ---
+Code: group_by([], "any_key")
+Output: {}
+
+--- Snippet 3 [normal]: Missing key: one dict is missing the specified key, should go under None. ---
+Code: group_by([{"type": "fruit", "name": "apple"}, {"type": "vibe"}], "type")
+Output: {'fruit': [{'type': 'fruit', 'name': 'apple'}], 'vibe': [{'type': 'vibe'}]}
+
+--- Snippet 4 [normal]: Single group: all dicts have the same value for the key. ---
+Code: group_by([{"val": 10}, {"val": 10}, {"val": 10}], "val")
+Output: {10: [{'val': 10}, {'val': 10}, {'val': 10}]}
+
+--- Snippet 5 [normal]: All missing keys: all dicts go under the None group. ---
+Code: group_by([{"a": 1}, {"b": 2}], "c")
+Output: {None: [{'a': 1}, {'b': 2}]}
+
+--- Snippet 6 [normal]: Verify the content of a specific group in the output. ---
+Code: group_by([{"key": "a"}, {"key": "b"}], "key")["a"] == [{"key": "a"}]
+Output: True
+
+--- Snippet 7 [normal]: Grouping by boolean values. ---
+Code: group_by([{"status": True}, {"status": False}, {"status": True}], "status")
+Output: {True: [{'status': True}, {'status': True}], False: [{'status': False}]}
+
+--- Snippet 8 [normal]: Explicit None value vs missing key (both should land in the None group). ---
+Code: group_by([{"id": None}, {"id": 1}], "id")
+Output: {None: [{'id': None}], 1: [{'id': 1}]}
+
+--- Snippet 9 [normal]: Grouping by empty string values. ---
+Code: group_by([{"tag": ""}, {"tag": "urgent"}, {"tag": ""}], "tag")
+Output: {'': [{'tag': ''}, {'tag': ''}], 'urgent': [{'tag': 'urgent'}]}
+
+--- Snippet 10 [normal]: Grouping by hashable tuple values. ---
+Code: group_by([{"nested": (1, 2)}, {"nested": (1, 2)}], "nested")
+Output: {(1, 2): [{'nested': (1, 2)}, {'nested': (1, 2)}]}
+
+--- Snippet 11 [normal]: Heterogeneous dicts with the same grouping key. ---
+Code: group_by([{"x": 1, "y": 2}, {"x": 1, "z": 3}], "x")
+Output: {1: [{'x': 1, 'y': 2}, {'x': 1, 'z': 3}]}
+
+--- Snippet 12 [normal]: Verify return type is a dictionary. ---
+Code: type(group_by([{"a": 1}], "a"))
+Output: <class 'dict'>
+
+--- Snippet 13 [normal]: Check number of groups created. ---
+Code: len(group_by([{"a": 1}, {"a": 2}, {"a": 3}], "a"))
+Output: 3
+
+--- Snippet 14 [normal]: Check if identity of dicts is preserved when they are identical but separate objects (false in this code literal). ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")[1][0] is group_by([{"a": 1}, {"a": 1}], "a")[1][1]
+Output: False
+
+--- Snippet 15 [normal]: Single empty dict in list. ---
+Code: group_by([{}], "anything")
+Output: {None: [{}]}
+
+--- Snippet 16 [error]: Passing None as the items argument (expected TypeError) ---
+Code: group_by(None, "id")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [normal]: Passing None as the key (item.get(None) is valid but dict keys cannot be unhashable; testing key validity) ---
+Code: group_by([{"a": 1}], None)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 18 [error]: Passing an integer instead of a list of dicts (expected TypeError) ---
+Code: group_by(123, "id")
+RAISED TypeError: 'int' object is not iterable
+
+--- Snippet 19 [error]: Grouping by a key whose value is unhashable (list), making it an invalid dict key for the result ---
+Code: group_by([{"a": [1, 2]}], "a")
+RAISED TypeError: unhashable type: 'list'
+
+--- Snippet 20 [normal]: Grouping by float keys. ---
+Code: group_by([{"a": 1.5}, {"a": 1.5}, {"a": 2.5}], "a")
+Output: {1.5: [{'a': 1.5}, {'a': 1.5}], 2.5: [{'a': 2.5}]}
+
+--- Snippet 21 [normal]: Grouping where keys are numerically equal but different types (1 and 1.0). ---
+Code: group_by([{"val": 1}, {"val": 1.0}], "val")
+Output: {1: [{'val': 1}, {'val': 1.0}]}
+
+--- Snippet 22 [normal]: Verify all items result in a single None group when key is globally missing. ---
+Code: group_by([{"a": 1}, {"b": 2}, {"c": 3}], "d") == {None: [{"a": 1}, {"b": 2}, {"c": 3}]}
+Output: True
+
+--- Snippet 23 [normal]: Identity check: grouping a single element list. ---
+Code: group_by([{"a": 1}], "a") == {1: [{"a": 1}]}
+Output: True
+
+--- Snippet 24 [normal]: Scalability check: 100 unique groups. ---
+Code: len(group_by([{"id": i} for i in range(100)], "id"))
+Output: 100
+
+--- Snippet 25 [normal]: Check if the objects in the result are the same instances as the input list (reference preservation). ---
+Code: group_by([{"key": "val"}, {"key": "val"}], "key")["val"][0] is group_by([{"key": "val"}, {"key": "val"}], "key")["val"][0]
+Output: False
+
+--- Snippet 26 [normal]: Verify order preservation within the group list. ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")[1] == [{"a": 1}, {"a": 1}]
+Output: True
+
+--- Snippet 27 [normal]: Check insertion order of keys in the resulting dictionary. ---
+Code: list(group_by([{"a": 2}, {"b": 1}, {"a": 1}], "a").keys())
+Output: [2, None, 1]
+
+--- Snippet 28 [normal]: Accessing a non-existent group in the result. ---
+Code: group_by([{"a": 1}, {"a": 2}], "a").get("non_existent")
+Output: None
+
+--- Snippet 29 [normal]: Case sensitivity: 'A' present vs 'a' requested. ---
+Code: group_by([{"A": 1}, {"a": 1}], "a")
+Output: {None: [{'A': 1}], 1: [{'a': 1}]}
+
+--- Snippet 30 [normal]: Grouping by complex numbers. ---
+Code: group_by([{"complex": 1j}, {"complex": 2j}], "complex")
+Output: {1j: [{'complex': 1j}], 2j: [{'complex': 2j}]}
+
+--- Snippet 31 [normal]: Grouping by bytes objects. ---
+Code: group_by([{"data": b"bytes"}, {"data": b"bytes"}], "data")
+Output: {b'bytes': [{'data': b'bytes'}, {'data': b'bytes'}]}
+
+--- Snippet 32 [error]: Grouping by a dictionary value (unhashable) in the item. ---
+Code: group_by([{"a": {"unhashable": "dict"}}], "a")
+RAISED TypeError: unhashable type: 'dict'
+
+--- Snippet 33 [error]: List contains None instead of a dict (None.get() will fail). ---
+Code: group_by([None], "any")
+RAISED AttributeError: 'NoneType' object has no attribute 'get'
+
+--- Snippet 34 [error]: List contains integers instead of dicts (int.get() will fail). ---
+Code: group_by([1, 2, 3], "any")
+RAISED AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 35 [error]: Using an unhashable list as the 'key' argument passed to dict.get() (usually allowed by get, but good for coverage). ---
+Code: group_by([{"a": 1}], ["key_as_list"])
+RAISED TypeError: unhashable type: 'list'

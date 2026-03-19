@@ -1,0 +1,75 @@
+--- Snippet 1 [normal]: Basic grouping by an existing integer key. ---
+Code: group_by([{"id": 1, "val": "a"}, {"id": 2, "val": "b"}, {"id": 1, "val": "c"}], "id")
+Output: {1: [{'id': 1, 'val': 'a'}, {'id': 1, 'val': 'c'}], 2: [{'id': 2, 'val': 'b'}]}
+
+--- Snippet 2 [normal]: Basic grouping by an existing string key. ---
+Code: group_by([{"type": "fruit", "name": "apple"}, {"type": "vibe", "name": "cool"}, {"type": "fruit", "name": "pear"}], "type")
+Output: {'fruit': [{'type': 'fruit', 'name': 'apple'}, {'type': 'fruit', 'name': 'pear'}], 'vibe': [{'type': 'vibe', 'name': 'cool'}]}
+
+--- Snippet 3 [normal]: Empty list of items returns an empty dictionary. ---
+Code: group_by([], "any_key")
+Output: {}
+
+--- Snippet 4 [normal]: Handling a missing key: item goes into the None group. ---
+Code: group_by([{"id": 1}, {"name": "missing"}], "id")
+Output: {1: [{'id': 1}], None: [{'name': 'missing'}]}
+
+--- Snippet 5 [normal]: All items missing the key: all go into the None group. ---
+Code: group_by([{"a": 1}, {"b": 2}], "c")
+Output: {None: [{'a': 1}, {'b': 2}]}
+
+--- Snippet 6 [normal]: Duplicate items with the same key grouping. ---
+Code: group_by([{"id": 1}, {"id": 1}], "id")
+Output: {1: [{'id': 1}, {'id': 1}]}
+
+--- Snippet 7 [normal]: Grouping items where the key value itself is explicitly None. ---
+Code: group_by([{"val": None}, {"val": None}], "val")
+Output: {None: [{'val': None}, {'val': None}]}
+
+--- Snippet 8 [normal]: Grouping by boolean values. ---
+Code: group_by([{"key": True}, {"key": False}, {"key": True}], "key")
+Output: {True: [{'key': True}, {'key': True}], False: [{'key': False}]}
+
+--- Snippet 9 [error]: Grouping values that are complex objects (dicts). ---
+Code: group_by([{"meta": {"sub": 1}}, {"meta": 2}], "meta")
+RAISED TypeError: unhashable type: 'dict'
+
+--- Snippet 10 [normal]: An empty dictionary item grouped by a missing key. ---
+Code: group_by([{}], "anything")
+Output: {None: [{}]}
+
+--- Snippet 11 [normal]: Grouping by keys that are numerically equal but different types (int vs float). ---
+Code: group_by([{"id": 1}, {"id": 1.0}], "id")
+Output: {1: [{'id': 1}, {'id': 1.0}]}
+
+--- Snippet 12 [normal]: Grouping using an empty string as the key name. ---
+Code: group_by([{"a": 1}], "")
+Output: {None: [{'a': 1}]}
+
+--- Snippet 13 [normal]: Verification that the result contains the original list of dicts. ---
+Code: group_by([{"tag": "A"}, {"tag": "A"}], "tag")["A"] == [{"tag": "A"}, {"tag": "A"}]
+Output: True
+
+--- Snippet 14 [normal]: Checking the number of groups created. ---
+Code: len(group_by([{"id": 1}, {"id": 2}, {"id": 3}], "id"))
+Output: 3
+
+--- Snippet 15 [normal]: Confirming the return type is a dictionary. ---
+Code: type(group_by([{"a": 1}], "a"))
+Output: <class 'dict'>
+
+--- Snippet 16 [normal]: Grouping by tuple values (hashable). ---
+Code: group_by([{"x": (1,2)}, {"x": (1,2)}], "x")
+Output: {(1, 2): [{'x': (1, 2)}, {'x': (1, 2)}]}
+
+--- Snippet 17 [error]: TypeError when items is None (not iterable). ---
+Code: group_by(None, "id")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 18 [normal]: TypeError when key is not a string (though dict.get() might handle it, the type hint specifies str). ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 19 [error]: AttributeError when items contains non-dict objects that lack a .get() method. ---
+Code: group_by([1, 2, 3], "id")
+RAISED AttributeError: 'int' object has no attribute 'get'

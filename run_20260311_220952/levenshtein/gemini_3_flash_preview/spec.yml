@@ -1,0 +1,91 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: "output >= 0"
+    LowerBound:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+    UpperBound:
+      assertion: "output <= max(len(input[0]), len(input[1]))"
+
+  dataset:
+    - case:
+        id: "typical_kitten_sitting"
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: "saturday_sunday"
+        inputs: ["Saturday", "Sunday"]
+        expected: 3
+    - case:
+        id: "both_empty"
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: "first_empty"
+        inputs: ["", "abc"]
+        expected: 3
+    - case:
+        id: "second_empty"
+        inputs: ["abc", ""]
+        expected: 3
+    - case:
+        id: "identical_strings"
+        inputs: ["abc", "abc"]
+        expected: 0
+    - case:
+        id: "prefix_match"
+        inputs: ["abc", "abcde"]
+        expected: 2
+    - case:
+        id: "flaw_lawn_overlap"
+        inputs: ["flaw", "lawn"]
+        expected: 2
+    - case:
+        id: "gumbo_gambol"
+        inputs: ["gumbo", "gambol"]
+        expected: 2
+    - case:
+        id: "single_char_substitution"
+        inputs: ["a", "b"]
+        expected: 1
+    - case:
+        id: "reversed_strings"
+        inputs: ["abc", "cba"]
+        expected: 2
+    - case:
+        id: "case_sensitivity"
+        inputs: ["A", "a"]
+        expected: 1
+    - case:
+        id: "unicode_handling"
+        inputs: ["cafe", "café"]
+        expected: 1
+    - case:
+        id: "total_substitution"
+        inputs: ["abcde", "fghij"]
+        expected: 5
+    - case:
+        id: "long_identical_strings"
+        inputs: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+        expected: 0
+    - case:
+        id: "symmetry_check"
+        inputs: ["sitting", "kitten"]
+        expected: 3
+    - case:
+        id: "error_first_arg_none"
+        inputs: [null, "hello"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_second_arg_int"
+        inputs: ["hello", 123]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_args_lists"
+        inputs: [["a"], ["b"]]
+        raises: TypeError
+        match: "Both arguments must be strings"

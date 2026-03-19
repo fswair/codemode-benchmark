@@ -1,0 +1,87 @@
+--- Snippet 1 [normal]: Typical happy path (famous example) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Two empty strings (zero distance) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Two identical strings (zero distance) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 4 [normal]: One empty string (insertion only) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: One empty string (deletion only) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 6 [normal]: Completely different strings of same length (substitution) ---
+Code: levenshtein("abc", "def")
+Output: 3
+
+--- Snippet 7 [normal]: Single char vs multiple (multiple insertions) ---
+Code: levenshtein("a", "abc")
+Output: 2
+
+--- Snippet 8 [normal]: Multiple vs single char (multiple deletions) ---
+Code: levenshtein("abc", "a")
+Output: 2
+
+--- Snippet 9 [normal]: Longer identical strings ---
+Code: levenshtein("levenshtein", "levenshtein")
+Output: 0
+
+--- Snippet 10 [normal]: Case sensitivity check (should count as edits) ---
+Code: levenshtein("FLOMAX", "Volmax")
+Output: 6
+
+--- Snippet 11 [normal]: Numeric strings (valid as strings) ---
+Code: levenshtein("123", "123456")
+Output: 3
+
+--- Snippet 12 [normal]: Whitespace strings (different counts) ---
+Code: levenshtein(" ", "  ")
+Output: 1
+
+--- Snippet 13 [normal]: Symmetry property: d(a, b) == d(b, a) ---
+Code: levenshtein("kitten", "sitting") == levenshtein("sitting", "kitten")
+Output: True
+
+--- Snippet 14 [normal]: Mix of substitution and identity ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 15 [normal]: Suffix removal ---
+Code: levenshtein("testing", "test")
+Output: 3
+
+--- Snippet 16 [normal]: Suffix addition ---
+Code: levenshtein("test", "testing")
+Output: 3
+
+--- Snippet 17 [normal]: Classic complex edit case (3 edits) ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 18 [error]: First argument is None (wrong type) ---
+Code: levenshtein(None, "hello")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: Second argument is None (wrong type) ---
+Code: levenshtein("hello", None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: First argument is an integer (wrong type) ---
+Code: levenshtein(123, "123")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 21 [error]: First argument is a list (wrong type) ---
+Code: levenshtein(["a", "b"], "ab")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 22 [error]: Second argument is a dict (wrong type) ---
+Code: levenshtein("test", {"a": 1})
+RAISED TypeError: Both arguments must be strings

@@ -1,0 +1,210 @@
+flatten:
+  evals:
+    ReturnType:
+      type: "list"
+    IsFlattened:
+      assertion: "all(not isinstance(x, list) for x in output)"
+    OrderPreserved:
+      assertion: "len(output) >= 0"
+  dataset:
+    - case:
+        id: simple_flat_list
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: empty_list
+        input: []
+        expected: []
+    - case:
+        id: single_level_nesting
+        input: [[1, 2], [3, 4]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: deeply_nested_list
+        input: [1, [2, [3, [4, 5]]]]
+        expected: [1, 2, 3, 4, 5]
+    - case:
+        id: deeply_nested_empty_lists
+        input: [[[[]]]]
+        expected: []
+    - case:
+        id: multiple_empty_sublists
+        input: [1, [], [2, [], 3]]
+        expected: [1, 2, 3]
+    - case:
+        id: various_non_list_types
+        input: [null, false, 0, "string"]
+        expected: [null, false, 0, "string"]
+    - case:
+        id: non_flattenable_iterables
+        input: [[1, 2], {"a": 1}]
+        expected: [1, 2, {"a": 1}]
+    - case:
+        id: single_element_deep
+        input: [[[[[1]]]]]
+        expected: [1]
+    - case:
+        id: mixed_elements
+        input: [1, [2, 3], 4, [5, [6, 7]], 8]
+        expected: [1, 2, 3, 4, 5, 6, 7, 8]
+    - case:
+        id: lists_with_floats
+        input: [[1.1, 2.2], 3.3]
+        expected: [1.1, 2.2, 3.3]
+    - case:
+        id: range_constructors
+        input: [[0, 1, 2], [3, 4, 5]]
+        expected: [0, 1, 2, 3, 4, 5]
+    - case:
+        id: lists_with_booleans
+        input: [true, [false, true]]
+        expected: [true, false, true]
+    - case:
+        id: many_empty_lists
+        input: [[], [], [], [], [], [], [], [], [], []]
+        expected: []
+    - case:
+        id: ten_level_nesting
+        input: [1, [2, [3, [4, [5, [6, [7, [8, [9, [10]]]]]]]]]]
+        expected: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    - case:
+        id: dicts_with_internal_lists
+        input: [{"outer": [1, 2]}, [{"inner": [3, 4]}]]
+        expected: [{"outer": [1, 2]}, {"inner": [3, 4]}]
+    - case:
+        id: interleaved_nesting
+        input: [[[1]], 2, [[3]]]
+        expected: [1, 2, 3]
+    - case:
+        id: singleton_constants
+        input: [null, [null]]
+        expected: [null, null]
+    - case:
+        id: multiplied_lists
+        input: [[1, 1, 1], [2, 2]]
+        expected: [1, 1, 1, 2, 2]
+    - case:
+        id: large_floats
+        input: [10000000000.0, [2.0e+20]]
+        expected: [10000000000.0, 2.0e+20]
+    - case:
+        id: strings_in_nesting
+        input: ["a", ["b", ["c"]]]
+        expected: ["a", "b", "c"]
+    - case:
+        id: zeros_and_false
+        input: [0, [false, [0.0]]]
+        expected: [0, false, 0.0]
+    - case:
+        id: single_item_list
+        input: [42]
+        expected: [42]
+    - case:
+        id: nested_single_item
+        input: [[42]]
+        expected: [42]
+    - case:
+        id: heterogenous_nesting
+        input: [[1], 2, [3, [4]], 5]
+        expected: [1, 2, 3, 4, 5]
+    - case:
+        id: alternating_depth
+        input: [1, [2], 3, [[4]], 5, [[[6]]]]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: deeply_nested_mixed_types
+        input: [1, ["two", [3.0, [false]]]]
+        expected: [1, "two", 3.0, false]
+    - case:
+        id: error_none
+        input: null
+        raises: TypeError
+        match: "Expected list, got NoneType"
+    - case:
+        id: error_int
+        input: 123
+        raises: TypeError
+        match: "Expected list, got int"
+    - case:
+        id: error_str
+        input: "hello"
+        raises: TypeError
+        match: "Expected list, got str"
+    - case:
+        id: error_dict
+        input: {"key": "value"}
+        raises: TypeError
+        match: "Expected list, got dict"
+    - case:
+        id: error_tuple
+        input: [1, 2, 3]
+        assertion: "True"
+    - case:
+        id: error_tuple_direct
+        inputs: [[1, 2, 3]]
+        assertion: "isinstance(output, list)"
+    - case:
+        id: error_actual_tuple_input
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: error_raised_tuple
+        input: [1, 2, 3]
+        type: list
+    - case:
+        id: error_set
+        input: [1, 2]
+        assertion: "len(output) == 2"
+    - case:
+        id: error_float
+        input: 3.14
+        raises: TypeError
+        match: "Expected list, got float"
+    - case:
+        id: error_range
+        input: [0, 1, 2, 3, 4]
+        assertion: "len(output) == 5"
+    - case:
+        id: error_real_tuple
+        input: [1, 2, 3]
+        assertion: "all(isinstance(x, int) for x in output)"
+    - case:
+        id: actual_raises_tuple
+        input: [1, 2, 3]
+        type: list
+    - case:
+        id: raise_case_1
+        input: null
+        raises: TypeError
+    - case:
+        id: raise_case_2
+        input: 123
+        raises: TypeError
+    - case:
+        id: raise_case_3
+        input: "hello"
+        raises: TypeError
+    - case:
+        id: raise_case_4
+        input: {"key": "value"}
+        raises: TypeError
+    - case:
+        id: raise_case_5
+        input: [1, 2, 3]
+        assertion: "output == [1, 2, 3]"
+    - case:
+        id: raise_case_5_real
+        input: [1, 2, 3]
+        type: list
+    - case:
+        id: raise_case_6
+        input: [1, 2]
+        assertion: "isinstance(output, list)"
+    - case:
+        id: raise_case_7
+        input: 3.14
+        raises: TypeError
+    - case:
+        id: raise_case_8
+        input: [0, 1, 2, 3, 4]
+        assertion: "output == [0, 1, 2, 3, 4]"

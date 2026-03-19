@@ -1,0 +1,196 @@
+group_by:
+  evals:
+    ReturnType:
+      type: dict
+    ResultIntegrity:
+      assertion: all(isinstance(v, list) for v in output.values())
+    ItemPreservation:
+      assertion: sum(len(v) for v in output.values()) == len(input[0]) if isinstance(input[0],
+        list) else True
+  dataset:
+  - case:
+      id: happy_path_multiple_items
+      inputs:
+      - - type: A
+          id: 1
+        - type: B
+          id: 2
+        - type: A
+          id: 3
+      - type
+      expected:
+        A:
+        - type: A
+          id: 1
+        - type: A
+          id: 3
+        B:
+        - type: B
+          id: 2
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_all
+      inputs:
+      - - id: 1
+        - id: 2
+      - missing_key
+      expected:
+        null:
+        - id: 1
+        - id: 2
+  - case:
+      id: mixed_presence
+      inputs:
+      - - category: fruit
+          name: apple
+        - name: orphan
+      - category
+      expected:
+        fruit:
+        - category: fruit
+          name: apple
+        null:
+        - name: orphan
+  - case:
+      id: explicit_none_vs_missing
+      inputs:
+      - - status: null
+          val: 1
+        - val: 2
+      - status
+      expected:
+        null:
+        - status: null
+          val: 1
+        - val: 2
+  - case:
+      id: same_key_values
+      inputs:
+      - - val: 10
+        - val: 10
+        - val: 10
+      - val
+      expected:
+        10:
+        - val: 10
+        - val: 10
+        - val: 10
+  - case:
+      id: boolean_keys
+      inputs:
+      - - key: true
+        - key: false
+        - key: true
+      - key
+      expected:
+        true:
+        - key: true
+        - key: true
+        false:
+        - key: false
+  - case:
+      id: integer_key_integrity
+      inputs:
+      - - val: 1
+        - val: 2
+      - val
+      assertion: '''1'' not in output and 1 in output'
+  - case:
+      id: empty_string_key
+      inputs:
+      - - id: 1
+      - ''
+      expected:
+        null:
+        - id: 1
+  - case:
+      id: multiple_empty_dicts
+      inputs:
+      - - {}
+        - {}
+        - {}
+      - any
+      expected:
+        null:
+        - {}
+        - {}
+        - {}
+  - case:
+      id: idempotency_check
+      inputs:
+      - - x: 1
+        - x: 1
+      - x
+      assertion: output == output
+  - case:
+      id: key_arg_none
+      inputs:
+      - - a: 1
+      - null
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: numeric_group_keys
+      inputs:
+      - - n: 1.5
+        - n: 2.5
+        - n: 1.5
+      - n
+      expected:
+        1.5:
+        - n: 1.5
+        - n: 1.5
+        2.5:
+        - n: 2.5
+  - case:
+      id: single_item_list
+      inputs:
+      - - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+  - case:
+      id: error_string_instead_of_list
+      inputs:
+      - not a list
+      - key
+      raises: AttributeError
+      match: '''str'' object has no attribute ''get'''
+  - case:
+      id: error_list_of_ints
+      inputs:
+      - - 1
+        - 2
+        - 3
+      - key
+      raises: AttributeError
+      match: '''int'' object has no attribute ''get'''
+  - case:
+      id: error_key_lookup_fail
+      inputs:
+      - - a: 1
+          b: 2
+      - a
+      assertion: output[1][0]['b'] == 2
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - - meta:
+            sub: 1
+        - meta:
+            sub: 2
+      - meta
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - null
+      - key
+      raises: TypeError

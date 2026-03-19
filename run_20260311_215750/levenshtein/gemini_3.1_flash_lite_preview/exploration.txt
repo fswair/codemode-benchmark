@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Both empty strings ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 2 [normal]: First string non-empty, second empty ---
+Code: levenshtein("a", "")
+Output: 1
+
+--- Snippet 3 [normal]: First string empty, second non-empty ---
+Code: levenshtein("", "a")
+Output: 1
+
+--- Snippet 4 [normal]: Identical non-empty strings ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 5 [normal]: Standard example from literature ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 6 [normal]: Strings with partial overlap ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 7 [normal]: Single character substitution ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 8 [normal]: Completely different strings same length ---
+Code: levenshtein("abc", "def")
+Output: 3
+
+--- Snippet 9 [normal]: Insertion at end ---
+Code: levenshtein("ab", "abc")
+Output: 1
+
+--- Snippet 10 [normal]: Deletion from end ---
+Code: levenshtein("abc", "ab")
+Output: 1
+
+--- Snippet 11 [normal]: Common comparison string ---
+Code: levenshtein("sunday", "saturday")
+Output: 3
+
+--- Snippet 12 [normal]: Medium length identical strings ---
+Code: levenshtein("a" * 10, "a" * 10)
+Output: 0
+
+--- Snippet 13 [normal]: Transposition (needs 2 edits) ---
+Code: levenshtein("abc", "acb")
+Output: 2
+
+--- Snippet 14 [normal]: Single character deletion ---
+Code: levenshtein("hello", "helo")
+Output: 1
+
+--- Snippet 15 [error]: Multiple insertions ---
+Code: levenshtein("a", "aaaaa"),description:
+RAISED SyntaxError: invalid syntax (<vowel-session>, line 1)
+
+--- Snippet 16 [error]: None as first argument ---
+Code: levenshtein(None, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 17 [error]: Integer as second argument ---
+Code: levenshtein("abc", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 18 [error]: List inputs instead of strings ---
+Code: levenshtein(["a"], ["b"])
+RAISED TypeError: Both arguments must be strings

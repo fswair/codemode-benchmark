@@ -1,0 +1,79 @@
+--- Snippet 1 [normal]: Simple flat list remains unchanged. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 2 [normal]: One level of nesting is flattened. ---
+Code: flatten([[1, 2], [3, 4]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 3 [normal]: Deeply nested list is fully flattened to one level. ---
+Code: flatten([1, [2, [3, [4]]]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 4 [normal]: Empty list returns an empty list. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 5 [normal]: List containing only empty lists of various depths results in an empty list. ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: Lists containing strings are flattened correctly. ---
+Code: flatten(["a", ["b", "c"], [["d"]]])
+Output: ['a', 'b', 'c', 'd']
+
+--- Snippet 7 [normal]: List with mixed types (None, bool, float) is flattened. ---
+Code: flatten([1, None, [True, False], 3.14])
+Output: [1, None, True, False, 3.14]
+
+--- Snippet 8 [normal]: Deeply wrapped single element is extracted. ---
+Code: flatten([[[1]]])
+Output: [1]
+
+--- Snippet 9 [normal]: Mixed structure of atoms and lists. ---
+Code: flatten([1, [2, 3], 4, [5, [6]]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 10 [normal]: Tuples inside the list are treated as atoms and not flattened. ---
+Code: flatten([1, [2], (3, 4), [5]])
+Output: [1, 2, (3, 4), 5]
+
+--- Snippet 11 [normal]: Dictionaries inside the list are treated as atoms. ---
+Code: flatten([{"key": "val"}, [7, 8]])
+Output: [{'key': 'val'}, 7, 8]
+
+--- Snippet 12 [normal]: Complex symmetric nesting. ---
+Code: flatten([[[1, 2], 3], [4, [5, 6]]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 13 [normal]: Idempotency: Flattening an already flattened list results in the same list. ---
+Code: flatten(flatten([[1, [2]], [3]]))
+Output: [1, 2, 3]
+
+--- Snippet 14 [normal]: Verify the length of the resulting flattened list. ---
+Code: len(flatten([1, [2, 3], [4, [5, 6]]]))
+Output: 6
+
+--- Snippet 15 [normal]: Other iterables like range are treated as atoms. ---
+Code: flatten([range(3), [4, 5]])
+Output: [range(0, 3), 4, 5]
+
+--- Snippet 16 [error]: Passing None triggers TypeError via the initial isinstance check. ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Passing an integer triggers TypeError via the initial isinstance check. ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 18 [error]: Passing a string triggers TypeError; though iterable, the function requires a list. ---
+Code: flatten("string")
+RAISED TypeError: Expected list, got str
+
+--- Snippet 19 [error]: Passing a dictionary triggers TypeError. ---
+Code: flatten({"a": 1})
+RAISED TypeError: Expected list, got dict
+
+--- Snippet 20 [error]: Passing a tuple triggers TypeError. ---
+Code: flatten((1, 2, 3))
+RAISED TypeError: Expected list, got tuple

@@ -1,0 +1,105 @@
+eval_rpn:
+  evals:
+    ReturnType:
+      type: "int"
+    NoFloat:
+      assertion: "not isinstance(output, float)"
+  dataset:
+    - case:
+        id: basic_addition_multiplication
+        input: ["2", "1", "+", "3", "*"]
+        expected: 9
+    - case:
+        id: division_truncation_positive
+        input: ["4", "13", "5", "/", "+"]
+        expected: 6
+    - case:
+        id: complex_nested_expression
+        input: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
+        expected: 22
+    - case:
+        id: single_operand
+        input: ["42"]
+        expected: 42
+    - case:
+        id: negative_operand
+        input: ["-5", "3", "+"]
+        expected: -2
+    - case:
+        id: positive_division_truncation
+        input: ["10", "3", "/"]
+        expected: 3
+    - case:
+        id: negative_division_truncation
+        input: ["-10", "3", "/"]
+        expected: -3
+    - case:
+        id: divide_by_negative_truncation
+        input: ["10", "-3", "/"]
+        expected: -3
+    - case:
+        id: zero_numerator
+        input: ["0", "5", "/"]
+        expected: 0
+    - case:
+        id: subtraction_with_zero
+        input: ["5", "0", "-"]
+        expected: 5
+    - case:
+        id: large_numbers
+        input: ["1000", "2000", "*"]
+        expected: 2000000
+    - case:
+        id: long_sequential_ops
+        input: ["1", "2", "+", "3", "-", "4", "+"]
+        expected: 4
+    - case:
+        id: double_negative_multiplication
+        input: ["-1", "-1", "*"]
+        expected: 1
+    - case:
+        id: operator_precedence_check_1
+        input: ["2", "3", "4", "*", "+"]
+        expected: 14
+    - case:
+        id: operator_precedence_check_2
+        input: ["10", "2", "-", "3", "+"]
+        expected: 11
+    - case:
+        id: nested_subtraction
+        input: ["10", "5", "2", "-", "-"]
+        expected: 7
+    - case:
+        id: zero_multiplication
+        input: ["100", "0", "*"]
+        expected: 0
+    - case:
+        id: error_empty_expression
+        input: []
+        raises: ValueError
+        match: "Empty expression"
+    - case:
+        id: error_insufficient_operands
+        input: ["1", "+"]
+        raises: ValueError
+        match: "Not enough operands for '\\+'"
+    - case:
+        id: error_division_by_zero
+        input: ["1", "2", "/", "0", "/"]
+        raises: ZeroDivisionError
+        match: "Division by zero"
+    - case:
+        id: error_invalid_token
+        input: ["1", "abc"]
+        raises: ValueError
+        match: "Invalid token: 'abc'"
+    - case:
+        id: error_stack_imbalance
+        input: ["1", "2", "3", "+"]
+        raises: ValueError
+        match: "Invalid expression: 2 values remaining on stack"
+    - case:
+        id: error_operator_no_operands
+        input: ["+"]
+        raises: ValueError
+        match: "Not enough operands for '\\+'"

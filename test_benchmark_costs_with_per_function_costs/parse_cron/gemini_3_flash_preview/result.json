@@ -1,0 +1,30 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "openrouter:google/gemini-3-flash-preview",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 89.25,
+  "cases": 44,
+  "raises_cases": 17,
+  "snippets": 44,
+  "error_snippets": 17,
+  "refinements": 0,
+  "cost_usd": 0.0486085,
+  "cost_cents": 4.8609,
+  "input_tokens": 28967,
+  "output_tokens": 11375,
+  "requests": 3,
+  "price_sources": [
+    "costs.yml"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.0486085,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

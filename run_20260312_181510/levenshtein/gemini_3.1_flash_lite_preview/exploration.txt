@@ -1,0 +1,143 @@
+--- Snippet 1 [normal]: Happy-path: typical word transformation ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Empty string to empty string should be 0 ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Empty string target (deletion) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Empty string source (insertion) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Identical single characters, distance 0 ---
+Code: levenshtein("a", "a")
+Output: 0
+
+--- Snippet 6 [normal]: Single substitution, distance 1 ---
+Code: levenshtein("abc", "abd")
+Output: 1
+
+--- Snippet 7 [normal]: Target longer than source (insertion only) ---
+Code: levenshtein("abc", "abcde")
+Output: 2
+
+--- Snippet 8 [normal]: Source longer than target (deletion only) ---
+Code: levenshtein("abcde", "abc")
+Output: 2
+
+--- Snippet 9 [normal]: Case sensitive check, distance 2 ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 10 [normal]: Single deletion, distance 1 ---
+Code: levenshtein("hello", "helo")
+Output: 1
+
+--- Snippet 11 [normal]: Disparate lengths ---
+Code: levenshtein("short", "verylongstring")
+Output: 12
+
+--- Snippet 12 [normal]: Numeric strings look-alike, distance 0 ---
+Code: levenshtein("123", "123")
+Output: 0
+
+--- Snippet 13 [normal]: Strings with same characters in different order ---
+Code: levenshtein("abcdefg", "gfedcba")
+Output: 6
+
+--- Snippet 14 [normal]: Strings with single spaces, distance 0 ---
+Code: levenshtein(" ", " ")
+Output: 0
+
+--- Snippet 15 [normal]: Repeating characters, large distance ---
+Code: levenshtein("a" * 100, "b" * 100)
+Output: 100
+
+--- Snippet 16 [normal]: Identical strings, distance 0 ---
+Code: levenshtein("levenshtein", "levenshtein")
+Output: 0
+
+--- Snippet 17 [normal]: Idempotency consistency check ---
+Code: levenshtein("kitten", "kitten") == levenshtein("kitten", "kitten")
+Output: True
+
+--- Snippet 18 [error]: None as first argument should raise TypeError ---
+Code: levenshtein(None, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: Integer as second argument should raise TypeError ---
+Code: levenshtein("abc", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: List inputs should raise TypeError ---
+Code: levenshtein(["a"], ["b"])
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 21 [normal]: Single character substitution boundary ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 22 [normal]: Transposition of two characters (should be distance 2) ---
+Code: levenshtein("ab", "ba")
+Output: 2
+
+--- Snippet 23 [normal]: Adding single character to end (suffix) ---
+Code: levenshtein("cat", "cats")
+Output: 1
+
+--- Snippet 24 [normal]: Adding single character to start (prefix) ---
+Code: levenshtein("cat", "scat")
+Output: 1
+
+--- Snippet 25 [normal]: Removing characters from end (suffix deletion) ---
+Code: levenshtein("banana", "bana")
+Output: 2
+
+--- Snippet 26 [normal]: Removing characters from start (prefix deletion) ---
+Code: levenshtein("banana", "nana")
+Output: 2
+
+--- Snippet 27 [normal]: Distance between different whitespace characters ---
+Code: levenshtein("\n", "\t")
+Output: 1
+
+--- Snippet 28 [normal]: Special characters substitution ---
+Code: levenshtein("!@#", "!$#")
+Output: 1
+
+--- Snippet 29 [normal]: Explicit check for distinct case-sensitive characters (not just a-z) ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 30 [normal]: Mixed case same letters in different order ---
+Code: levenshtein("AaBbCc", "abcABC")
+Output: 6
+
+--- Snippet 31 [normal]: Small subset swap (distance check) ---
+Code: levenshtein("abc", "acb")
+Output: 2
+
+--- Snippet 32 [normal]: Repeated substring deletion distance behavior ---
+Code: levenshtein("distance" * 10, "distanc" * 10)
+Output: 10
+
+--- Snippet 33 [error]: Both arguments as integers instead of strings ---
+Code: levenshtein(1, 2)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 34 [error]: Second argument as None instead of string ---
+Code: levenshtein("abc", None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 35 [error]: First argument as dictionary instead of string ---
+Code: levenshtein({"a":1}, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 36 [error]: Second argument as list instead of string ---
+Code: levenshtein("abc", ["a", "b", "c"])
+RAISED TypeError: Both arguments must be strings

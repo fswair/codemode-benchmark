@@ -1,0 +1,112 @@
+{
+  "per_model": {
+    "claude_sonnet_4.6_gemini_3_flash_preview": {
+      "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "exploration_model": "openrouter:google/gemini-3-flash-preview",
+      "pass_rate": "3/3",
+      "function_count": 3,
+      "avg_coverage": 1.0,
+      "avg_time_s": 48.72,
+      "total_cost_usd": 0.3264095,
+      "avg_cost_usd": 0.10880317,
+      "cost_per_function_usd": 0.10880317,
+      "avg_input_tokens": 22818.7,
+      "avg_output_tokens": 4409.3,
+      "avg_cases": 45.0,
+      "avg_raises": 12.7,
+      "avg_snippets": 40.3
+    }
+  },
+  "per_scenario": [
+    {
+      "scenario": "parse_cron",
+      "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "exploration_model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 78.96,
+      "cases": 53,
+      "raises_cases": 20,
+      "snippets": 46,
+      "error_snippets": 18,
+      "refinements": 0,
+      "cost_usd": 0.168926,
+      "cost_cents": 16.8926,
+      "input_tokens": 30561,
+      "output_tokens": 7588,
+      "requests": 3,
+      "price_sources": [
+        "costs.yml"
+      ],
+      "function_count": 1,
+      "cost_per_function_usd": 0.168926,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "eval_rpn",
+      "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "exploration_model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 33.64,
+      "cases": 42,
+      "raises_cases": 11,
+      "snippets": 39,
+      "error_snippets": 11,
+      "refinements": 0,
+      "cost_usd": 0.0782485,
+      "cost_cents": 7.8248,
+      "input_tokens": 19332,
+      "output_tokens": 2816,
+      "requests": 3,
+      "price_sources": [
+        "costs.yml"
+      ],
+      "function_count": 1,
+      "cost_per_function_usd": 0.0782485,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "levenshtein",
+      "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "exploration_model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 33.55,
+      "cases": 40,
+      "raises_cases": 7,
+      "snippets": 36,
+      "error_snippets": 7,
+      "refinements": 0,
+      "cost_usd": 0.079235,
+      "cost_cents": 7.9235,
+      "input_tokens": 18563,
+      "output_tokens": 2824,
+      "requests": 3,
+      "price_sources": [
+        "costs.yml"
+      ],
+      "function_count": 1,
+      "cost_per_function_usd": 0.079235,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "claude-sonnet-4.6",
+  "exploration_model": "gemini-3-flash-preview",
+  "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 76.51,
+  "cases": 63,
+  "raises_cases": 19,
+  "snippets": 48,
+  "error_snippets": 19,
+  "refinements": 0,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

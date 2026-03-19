@@ -1,0 +1,113 @@
+levenshtein:
+  evals:
+    IsInt:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    LowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+  dataset:
+  - case:
+      id: both_empty
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: first_non_empty_second_empty
+      inputs:
+      - a
+      - ''
+      expected: 1
+  - case:
+      id: first_empty_second_non_empty
+      inputs:
+      - ''
+      - a
+      expected: 1
+  - case:
+      id: identical_non_empty
+      inputs:
+      - abc
+      - abc
+      expected: 0
+  - case:
+      id: literature_example
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: partial_overlap
+      inputs:
+      - flaw
+      - lawn
+      expected: 2
+  - case:
+      id: single_char_sub
+      inputs:
+      - a
+      - b
+      expected: 1
+  - case:
+      id: completely_different_same_length
+      inputs:
+      - abc
+      - def
+      expected: 3
+  - case:
+      id: insertion_at_end
+      inputs:
+      - ab
+      - abc
+      expected: 1
+  - case:
+      id: deletion_from_end
+      inputs:
+      - abc
+      - ab
+      expected: 1
+  - case:
+      id: common_comparison
+      inputs:
+      - sunday
+      - saturday
+      expected: 3
+  - case:
+      id: medium_identical
+      inputs:
+      - aaaaaaaaaa
+      - aaaaaaaaaa
+      expected: 0
+  - case:
+      id: transposition
+      inputs:
+      - abc
+      - acb
+      expected: 2
+  - case:
+      id: single_char_deletion
+      inputs:
+      - hello
+      - helo
+      expected: 1
+  - case:
+      id: none_as_first_arg
+      inputs:
+      - null
+      - abc
+      raises: TypeError
+  - case:
+      id: int_as_second_arg
+      inputs:
+      - abc
+      - 123
+      raises: TypeError
+  - case:
+      id: list_inputs
+      inputs:
+      - - a
+      - - b
+      raises: TypeError

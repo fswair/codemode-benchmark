@@ -1,0 +1,202 @@
+group_by:
+  evals:
+    ReturnType:
+      type: dict
+    ConsistentLength:
+      assertion: sum(len(v) for v in output.values()) == len(input[0])
+    KeysInItems:
+      assertion: all(k is None or any(item.get(input[1]) == k for item in input[0])
+        for k in output.keys())
+  dataset:
+  - case:
+      id: basic_id_grouping
+      inputs:
+      - - id: 1
+          val: a
+        - id: 2
+          val: b
+        - id: 1
+          val: c
+      - id
+      expected:
+        1:
+        - id: 1
+          val: a
+        - id: 1
+          val: c
+        2:
+        - id: 2
+          val: b
+  - case:
+      id: string_key_grouping
+      inputs:
+      - - type: fruit
+          name: apple
+        - type: vibe
+          name: cool
+        - type: fruit
+          name: pear
+      - type
+      expected:
+        fruit:
+        - type: fruit
+          name: apple
+        - type: fruit
+          name: pear
+        vibe:
+        - type: vibe
+          name: cool
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_handling
+      inputs:
+      - - id: 1
+        - name: missing
+      - id
+      expected:
+        1:
+        - id: 1
+        null:
+        - name: missing
+  - case:
+      id: all_missing_keys
+      inputs:
+      - - a: 1
+        - b: 2
+      - c
+      expected:
+        null:
+        - a: 1
+        - b: 2
+  - case:
+      id: duplicate_items
+      inputs:
+      - - id: 1
+        - id: 1
+      - id
+      expected:
+        1:
+        - id: 1
+        - id: 1
+  - case:
+      id: explicit_none_value
+      inputs:
+      - - val: null
+        - val: null
+      - val
+      expected:
+        null:
+        - val: null
+        - val: null
+  - case:
+      id: boolean_keys
+      inputs:
+      - - key: true
+        - key: false
+        - key: true
+      - key
+      expected:
+        true:
+        - key: true
+        - key: true
+        false:
+        - key: false
+  - case:
+      id: empty_dict_item
+      inputs:
+      - - {}
+      - anything
+      expected:
+        null:
+        - {}
+  - case:
+      id: numeric_coalescing_int_float
+      inputs:
+      - - id: 1
+        - id: 1.0
+      - id
+      expected:
+        1:
+        - id: 1
+        - id: 1.0
+  - case:
+      id: empty_string_key_name
+      inputs:
+      - - a: 1
+      - ''
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: verify_original_content
+      inputs:
+      - - tag: A
+        - tag: A
+      - tag
+      assertion: 'output[''A''] == [{''tag'': ''A''}, {''tag'': ''A''}]'
+  - case:
+      id: count_groups
+      inputs:
+      - - id: 1
+        - id: 2
+        - id: 3
+      - id
+      assertion: len(output) == 3
+  - case:
+      id: tuple_key_grouping
+      inputs:
+      - - x:
+          - 1
+          - 2
+        - x:
+          - 1
+          - 2
+      - x
+      assertion: len(output) == 1 and [1, 2] in list(output.keys())
+  - case:
+      id: non_string_key_param
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: large_grouping
+      inputs:
+      - - k: 1
+        - k: 2
+        - k: 1
+        - k: 2
+        - k: 1
+        - k: 2
+      - k
+      assertion: len(output[1]) == 3 and len(output[2]) == 3
+  - case:
+      id: error_non_dict_items
+      inputs:
+      - - 1
+        - 2
+        - 3
+      - id
+      raises: AttributeError
+      match: '''int'' object has no attribute ''get'''
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - - meta:
+            sub: 1
+        - meta: 2
+      - meta
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - null
+      - id
+      raises: TypeError

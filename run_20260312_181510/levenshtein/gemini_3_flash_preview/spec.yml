@@ -1,0 +1,232 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+    TriangleInequalityLowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+    IdentityProperty:
+      assertion: (input[0] == input[1]) == (output == 0)
+  dataset:
+  - case:
+      id: standard_kitten_sitting
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: empty_strings
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: deletion_to_empty
+      inputs:
+      - abc
+      - ''
+      expected: 3
+  - case:
+      id: insertion_from_empty
+      inputs:
+      - ''
+      - abc
+      expected: 3
+  - case:
+      id: mixed_flaw_lawn
+      inputs:
+      - flaw
+      - lawn
+      expected: 2
+  - case:
+      id: identical_strings
+      inputs:
+      - same
+      - same
+      expected: 0
+  - case:
+      id: case_sensitivity_single
+      inputs:
+      - A
+      - a
+      expected: 1
+  - case:
+      id: case_sensitivity_multi
+      inputs:
+      - abc
+      - ABC
+      expected: 3
+  - case:
+      id: long_identical
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      expected: 0
+  - case:
+      id: internal_edits
+      inputs:
+      - abcdef
+      - azcedf
+      expected: 3
+  - case:
+      id: saturday_sunday
+      inputs:
+      - Saturday
+      - Sunday
+      expected: 3
+  - case:
+      id: two_substitutions
+      inputs:
+      - book
+      - back
+      expected: 2
+  - case:
+      id: single_insertion_end
+      inputs:
+      - yo
+      - you
+      expected: 1
+  - case:
+      id: single_deletion_end
+      inputs:
+      - you
+      - yo
+      expected: 1
+  - case:
+      id: max_distance_equal_length
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      expected: 50
+  - case:
+      id: transposition_as_edits
+      inputs:
+      - abc
+      - cba
+      expected: 2
+  - case:
+      id: unicode_char
+      inputs:
+      - cafe
+      - café
+      expected: 1
+  - case:
+      id: leading_whitespace
+      inputs:
+      - '  abc'
+      - abc
+      expected: 2
+  - case:
+      id: trailing_whitespace
+      inputs:
+      - 'abc  '
+      - abc
+      expected: 2
+  - case:
+      id: escape_characters
+      inputs:
+      - 'a
+
+        b'
+      - a b
+      expected: 1
+  - case:
+      id: prefix_doubled
+      inputs:
+      - levenshtein
+      - levenshteinlevenshtein
+      expected: 11
+  - case:
+      id: numeric_strings_reversal
+      inputs:
+      - '1234567890'
+      - 0987654321
+      expected: 10
+  - case:
+      id: single_character_symbols
+      inputs:
+      - '!'
+      - '?'
+      expected: 1
+  - case:
+      id: substitution_start
+      inputs:
+      - python
+      - cython
+      expected: 1
+  - case:
+      id: rhyming_words
+      inputs:
+      - reach
+      - beach
+      expected: 1
+  - case:
+      id: scattered_insertions
+      inputs:
+      - abcdefghijklmnopqrstuvwxyz
+      - abcde_fgh_ijkl_m_nopqr_stuvwxyz
+      expected: 5
+  - case:
+      id: repeated_symbols
+      inputs:
+      - '----------'
+      - __________
+      expected: 10
+  - case:
+      id: swapped_blocks
+      inputs:
+      - AAAAAAAAAABBBBBBBBBB
+      - BBBBBBBBBBAAAAAAAAAA
+      expected: 20
+  - case:
+      id: error_null_first
+      inputs:
+      - null
+      - hello
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_int_second
+      inputs:
+      - hello
+      - 123
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_list_first
+      inputs:
+      - - h
+        - i
+      - hi
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_both_ints
+      inputs:
+      - 123
+      - 456
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_null_second
+      inputs:
+      - valid
+      - null
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_bytes_input
+      inputs:
+      - binary
+      - string
+      assertion: input[0] == 'binary'
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - !!binary |
+        YmluYXJ5
+      - string
+      raises: TypeError

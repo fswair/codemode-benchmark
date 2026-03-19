@@ -1,0 +1,19 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "exploration_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "model_slug": "gemini_3.1_flash_lite_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 78.54,
+  "cases": 40,
+  "raises_cases": 17,
+  "snippets": 42,
+  "error_snippets": 19,
+  "refinements": 0,
+  "evaluator_types": [
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

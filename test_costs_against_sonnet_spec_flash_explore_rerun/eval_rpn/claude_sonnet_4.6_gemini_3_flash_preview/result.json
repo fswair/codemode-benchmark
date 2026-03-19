@@ -1,0 +1,30 @@
+{
+  "scenario": "eval_rpn",
+  "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 33.64,
+  "cases": 42,
+  "raises_cases": 11,
+  "snippets": 39,
+  "error_snippets": 11,
+  "refinements": 0,
+  "cost_usd": 0.0782485,
+  "cost_cents": 7.8248,
+  "input_tokens": 19332,
+  "output_tokens": 2816,
+  "requests": 3,
+  "price_sources": [
+    "costs.yml"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.0782485,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

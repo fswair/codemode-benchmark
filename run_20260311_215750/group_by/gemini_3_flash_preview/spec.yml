@@ -1,0 +1,214 @@
+group_by:
+  evals:
+    IsDict:
+      type: dict
+    CheckKeys:
+      assertion: all(k is None or isinstance(k, (str, int, float, bool)) for k in
+        output.keys())
+    PreservesItems:
+      assertion: sum(len(v) for v in output.values()) == len(input[0])
+    ValuesAreLists:
+      assertion: all(isinstance(v, list) for v in output.values())
+  dataset:
+  - case:
+      id: basic_grouping
+      inputs:
+      - - type: fruit
+          name: apple
+        - type: fruit
+          name: banana
+        - type: veg
+          name: carrot
+      - type
+      expected:
+        fruit:
+        - type: fruit
+          name: apple
+        - type: fruit
+          name: banana
+        veg:
+        - type: veg
+          name: carrot
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_under_none
+      inputs:
+      - - id: 1
+        - id: 2
+        - name: missing
+      - id
+      expected:
+        1:
+        - id: 1
+        2:
+        - id: 2
+        null:
+        - name: missing
+  - case:
+      id: explicit_none_vs_missing
+      inputs:
+      - - val: null
+        - other: 1
+      - val
+      expected:
+        null:
+        - val: null
+        - other: 1
+  - case:
+      id: duplicate_key_values
+      inputs:
+      - - a: 1
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+  - case:
+      id: boolean_keys
+      inputs:
+      - - active: true
+        - active: false
+        - active: true
+      - active
+      expected:
+        true:
+        - active: true
+        - active: true
+        false:
+        - active: false
+  - case:
+      id: nonexistent_globally
+      inputs:
+      - - id: 1
+      - nonexistent_key
+      expected:
+        null:
+        - id: 1
+  - case:
+      id: coalescing_keys
+      inputs:
+      - - n: 0
+        - n: 0.0
+        - n: false
+      - n
+      expected:
+        0:
+        - n: 0
+        - n: 0.0
+        - n: false
+  - case:
+      id: list_of_empty_dicts
+      inputs:
+      - - {}
+        - {}
+      - any
+      expected:
+        null:
+        - {}
+        - {}
+  - case:
+      id: global_key_missing
+      inputs:
+      - - a: 1
+        - a: 2
+      - b
+      expected:
+        null:
+        - a: 1
+        - a: 2
+  - case:
+      id: integer_key_parameter
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: string_keys_mixed_types
+      inputs:
+      - - id: a
+          v: 1
+        - id: 1
+          v: 2
+      - id
+      expected:
+        a:
+        - id: a
+          v: 1
+        1:
+        - id: 1
+          v: 2
+  - case:
+      id: large_group
+      inputs:
+      - - x: 1
+        - x: 1
+        - x: 1
+        - x: 1
+        - x: 1
+      - x
+      assertion: len(output[1]) == 5
+  - case:
+      id: multi_key_dicts
+      inputs:
+      - - a: 1
+          b: 2
+        - a: 2
+          b: 2
+      - b
+      expected:
+        2:
+        - a: 1
+          b: 2
+        - a: 2
+          b: 2
+  - case:
+      id: single_match
+      inputs:
+      - - k: v
+      - k
+      expected:
+        v:
+        - k: v
+  - case:
+      id: none_in_list
+      inputs:
+      - - null
+      - id
+      raises: AttributeError
+      match: '''NoneType'' object has no attribute ''get'''
+  - case:
+      id: string_as_items
+      inputs:
+      - not a list
+      - id
+      raises: AttributeError
+      match: '''str'' object has no attribute ''get'''
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - - meta:
+            id: 1
+      - meta
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - - a:
+          - 1
+          - 2
+      - a
+      raises: TypeError
+  - case:
+      id: error_typeerror_2
+      inputs:
+      - null
+      - id
+      raises: TypeError

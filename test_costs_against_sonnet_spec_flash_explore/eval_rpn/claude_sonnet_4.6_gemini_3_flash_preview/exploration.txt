@@ -1,0 +1,151 @@
+--- Snippet 1 [error]: Simple addition ---
+Code: eval__rpn(["2", "1", "+"])
+RAISED NotImplementedError: NotImplementedError: External function 'eval__rpn' not implemented with standard execution
+
+--- Snippet 2 [normal]: Complex expression with mixing operators ---
+Code: eval_rpn(["4", "13", "5", "/", "+"])
+Output: 6
+
+--- Snippet 3 [normal]: Long nested expression from standard RPN examples ---
+Code: eval_rpn(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"])
+Output: 22
+
+--- Snippet 4 [normal]: Single operand expression (boundary case) ---
+Code: eval_rpn(["42"])
+Output: 42
+
+--- Snippet 5 [normal]: Handling negative integer strings as operands ---
+Code: eval_rpn(["-5", "3", "+"])
+Output: -2
+
+--- Snippet 6 [normal]: Positive division truncation toward zero (floor) ---
+Code: eval_rpn(["10", "3", "/"])
+Output: 3
+
+--- Snippet 7 [normal]: Negative division truncation toward zero (ceil) ---
+Code: eval_rpn(["-10", "3", "/"])
+Output: -3
+
+--- Snippet 8 [normal]: Truncation when denominator is negative ---
+Code: eval_rpn(["10", "-3", "/"])
+Output: -3
+
+--- Snippet 9 [normal]: Zero as numerator in division ---
+Code: eval_rpn(["0", "5", "/"])
+Output: 0
+
+--- Snippet 10 [normal]: Multi-step calculation (2*3 - 5) ---
+Code: eval_rpn(["2", "3", "*", "5", "-"])
+Output: 1
+
+--- Snippet 11 [normal]: Large integer results ---
+Code: eval_rpn(["100", "200", "+", "300", "*"])
+Output: 90000
+
+--- Snippet 12 [normal]: Resulting in zero ---
+Code: eval_rpn(["5", "5", "-"])
+Output: 0
+
+--- Snippet 13 [normal]: Multiplication with negative numbers ---
+Code: eval_rpn(["2", "-3", "*"])
+Output: -6
+
+--- Snippet 14 [normal]: Sequential subtraction to check operand order (10-2-3) ---
+Code: eval_rpn(["10", "2", "-", "3", "-"])
+Output: 5
+
+--- Snippet 15 [normal]: Verify return type is integer ---
+Code: type(eval_rpn(["5"]))
+Output: <class 'int'>
+
+--- Snippet 16 [error]: Empty expression list raises ValueError ---
+Code: eval_rpn([])
+RAISED ValueError: ValueError: Empty expression
+
+--- Snippet 17 [error]: Insufficient operands for an operator raises ValueError ---
+Code: eval_rpn(["1", "+"])
+RAISED ValueError: ValueError: Not enough operands for '+'
+
+--- Snippet 18 [error]: Division by zero raises ZeroDivisionError ---
+Code: eval_rpn(["10", "0", "/"])
+RAISED ZeroDivisionError: ZeroDivisionError: Division by zero
+
+--- Snippet 19 [error]: Invalid token (non-integer, non-operator) raises ValueError ---
+Code: eval_rpn(["1", "2", "abc"])
+RAISED ValueError: ValueError: Invalid token: 'abc'
+
+--- Snippet 20 [error]: Extra operands at end of expression (stack size != 1) raises ValueError ---
+Code: eval_rpn(["1", "2"])
+RAISED ValueError: ValueError: Invalid expression: 2 values remaining on stack
+
+--- Snippet 21 [error]: None input (non-iterable) raises TypeError ---
+Code: eval_rpn(None)
+RAISED ValueError: ValueError: Empty expression
+
+--- Snippet 22 [normal]: Multiplication of two negative numbers resulting in positive ---
+Code: eval_rpn(["-1", "-1", "*"])
+Output: 1
+
+--- Snippet 23 [normal]: Positive numerator, negative denominator division truncation ---
+Code: eval_rpn(["5", "-2", "/"])
+Output: -2
+
+--- Snippet 24 [normal]: Negative numerator, negative denominator division truncation (result 2) ---
+Code: eval_rpn(["-7", "-3", "/"])
+Output: 2
+
+--- Snippet 25 [normal]: Subtraction of zero from zero ---
+Code: eval_rpn(["0", "0", "-"])
+Output: 0
+
+--- Snippet 26 [normal]: Repeated addition (chaining) ---
+Code: eval_rpn(["1", "1", "+", "1", "+", "1", "+"])
+Output: 4
+
+--- Snippet 27 [normal]: Standard RPN precedence: 2 + (3 * 4) ---
+Code: eval_rpn(["2", "3", "4", "*", "+"])
+Output: 14
+
+--- Snippet 28 [normal]: Standard RPN precedence: (2 + 3) * 4 ---
+Code: eval_rpn(["2", "3", "+", "4", "*"])
+Output: 20
+
+--- Snippet 29 [normal]: Multiplication by zero ---
+Code: eval_rpn(["1000", "0", "*"])
+Output: 0
+
+--- Snippet 30 [normal]: Addition of two negative numbers ---
+Code: eval_rpn(["-5", "-5", "+"])
+Output: -10
+
+--- Snippet 31 [normal]: Subtracting a negative number (equivalent to addition) ---
+Code: eval_rpn(["1", "-1", "-"])
+Output: 2
+
+--- Snippet 32 [normal]: Zero divided by a negative number ---
+Code: eval_rpn(["0", "-5", "/"])
+Output: 0
+
+--- Snippet 33 [normal]: Token is string '-0' should be treated as 0 ---
+Code: eval_rpn(["-0"])
+Output: 0
+
+--- Snippet 34 [error]: Multiple extra operands at the end (3 values remaining) ---
+Code: eval_rpn(["10", "2", "3", "+"])
+RAISED ValueError: ValueError: Invalid expression: 2 values remaining on stack
+
+--- Snippet 35 [error]: Prefix notation instead of RPN (operator first) ---
+Code: eval_rpn(["+", "1", "2"])
+RAISED ValueError: ValueError: Not enough operands for '+'
+
+--- Snippet 36 [error]: Float string as token (invalid integer format) ---
+Code: eval_rpn(["1.5", "1", "+"])
+RAISED ValueError: ValueError: Invalid token: '1.5'
+
+--- Snippet 37 [error]: Combined operator characters treated as single invalid token ---
+Code: eval_rpn(["1", "2", "-*"])
+RAISED ValueError: ValueError: Invalid token: '-*'
+
+--- Snippet 38 [error]: Whitespace-only token ---
+Code: eval_rpn([" ", "5"])
+RAISED ValueError: ValueError: Invalid token: ' '

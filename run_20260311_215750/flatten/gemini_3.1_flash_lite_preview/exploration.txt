@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Empty list edge case ---
+Code: flatten([])
+Output: []
+
+--- Snippet 2 [normal]: Flat list of integers ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 3 [normal]: One level of nesting ---
+Code: flatten([1, [2, 3], 4])
+Output: [1, 2, 3, 4]
+
+--- Snippet 4 [normal]: Deeply nested list ---
+Code: flatten([1, [2, [3, 4], 5], 6])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 5 [normal]: Nested empty lists ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: List with mixed types of elements ---
+Code: flatten([1, 'a', 2.5, True])
+Output: [1, 'a', 2.5, True]
+
+--- Snippet 7 [normal]: List of single-item lists ---
+Code: flatten([[1], [2], [3]])
+Output: [1, 2, 3]
+
+--- Snippet 8 [normal]: Highly skewed nesting (towards the end) ---
+Code: flatten([1, [2, [3, [4, [5]]]]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 9 [normal]: Highly skewed nesting (only nesting) ---
+Code: flatten([[[[[1]]]]])
+Output: [1]
+
+--- Snippet 10 [normal]: List containing empty lists mixed with elements ---
+Code: flatten([1, [], 2, [], 3])
+Output: [1, 2, 3]
+
+--- Snippet 11 [normal]: Symmetrical nesting structure ---
+Code: flatten([[[1, 2], 3], [4, [5, 6]]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 12 [normal]: List containing None value nesting ---
+Code: flatten([None, [None], [[None]]])
+Output: [None, None, None]
+
+--- Snippet 13 [normal]: Larger flat list ---
+Code: flatten([1] * 100)
+Output: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+--- Snippet 14 [normal]: Larger nested list repetition ---
+Code: flatten([[1] * 10] * 10)
+Output: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+--- Snippet 15 [normal]: Using range to generate list input ---
+Code: flatten(list(range(5)))
+Output: [0, 1, 2, 3, 4]
+
+--- Snippet 16 [error]: None input should raise TypeError ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Integer input should raise TypeError ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 18 [error]: String input should raise TypeError because it's not a list ---
+Code: flatten("string")
+RAISED TypeError: Expected list, got str

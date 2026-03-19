@@ -1,0 +1,82 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    DurationCheck:
+      duration: 10
+  dataset:
+    - case:
+        id: "empty_list"
+        input: []
+        expected: []
+    - case:
+        id: "flat_integers"
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: "single_nesting"
+        input: [1, [2, 3], 4]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "multiple_nesting"
+        input: [1, [2, [3, 4], 5], 6]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: "deep_empty_lists"
+        input: [[], [[]], [[[]]]]
+        expected: []
+    - case:
+        id: "heterogeneous_list"
+        input: [1, "a", 2.5, true]
+        expected: [1, "a", 2.5, true]
+    - case:
+        id: "asymmetric_nesting"
+        input: [[1], 2, [3, [4]]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "deeply_nested_single"
+        input: [[[[[1]]]]]
+        expected: [1]
+    - case:
+        id: "empty_sublist"
+        input: [1, [], 2]
+        expected: [1, 2]
+    - case:
+        id: "nested_strings"
+        input: ["a", ["b", ["c"]]]
+        expected: ["a", "b", "c"]
+    - case:
+        id: "mixed_depths"
+        input: [1, [2], [[3]], [[[4]]]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "increasing_depth"
+        input: [1, 2, [3, 4, [5, 6, [7, 8]]]]
+        expected: [1, 2, 3, 4, 5, 6, 7, 8]
+    - case:
+        id: "alternating_segments"
+        input: [1, [2], 3, [4]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: "length_assertion"
+        input: [[[1, 2], 3], 4]
+        assertion: "len(output) == 4"
+    - case:
+        id: "identity_property"
+        input: [1, 2, 3]
+        assertion: "output == input"
+    - case:
+        id: "none_error"
+        input: null
+        raises: TypeError
+        match: "Expected list, got NoneType"
+    - case:
+        id: "string_input_error"
+        input: "not a list"
+        raises: TypeError
+        match: "Expected list, got str"
+    - case:
+        id: "int_input_error"
+        input: 123
+        raises: TypeError
+        match: "Expected list, got int"

@@ -1,0 +1,207 @@
+{
+  "per_model": {
+    "gemini_3.1_flash_lite_preview": {
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "pass_rate": "4/5",
+      "avg_coverage": 0.8,
+      "avg_time_s": 29.7,
+      "avg_cases": 29.2,
+      "avg_raises": 8.0,
+      "avg_snippets": 36.0
+    },
+    "gemini_3_flash_preview": {
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "pass_rate": "5/5",
+      "avg_coverage": 1.0,
+      "avg_time_s": 54.15,
+      "avg_cases": 38.0,
+      "avg_raises": 9.0,
+      "avg_snippets": 37.2
+    }
+  },
+  "per_scenario": [
+    {
+      "scenario": "group_by",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": false,
+      "coverage": "0.0%",
+      "time_s": 29.58,
+      "cases": 0,
+      "raises_cases": 0,
+      "snippets": 33,
+      "error_snippets": 6,
+      "refinements": 3,
+      "evaluator_types": [],
+      "error": "Eval run error: [Errno 2] No such file or directory: ''"
+    },
+    {
+      "scenario": "group_by",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 95.89,
+      "cases": 35,
+      "raises_cases": 7,
+      "snippets": 35,
+      "error_snippets": 7,
+      "refinements": 2,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "flatten",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 15.5,
+      "cases": 34,
+      "raises_cases": 7,
+      "snippets": 33,
+      "error_snippets": 6,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "flatten",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 46.64,
+      "cases": 36,
+      "raises_cases": 4,
+      "snippets": 34,
+      "error_snippets": 7,
+      "refinements": 1,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 78.54,
+      "cases": 40,
+      "raises_cases": 17,
+      "snippets": 42,
+      "error_snippets": 19,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 65.68,
+      "cases": 45,
+      "raises_cases": 17,
+      "snippets": 45,
+      "error_snippets": 17,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "eval_rpn",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 10.97,
+      "cases": 36,
+      "raises_cases": 9,
+      "snippets": 36,
+      "error_snippets": 9,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "eval_rpn",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 19.91,
+      "cases": 39,
+      "raises_cases": 11,
+      "snippets": 38,
+      "error_snippets": 11,
+      "refinements": 0,
+      "evaluator_types": [
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "levenshtein",
+      "model": "openrouter:google/gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 13.9,
+      "cases": 36,
+      "raises_cases": 7,
+      "snippets": 36,
+      "error_snippets": 7,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "levenshtein",
+      "model": "openrouter:google/gemini-3-flash-preview",
+      "model_slug": "gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 42.63,
+      "cases": 35,
+      "raises_cases": 6,
+      "snippets": 34,
+      "error_snippets": 6,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    }
+  ]
+}

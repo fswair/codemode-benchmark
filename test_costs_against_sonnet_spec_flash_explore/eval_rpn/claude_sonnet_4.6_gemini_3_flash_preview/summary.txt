@@ -1,0 +1,14 @@
+Scenario : eval_rpn
+Spec Model : openrouter:anthropic/claude-sonnet-4.6
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 44  (raises=12)
+Snippets : 38  (error_snippets=12)
+Refines  : 1
+Cost USD : 0.00464950
+Cost/Fn  : 0.00464950
+Tokens   : in=34652 out=4322 req=4
+Pricing  : costs.yml, missing
+Time     : 62.4s
+Evals    : assertion, expected, raises, type

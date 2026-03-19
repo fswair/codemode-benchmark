@@ -1,0 +1,390 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    NonNegativeLength:
+      assertion: len(output) >= 0
+    AllElementsNonList:
+      assertion: all(not isinstance(x, list) for x in output)
+  dataset:
+  - case:
+      id: flat_integers
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: one_level_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: complex_mixed_nesting
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      - - 5
+        - - 6
+          - 7
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+  - case:
+      id: fifteen_levels_deep
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+              - - 6
+                - - 7
+                  - - 8
+                    - - 9
+                      - - 10
+                        - - 11
+                          - - 12
+                            - - 13
+                              - - 14
+                                - - 15
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+  - case:
+      id: nine_levels_deep
+      input:
+      - - - - - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: range_equivalent
+      input:
+      - - 0
+        - 1
+        - 2
+        - 3
+        - 4
+      - - - 5
+          - 6
+          - 7
+          - 8
+          - 9
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: interleaved_empty_and_populated
+      input:
+      - []
+      - - 1
+      - []
+      - - 2
+        - 3
+      - []
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: empty_lists_only_first_level
+      input:
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      expected: []
+  - case:
+      id: deeply_nested_empty_mixed_integers
+      input:
+      - 1
+      - - []
+        - 2
+        - - []
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: strings_and_lists
+      input:
+      - a
+      - - b
+        - c
+      - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: heterogeneous_types
+      input:
+      - 1
+      - two
+      - 3.0
+      - - true
+        - null
+      expected:
+      - 1
+      - two
+      - 3.0
+      - true
+      - null
+  - case:
+      id: none_values_nested
+      input:
+      - null
+      - - null
+        - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: booleans_flat_and_nested
+      input:
+      - true
+      - true
+      - true
+      - true
+      - true
+      - - false
+        - false
+        - false
+        - false
+        - false
+      expected:
+      - true
+      - true
+      - true
+      - true
+      - true
+      - false
+      - false
+      - false
+      - false
+      - false
+  - case:
+      id: tuples_as_atoms
+      input:
+      - - 1
+        - 2
+      - - - 3
+          - 4
+      assertion: output == [1, 2, 3, 4]
+  - case:
+      id: dicts_as_atoms
+      input:
+      - key: val
+      assertion: len(output) == 1 and isinstance(output[0], dict)
+  - case:
+      id: dicts_nested_atoms
+      input:
+      - a: 1
+      - - b: 2
+      assertion: len(output) == 2 and all(isinstance(x, dict) for x in output)
+  - case:
+      id: length_matches_atom_count
+      input:
+      - 1
+      - - 2
+        - 3
+      - - - 4
+          - 5
+          - 6
+      assertion: len(output) == 6
+  - case:
+      id: idempotent_on_flat_list
+      input:
+      - 1
+      - 2
+      assertion: output == [1, 2]
+  - case:
+      id: already_flat_unchanged
+      input:
+      - 10
+      - 20
+      - 30
+      - 40
+      - 50
+      expected:
+      - 10
+      - 20
+      - 30
+      - 40
+      - 50
+  - case:
+      id: single_element_flat
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: single_element_nested
+      input:
+      - - - - 42
+      expected:
+      - 42
+  - case:
+      id: large_flat_list
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      assertion: len(output) == 20 and output[0] == 0 and output[19] == 19
+      duration: 500
+  - case:
+      id: repeated_nesting_pattern
+      input:
+      - - 1
+        - - 2
+      - - 3
+        - - 4
+      - - 5
+        - - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: output_is_always_flat
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      assertion: all(not isinstance(x, list) for x in output)
+  - case:
+      id: output_sorted_asc_check
+      input:
+      - 3
+      - - 1
+        - - 2
+      assertion: sorted(output) == [1, 2, 3]
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+  - case:
+      id: error_string_input
+      input: not a list
+      raises: TypeError
+  - case:
+      id: error_integer_input
+      input: 123
+      raises: TypeError
+  - case:
+      id: error_dict_input
+      input:
+        a: 1
+      raises: TypeError
+  - case:
+      id: error_float_input
+      input: 3.14
+      raises: TypeError
+  - case:
+      id: error_bool_input
+      input: true
+      raises: TypeError
+  - case:
+      id: error_set_input
+      input: null
+      raises: TypeError
+  - case:
+      id: error_tuple_input
+      input: null
+      raises: TypeError
+  - case:
+      id: error_range_input
+      input: null
+      raises: TypeError

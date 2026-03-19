@@ -1,0 +1,318 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    MaintainElements:
+      assertion: all(not isinstance(x, list) for x in output)
+  dataset:
+  - case:
+      id: basic_flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: single_level_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: mixed_top_level_types
+      input:
+      - 1
+      - string
+      - null
+      - true
+      expected:
+      - 1
+      - string
+      - null
+      - true
+  - case:
+      id: mixed_nested_structures
+      input:
+      - 1
+      - - a
+        - - null
+      - - - true
+      expected:
+      - 1
+      - a
+      - null
+      - true
+  - case:
+      id: extreme_nesting_single
+      input:
+      - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: list_concatenation_input
+      input:
+      - 1
+      - 2
+      - 3
+      - - 4
+        - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: dict_as_atom
+      input:
+      - a: 1
+      - - b: 2
+      expected:
+      - a: 1
+      - b: 2
+  - case:
+      id: complex_mix_nesting
+      input:
+      - 1
+      - - 2
+        - 3
+      - - 4
+        - - 5
+          - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: list_of_one_empty_list
+      input:
+      - []
+      expected: []
+  - case:
+      id: very_deep_nesting
+      input:
+      - - - - - - - - - - - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: list_with_tuple_atom
+      input:
+      - - 1
+        - 2
+        - 3
+        - 4
+      assertion: len(output) == 4
+  - case:
+      id: flattened_multiplication
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: sparse_list_values
+      input:
+      - []
+      - []
+      - - 1
+      - []
+      expected:
+      - 1
+  - case:
+      id: list_comprehension_results
+      input:
+      - - 0
+        - 1
+      - - 2
+        - 3
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+  - case:
+      id: nested_identity
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: flatten(output) == output
+  - case:
+      id: structural_independence_check
+      input:
+      - 1
+      - - 2
+        - 3
+      assertion: output == [1, 2, 3]
+  - case:
+      id: deep_nulls
+      input:
+      - null
+      - - null
+        - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: string_elements_preserved
+      input:
+      - a
+      - - b
+        - c
+      - - - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: heterogeneous_atoms
+      input:
+      - 1.5
+      - - 2
+        - '3'
+      - - true
+        - null
+      expected:
+      - 1.5
+      - 2
+      - '3'
+      - true
+      - null
+  - case:
+      id: multiple_nesting_levels_mixed
+      input:
+      - - 1
+      - 2
+      - - 3
+        - - 4
+          - 5
+      - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: nested_booleans
+      input:
+      - - true
+        - false
+      - - true
+      expected:
+      - true
+      - false
+      - true
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_string_input
+      input: not a list
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_int_input
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_dict_input
+      input:
+        key: value
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_tuple_input
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: isinstance(input, list)
+  - case:
+      id: error_not_implemented_bytes
+      input:
+      - bytes
+      - bytearray
+      assertion: len(output) == 2
+  - case:
+      id: error_complex_numbers
+      input:
+      - 1
+      - 2
+      assertion: len(output) == 2
+  - case:
+      id: error_set_input
+      input:
+      - 1
+      - 2
+      assertion: isinstance(output, list)
+  - case:
+      id: error_float_input
+      input: 3.14159
+      raises: TypeError
+      match: Expected list, got float
+  - case:
+      id: error_bool_input
+      input: true
+      raises: TypeError
+      match: Expected list, got bool

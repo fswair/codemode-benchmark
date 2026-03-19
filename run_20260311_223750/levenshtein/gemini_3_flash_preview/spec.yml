@@ -1,0 +1,115 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: "output >= 0"
+    UpperBound:
+      assertion: "output <= max(len(input[0]), len(input[1]))"
+    LowerBound:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+  dataset:
+    - case:
+        id: "classic_example"
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: "two_empty_strings"
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: "deletion_to_empty"
+        inputs: ["abc", ""]
+        expected: 3
+    - case:
+        id: "insertion_from_empty"
+        inputs: ["", "abc"]
+        expected: 3
+    - case:
+        id: "identical_strings"
+        inputs: ["abc", "abc"]
+        expected: 0
+    - case:
+        id: "substitution_at_end"
+        inputs: ["abc", "abd"]
+        expected: 1
+    - case:
+        id: "substitution_at_beginning"
+        inputs: ["abc", "zbc"]
+        expected: 1
+    - case:
+        id: "insertion_in_middle"
+        inputs: ["abc", "axbc"]
+        expected: 1
+    - case:
+        id: "deletion_in_middle"
+        inputs: ["axbc", "abc"]
+        expected: 1
+    - case:
+        id: "leading_deletion_trailing_insertion"
+        inputs: ["flaw", "lawn"]
+        expected: 2
+    - case:
+        id: "mixed_edits_saturday_sunday"
+        inputs: ["Saturday", "Sunday"]
+        expected: 3
+    - case:
+        id: "case_sensitivity"
+        inputs: ["A", "a"]
+        expected: 1
+    - case:
+        id: "two_substitutions_middle"
+        inputs: ["book", "back"]
+        expected: 2
+    - case:
+        id: "numeric_strings"
+        inputs: ["123", "12345"]
+        expected: 2
+    - case:
+        id: "long_strings_scaling"
+        inputs: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+        expected: 50
+    - case:
+        id: "complete_difference"
+        inputs: ["abc", "xyz"]
+        expected: 3
+    - case:
+        id: "single_char_match"
+        inputs: ["a", "b"]
+        expected: 1
+    - case:
+        id: "transposed_characters"
+        inputs: ["ab", "ba"]
+        expected: 2
+    - case:
+        id: "error_first_null"
+        inputs: [null, "test"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_second_int"
+        inputs: ["test", 123]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_first_list"
+        inputs: [["list"], "string"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_both_null"
+        inputs: [null, null]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "idempotency_check"
+        inputs: ["levenshtein", "levenshtein"]
+        expected: 0
+    - case:
+        id: "different_lengths"
+        inputs: ["apple", "apply"]
+        expected: 1
+    - case:
+        id: "whitespace_difference"
+        inputs: ["hello world", "hello  world"]
+        expected: 1

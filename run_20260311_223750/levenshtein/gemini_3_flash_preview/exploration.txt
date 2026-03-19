@@ -1,0 +1,83 @@
+--- Snippet 1 [normal]: Classic Levenshtein example: kitten -> sitting (3 edits) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Two empty strings (0 distance) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Non-empty string to empty string (deletion distance) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Empty string to non-empty string (insertion distance) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Identical strings (0 distance) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 6 [normal]: Single substitution at the end ---
+Code: levenshtein("abc", "abd")
+Output: 1
+
+--- Snippet 7 [normal]: Single substitution at the beginning ---
+Code: levenshtein("abc", "zbc")
+Output: 1
+
+--- Snippet 8 [normal]: Single insertion in the middle ---
+Code: levenshtein("abc", "axbc")
+Output: 1
+
+--- Snippet 9 [normal]: Single deletion in the middle ---
+Code: levenshtein("axbc", "abc")
+Output: 1
+
+--- Snippet 10 [normal]: Overlap with leading deletion and trailing insertion ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 11 [normal]: Mixed edits (substitution and deletion) ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 12 [normal]: Case sensitivity: distance between same letter different case ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 13 [normal]: Two substitutions in the middle ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 14 [normal]: Numeric strings (valid as long as they are str type) ---
+Code: levenshtein("123", "12345")
+Output: 2
+
+--- Snippet 15 [normal]: Idempotency check ---
+Code: levenshtein("levenshtein", "levenshtein") == levenshtein("levenshtein", "levenshtein")
+Output: True
+
+--- Snippet 16 [normal]: Symmetry: distance(s, t) == distance(t, s) ---
+Code: levenshtein("kitten", "sitting") == levenshtein("sitting", "kitten")
+Output: True
+
+--- Snippet 17 [normal]: Larger strings (checking scaling/efficiency) ---
+Code: levenshtein("a" * 100, "a" * 50)
+Output: 50
+
+--- Snippet 18 [error]: TypeError when first argument is None ---
+Code: levenshtein(None, "test")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError when second argument is an integer ---
+Code: levenshtein("test", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: TypeError when first argument is a list ---
+Code: levenshtein(["list"], "string")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 21 [error]: TypeError when both arguments are None ---
+Code: levenshtein(None, None)
+RAISED TypeError: Both arguments must be strings

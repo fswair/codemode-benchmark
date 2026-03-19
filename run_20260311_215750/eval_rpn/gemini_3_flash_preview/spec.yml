@@ -1,0 +1,122 @@
+eval_rpn:
+  evals:
+    ReturnType:
+      type: int
+    CorrectResult:
+      assertion: "isinstance(output, int)"
+  dataset:
+    - case:
+        id: "simple_multiplication"
+        input: ["2", "1", "+", "3", "*"]
+        expected: 9
+    - case:
+        id: "truncating_division"
+        input: ["4", "13", "5", "/", "+"]
+        expected: 6
+    - case:
+        id: "complex_expression"
+        input: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
+        expected: 22
+    - case:
+        id: "single_positive_operand"
+        input: ["42"]
+        expected: 42
+    - case:
+        id: "single_negative_operand"
+        input: ["-5"]
+        expected: -5
+    - case:
+        id: "positive_division_truncation"
+        input: ["10", "3", "/"]
+        expected: 3
+    - case:
+        id: "negative_division_truncation"
+        input: ["-10", "3", "/"]
+        expected: -3
+    - case:
+        id: "division_by_negative_truncation"
+        input: ["10", "-3", "/"]
+        expected: -3
+    - case:
+        id: "zero_numerator"
+        input: ["0", "5", "/"]
+        expected: 0
+    - case:
+        id: "subtraction_positive_result"
+        input: ["5", "0", "-", "2", "*"]
+        expected: 10
+    - case:
+        id: "subtraction_negative_result"
+        input: ["0", "5", "-"]
+        expected: -5
+    - case:
+        id: "large_number_multiplication"
+        input: ["1000", "1000", "*"]
+        expected: 1000000
+    - case:
+        id: "repeated_addition"
+        input: ["1", "1", "+", "1", "+", "1", "+"]
+        expected: 4
+    - case:
+        id: "operation_on_zeros"
+        input: ["0", "0", "+"]
+        expected: 0
+    - case:
+        id: "multiplication_negatives"
+        input: ["-5", "-5", "*"]
+        expected: 25
+    - case:
+        id: "division_result_type"
+        input: ["10", "2", "/"]
+        expected: 5
+        type: int
+    - case:
+        id: "mixed_operators"
+        input: ["3", "4", "5", "*", "-"]
+        expected: -17
+    - case:
+        id: "zero_result"
+        input: ["10", "10", "-"]
+        expected: 0
+
+    # Error cases from Verified Results
+    - case:
+        id: "empty_expression_error"
+        input: []
+        raises: ValueError
+        match: "Empty expression"
+    - case:
+        id: "insufficient_operands"
+        input: ["1", "+"]
+        raises: ValueError
+        match: "Not enough operands"
+    - case:
+        id: "too_many_operands"
+        input: ["1", "2", "3", "+"]
+        raises: ValueError
+        match: "values remaining on stack"
+    - case:
+        id: "division_by_zero_error"
+        input: ["10", "0", "/"]
+        raises: ZeroDivisionError
+        match: "Division by zero"
+    - case:
+        id: "invalid_token_format"
+        input: ["1", "abc", "+"]
+        raises: ValueError
+        match: "Invalid token"
+    - case:
+        id: "invalid_input_type_none"
+        input: ["1", null, "+"]
+        raises: TypeError
+        match: "string"
+
+    # Additional diverse cases
+    - case:
+        id: "all_operators"
+        input: ["10", "2", "/", "3", "*", "4", "+", "5", "-"]
+        expected: 14
+    - case:
+        id: "nested_subtraction"
+        input: ["100", "10", "5", "-", "-"]
+        expected: 95

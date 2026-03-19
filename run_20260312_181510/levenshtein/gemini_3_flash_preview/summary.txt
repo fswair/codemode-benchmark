@@ -1,0 +1,9 @@
+Scenario : levenshtein
+Model    : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 35  (raises=6)
+Snippets : 34  (error_snippets=6)
+Refines  : 0
+Time     : 42.6s
+Evals    : assertion, expected, raises

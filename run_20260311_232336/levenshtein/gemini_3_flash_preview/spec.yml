@@ -1,0 +1,108 @@
+levenshtein:
+  evals:
+    IsInteger:
+      type: "int"
+    NonNegative:
+      assertion: "output >= 0"
+    UpperBound:
+      assertion: "output <= max(len(input[0]), len(input[1]))"
+    TriangleInequalityLowerBound:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+    IdentityProperty:
+      assertion: "(input[0] == input[1]) == (output == 0)"
+  dataset:
+    - case:
+        id: "classic_kitten_sitting"
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: "two_empty_strings"
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: "string_to_empty"
+        inputs: ["abc", ""]
+        expected: 3
+    - case:
+        id: "empty_to_string"
+        inputs: ["", "abc"]
+        expected: 3
+    - case:
+        id: "identical_strings"
+        inputs: ["python", "python"]
+        expected: 0
+    - case:
+        id: "single_substitution"
+        inputs: ["a", "b"]
+        expected: 1
+    - case:
+        id: "sub_at_end"
+        inputs: ["abc", "abd"]
+        expected: 1
+    - case:
+        id: "sub_in_middle"
+        inputs: ["abc", "azc"]
+        expected: 1
+    - case:
+        id: "significant_length_diff"
+        inputs: ["short", "much longer string"]
+        expected: 14
+    - case:
+        id: "two_substitutions"
+        inputs: ["book", "back"]
+        expected: 2
+    - case:
+        id: "saturday_sunday"
+        inputs: ["Saturday", "Sunday"]
+        expected: 3
+    - case:
+        id: "flaw_lawn"
+        inputs: ["flaw", "lawn"]
+        expected: 2
+    - case:
+        id: "case_sensitivity"
+        inputs: ["CaseSensitive", "casesensitive"]
+        expected: 2
+    - case:
+        id: "long_identical"
+        inputs: ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]
+        expected: 0
+    - case:
+        id: "single_insertion_end"
+        inputs: ["hello world", "hello world!"]
+        expected: 1
+    - case:
+        id: "multiple_deletions"
+        inputs: ["abcde", "ace"]
+        expected: 2
+    - case:
+        id: "completely_different"
+        inputs: ["abc", "xyz"]
+        expected: 3
+    - case:
+        id: "single_char_insertion"
+        inputs: ["pale", "pales"]
+        expected: 1
+    - case:
+        id: "single_char_deletion"
+        inputs: ["pale", "ple"]
+        expected: 1
+    - case:
+        id: "single_char_replacement"
+        inputs: ["pale", "bale"]
+        expected: 1
+    - case:
+        id: "error_first_arg_none"
+        inputs: [null, "test"]
+        raises: "TypeError"
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_second_arg_int"
+        inputs: ["test", 123]
+        raises: "TypeError"
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_both_args_list"
+        inputs: [[], []]
+        raises: "TypeError"
+        match: "Both arguments must be strings"

@@ -1,0 +1,52 @@
+{
+  "per_model": {
+    "claude_opus_4.6_claude_sonnet_4.6": {
+      "spec_model": "openrouter:anthropic/claude-opus-4.6",
+      "exploration_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "pass_rate": "1/1",
+      "function_count": 1,
+      "avg_coverage": 1.0,
+      "avg_time_s": 90.02,
+      "total_cost_usd": 0.28704,
+      "avg_cost_usd": 0.28704,
+      "cost_per_function_usd": 0.28704,
+      "avg_input_tokens": 28744.0,
+      "avg_output_tokens": 7698.0,
+      "avg_cases": 65.0,
+      "avg_raises": 21.0,
+      "avg_snippets": 58.0
+    }
+  },
+  "per_scenario": [
+    {
+      "scenario": "parse_cron",
+      "spec_model": "openrouter:anthropic/claude-opus-4.6",
+      "exploration_model": "openrouter:anthropic/claude-sonnet-4.6",
+      "model_slug": "claude_opus_4.6_claude_sonnet_4.6",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 90.02,
+      "cases": 65,
+      "raises_cases": 21,
+      "snippets": 58,
+      "error_snippets": 21,
+      "refinements": 0,
+      "cost_usd": 0.28704,
+      "cost_cents": 28.704,
+      "input_tokens": 28744,
+      "output_tokens": 7698,
+      "requests": 3,
+      "price_sources": [
+        "costs.yml"
+      ],
+      "function_count": 1,
+      "cost_per_function_usd": 0.28704,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    }
+  ]
+}

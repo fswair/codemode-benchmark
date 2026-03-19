@@ -1,0 +1,267 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+    LowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+    IdentityProperty:
+      assertion: (input[0] == input[1]) == (output == 0)
+  dataset:
+  - case:
+      id: classic_kitten_sitting
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: saturday_sunday
+      inputs:
+      - saturday
+      - sunday
+      expected: 3
+  - case:
+      id: case_difference
+      inputs:
+      - Hello
+      - hello
+      expected: 1
+  - case:
+      id: unicode_accent
+      inputs:
+      - café
+      - cafe
+      expected: 1
+  - case:
+      id: completely_different_same_length
+      inputs:
+      - abc
+      - xyz
+      expected: 3
+  - case:
+      id: one_substitution
+      inputs:
+      - abc
+      - aXc
+      expected: 1
+  - case:
+      id: prefix_relationship
+      inputs:
+      - pre
+      - prefix
+      expected: 3
+  - case:
+      id: suffix_relationship
+      inputs:
+      - fix
+      - prefix
+      expected: 3
+  - case:
+      id: one_insertion
+      inputs:
+      - abc
+      - abcd
+      expected: 1
+  - case:
+      id: one_deletion
+      inputs:
+      - abcd
+      - abc
+      expected: 1
+  - case:
+      id: append_one_char
+      inputs:
+      - test
+      - tests
+      expected: 1
+  - case:
+      id: string_with_space_appended
+      inputs:
+      - hello world
+      - hello world!
+      expected: 1
+  - case:
+      id: repeated_char_insertion
+      inputs:
+      - aaa
+      - aaaa
+      expected: 1
+  - case:
+      id: identical_hello
+      inputs:
+      - hello
+      - hello
+      expected: 0
+  - case:
+      id: identical_single_char
+      inputs:
+      - a
+      - a
+      expected: 0
+  - case:
+      id: both_empty
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: first_empty
+      inputs:
+      - ''
+      - abc
+      expected: 3
+  - case:
+      id: second_empty
+      inputs:
+      - abc
+      - ''
+      expected: 3
+  - case:
+      id: empty_vs_hello
+      inputs:
+      - ''
+      - hello
+      expected: 5
+  - case:
+      id: single_char_different
+      inputs:
+      - a
+      - b
+      expected: 1
+  - case:
+      id: whitespace_only_differ_by_one
+      inputs:
+      - '   '
+      - '  '
+      expected: 1
+  - case:
+      id: symmetry_check_forward
+      inputs:
+      - kitten
+      - sitting
+      assertion: output == 3
+  - case:
+      id: symmetry_check_reverse
+      inputs:
+      - sitting
+      - kitten
+      assertion: output == 3
+  - case:
+      id: triangle_ineq_ab
+      inputs:
+      - abc
+      - axc
+      expected: 1
+  - case:
+      id: triangle_ineq_bc
+      inputs:
+      - axc
+      - axy
+      expected: 1
+  - case:
+      id: triangle_ineq_ac
+      inputs:
+      - abc
+      - axy
+      assertion: output <= 2
+  - case:
+      id: longer_to_shorter_multiple_ops
+      inputs:
+      - abcdef
+      - azced
+      assertion: output >= 2 and output <= 6
+  - case:
+      id: transposition_is_two
+      inputs:
+      - ab
+      - ba
+      assertion: output == 2
+  - case:
+      id: all_same_chars_vs_different
+      inputs:
+      - aaaa
+      - bbbb
+      expected: 4
+  - case:
+      id: substring_at_start
+      inputs:
+      - abc
+      - abcxyz
+      expected: 3
+  - case:
+      id: substring_at_end
+      inputs:
+      - xyz
+      - abcxyz
+      expected: 3
+  - case:
+      id: long_identical_prefix
+      inputs:
+      - abcdefgh
+      - abcdefXY
+      expected: 2
+  - case:
+      id: single_vs_empty
+      inputs:
+      - z
+      - ''
+      expected: 1
+  - case:
+      id: none_first_arg
+      inputs:
+      - null
+      - hello
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: none_second_arg
+      inputs:
+      - hello
+      - null
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: both_none
+      inputs:
+      - null
+      - null
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: integer_first_arg
+      inputs:
+      - 123
+      - hello
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: list_second_arg
+      inputs:
+      - hello
+      - - h
+        - e
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: no_arguments
+      inputs: []
+      raises: TypeError
+  - case:
+      id: only_one_argument
+      inputs:
+      - hello
+      raises: TypeError
+  - case:
+      id: boolean_first_arg
+      inputs:
+      - true
+      - hello
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_typeerror_0
+      input: hello
+      raises: TypeError

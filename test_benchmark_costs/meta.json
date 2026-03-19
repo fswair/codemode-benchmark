@@ -1,0 +1,15 @@
+{
+  "id": "test_benchmark_costs",
+  "timestamp": "20260317_182528",
+  "iso": "2026-03-17T18:25:28.889706+00:00",
+  "models": {
+    "case_1": {
+      "spec": "openrouter:google/gemini-3-flash-preview",
+      "exploration": "openrouter:google/gemini-3-flash-preview"
+    }
+  },
+  "scenarios": [
+    "flatten"
+  ],
+  "python": "3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)]"
+}

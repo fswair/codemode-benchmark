@@ -1,0 +1,10 @@
+Scenario : group_by
+Model    : openrouter:google/gemini-3.1-flash-lite-preview
+Success  : False
+Coverage : 0.0%
+Cases    : 0  (raises=0)
+Snippets : 33  (error_snippets=6)
+Refines  : 3
+Time     : 29.6s
+Evals    : -
+Error    : Eval run error: [Errno 2] No such file or directory: ''

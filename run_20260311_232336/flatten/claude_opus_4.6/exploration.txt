@@ -1,0 +1,103 @@
+--- Snippet 1 [normal]: Happy path: simple nested list ---
+Code: flatten([1, [2, 3], [4, [5]]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 2 [normal]: Already flat list ---
+Code: flatten([1, 2, 3, 4, 5])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 3 [normal]: Empty list ---
+Code: flatten([])
+Output: []
+
+--- Snippet 4 [normal]: Deeply nested single element ---
+Code: flatten([[[[[[42]]]]]])
+Output: [42]
+
+--- Snippet 5 [normal]: Nested empty lists ---
+Code: flatten([[], [[]], [[], []]])
+Output: []
+
+--- Snippet 6 [normal]: Mixed types as elements (int, str, float, bool, None) ---
+Code: flatten([1, 'hello', [3.14, True, [None]]])
+Output: [1, 'hello', 3.14, True, None]
+
+--- Snippet 7 [normal]: Single element list ---
+Code: flatten([42])
+Output: [42]
+
+--- Snippet 8 [normal]: List with only one nested empty list ---
+Code: flatten([[]])
+Output: []
+
+--- Snippet 9 [normal]: Return type is list ---
+Code: type(flatten([1, [2]])) is list
+Output: True
+
+--- Snippet 10 [normal]: Flattening preserves order ---
+Code: flatten([[1, 2], [3, 4], [5, 6]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 11 [normal]: Idempotency: flattening an already flat list returns same content ---
+Code: flatten([1, 2, 3]) == flatten(flatten([1, 2, 3]))
+Output: True
+
+--- Snippet 12 [normal]: Tuples inside list are kept as-is (not recursed into) ---
+Code: flatten([(1, 2), [3, (4, 5)]])
+Output: [(1, 2), 3, (4, 5)]
+
+--- Snippet 13 [normal]: Dicts inside list are kept as-is ---
+Code: flatten([{'a': 1}, [{'b': 2}]])
+Output: [{'a': 1}, {'b': 2}]
+
+--- Snippet 14 [normal]: Large flat list ---
+Code: flatten(list(range(1000))) == list(range(1000))
+Output: True
+
+--- Snippet 15 [normal]: Two-level nesting with multiple sublists ---
+Code: flatten([[1], [2], [3], [4], [5]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 16 [normal]: Mixed nesting depths ---
+Code: flatten([1, [2, [3, [4, [5]]]]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 17 [normal]: List containing strings (strings are not recursed into) ---
+Code: flatten(['abc', ['def', ['ghi']]])
+Output: ['abc', 'def', 'ghi']
+
+--- Snippet 18 [normal]: Result length matches total non-list leaf count ---
+Code: len(flatten([1, [2, 3], [[4, 5], 6]])) == 6
+Output: True
+
+--- Snippet 19 [normal]: Composition: flatten of concatenated lists equals concatenation of flattens ---
+Code: flatten([[1, 2], [3]]) + flatten([[4], [5, 6]]) == flatten([[1, 2], [3], [4], [5, 6]])
+Output: True
+
+--- Snippet 20 [error]: None input raises TypeError ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 21 [error]: Integer input raises TypeError ---
+Code: flatten(42)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 22 [error]: String input raises TypeError ---
+Code: flatten('hello')
+RAISED TypeError: Expected list, got str
+
+--- Snippet 23 [error]: Tuple input raises TypeError ---
+Code: flatten((1, 2, 3))
+RAISED TypeError: Expected list, got tuple
+
+--- Snippet 24 [error]: Dict input raises TypeError ---
+Code: flatten({'a': 1})
+RAISED TypeError: Expected list, got dict
+
+--- Snippet 25 [error]: Set input raises TypeError ---
+Code: flatten({1, 2, 3})
+RAISED TypeError: Expected list, got set
+
+--- Snippet 26 [error]: Boolean input raises TypeError ---
+Code: flatten(True)
+RAISED TypeError: Expected list, got bool

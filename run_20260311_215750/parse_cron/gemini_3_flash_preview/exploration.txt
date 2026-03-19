@@ -1,0 +1,107 @@
+--- Snippet 1 [normal]: Universal wildcard for all fields ---
+Code: parse_cron("* * * * *")
+Output: {'minute': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 2 [normal]: Specific single values for all fields ---
+Code: parse_cron("0 0 1 1 0")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 3 [normal]: Comma-separated lists in multiple fields ---
+Code: parse_cron("1,2,3 4,5 6 7 1")
+Output: {'minute': [1, 2, 3], 'hour': [4, 5], 'day_of_month': [6], 'month': [7], 'day_of_week': [1]}
+
+--- Snippet 4 [normal]: Range in minute field ---
+Code: parse_cron("1-5 * * * *")
+Output: {'minute': [1, 2, 3, 4, 5], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 5 [normal]: Step with wildcard in minute field ---
+Code: parse_cron("*/15 * * * *")
+Output: {'minute': [0, 15, 30, 45], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 6 [normal]: Step with range in minute field ---
+Code: parse_cron("0-10/2 * * * *")
+Output: {'minute': [0, 2, 4, 6, 8, 10], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 7 [normal]: Step starting from a specific value to max range ---
+Code: parse_cron("5/20 * * * *")
+Output: {'minute': [5, 25, 45], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 8 [normal]: Complex combination of single, range, and step with comma ---
+Code: parse_cron("1,5-7,*/20 * * * *")
+Output: {'minute': [0, 1, 5, 6, 7, 20, 40], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 9 [normal]: Expression with leading/trailing whitespace ---
+Code: parse_cron("  * * * * *  ")
+Output: {'minute': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 10 [normal]: Weekday range (Monday to Friday) ---
+Code: parse_cron("0 0 * * 1-5")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [1, 2, 3, 4, 5]}
+
+--- Snippet 11 [normal]: Maximum boundary values for all fields ---
+Code: parse_cron("59 23 31 12 6")
+Output: {'minute': [59], 'hour': [23], 'day_of_month': [31], 'month': [12], 'day_of_week': [6]}
+
+--- Snippet 12 [normal]: Minimum boundary values for all fields ---
+Code: parse_cron("0 0 1 1 0")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 13 [normal]: Range where start equals end ---
+Code: parse_cron("1-1 * * * *")
+Output: {'minute': [1], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 14 [normal]: Unsorted comma list (verifying output is sorted) ---
+Code: parse_cron("3,2,1 * * * *")
+Output: {'minute': [1, 2, 3], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 15 [normal]: Duplicate values in comma list (verifying uniqueness) ---
+Code: parse_cron("1,1,1 * * * *")
+Output: {'minute': [1], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 16 [normal]: Step equal to range size (returns only the first value) ---
+Code: parse_cron("*/60 * * * *")
+Output: {'minute': [0], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 17 [error]: Too few fields (4 instead of 5) ---
+Code: parse_cron("* * * *")
+RAISED ValueError: Expected 5 fields, got 4
+
+--- Snippet 18 [error]: Too many fields (6 instead of 5) ---
+Code: parse_cron("* * * * * *")
+RAISED ValueError: Expected 5 fields, got 6
+
+--- Snippet 19 [error]: Step value is zero (must be positive) ---
+Code: parse_cron("*/0 * * * *")
+RAISED ValueError: Step must be positive, got 0
+
+--- Snippet 20 [error]: Step value is negative (must be positive) ---
+Code: parse_cron("*/-5 * * * *")
+RAISED ValueError: Step must be positive, got -5
+
+--- Snippet 21 [error]: Minute value out of range (max 59) ---
+Code: parse_cron("60 * * * *")
+RAISED ValueError: minute: 60 out of range 0-59
+
+--- Snippet 22 [error]: Hour value out of range (max 23) ---
+Code: parse_cron("* 24 * * *")
+RAISED ValueError: hour: 24 out of range 0-23
+
+--- Snippet 23 [error]: Day of month out of range (min 1) ---
+Code: parse_cron("* * 0 * *")
+RAISED ValueError: day_of_month: 0 out of range 1-31
+
+--- Snippet 24 [error]: Month out of range (max 12) ---
+Code: parse_cron("* * * 13 *")
+RAISED ValueError: month: 13 out of range 1-12
+
+--- Snippet 25 [error]: Day of week out of range (max 6) ---
+Code: parse_cron("* * * * 7")
+RAISED ValueError: day_of_week: 7 out of range 0-6
+
+--- Snippet 26 [error]: Range start greater than end (invalid range) ---
+Code: parse_cron("10-5 * * * *")
+RAISED ValueError: minute: invalid range 10-5 (valid: 0-59)
+
+--- Snippet 27 [error]: Non-integer field value ---
+Code: parse_cron("abc * * * *")
+RAISED ValueError: invalid literal for int() with base 10: 'abc'

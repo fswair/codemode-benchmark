@@ -1,0 +1,159 @@
+--- Snippet 1 [normal]: Test basic asterisk wildcard for all fields ---
+Code: parse_cron("* * * * *")
+Output: {'minute': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 2 [normal]: Test specific single values for all fields ---
+Code: parse_cron("0 0 1 1 0")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 3 [normal]: Test comma separated values in one field ---
+Code: parse_cron("1,5,10 * * * *")
+Output: {'minute': [1, 5, 10], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 4 [normal]: Test range syntax in one field ---
+Code: parse_cron("1-5 * * * *")
+Output: {'minute': [1, 2, 3, 4, 5], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 5 [normal]: Test wildcard with step syntax ---
+Code: parse_cron("*/15 * * * *")
+Output: {'minute': [0, 15, 30, 45], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 6 [normal]: Test range with step syntax ---
+Code: parse_cron("1-10/2 * * * *")
+Output: {'minute': [1, 3, 5, 7, 9], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 7 [normal]: Ensure results are sorted integers ---
+Code: parse_cron("0 0 1 1 0")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 8 [normal]: Combine comma and range syntax should be unique and sorted ---
+Code: parse_cron("1,3,1-5 * * * *")
+Output: {'minute': [1, 2, 3, 4, 5], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 9 [normal]: Test steps covering only some of the range ---
+Code: parse_cron("*/20 */12 * * *")
+Output: {'minute': [0, 20, 40], 'hour': [0, 12], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 10 [normal]: Test boundary upper values for all fields ---
+Code: parse_cron("59 23 31 12 6")
+Output: {'minute': [59], 'hour': [23], 'day_of_month': [31], 'month': [12], 'day_of_week': [6]}
+
+--- Snippet 11 [normal]: Test boundary lower values for all fields ---
+Code: parse_cron("0 0 1 1 0")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 12 [normal]: Test range with step where range is fully covered by steps ---
+Code: parse_cron("15-20/5 * * * *")
+Output: {'minute': [15, 20], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 13 [normal]: Test range boundary behavior ---
+Code: parse_cron("10-15 * * * *")
+Output: {'minute': [10, 11, 12, 13, 14, 15], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 14 [normal]: Test range start to max with step (implicit end) ---
+Code: parse_cron("5/5 * * * *")
+Output: {'minute': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 15 [normal]: Verify result set handling of duplicate values ---
+Code: parse_cron("5,5,5 * * * *")
+Output: {'minute': [5], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 16 [error]: Insufficient number of fields ---
+Code: parse_cron("* * * *")
+RAISED ValueError: ValueError: Expected 5 fields, got 4
+
+--- Snippet 17 [error]: Too many fields ---
+Code: parse_cron("* * * * * *")
+RAISED ValueError: ValueError: Expected 5 fields, got 6
+
+--- Snippet 18 [error]: Value out of range (minute) ---
+Code: parse_cron("60 * * * *")
+RAISED ValueError: ValueError: minute: 60 out of range 0-59
+
+--- Snippet 19 [error]: Value out of range (hour) ---
+Code: parse_cron("* 24 * * *")
+RAISED ValueError: ValueError: hour: 24 out of range 0-23
+
+--- Snippet 20 [error]: Day of month below 1 ---
+Code: parse_cron("* * 0 * *")
+RAISED ValueError: ValueError: day_of_month: 0 out of range 1-31
+
+--- Snippet 21 [error]: Month out of range ---
+Code: parse_cron("* * * 13 *")
+RAISED ValueError: ValueError: month: 13 out of range 1-12
+
+--- Snippet 22 [error]: Day of week out of range (0-6) ---
+Code: parse_cron("* * * * 7")
+RAISED ValueError: ValueError: day_of_week: 7 out of range 0-6
+
+--- Snippet 23 [error]: Step must be positive ---
+Code: parse_cron("* * * * */0")
+RAISED ValueError: ValueError: Step must be positive, got 0
+
+--- Snippet 24 [error]: Range start greater than end ---
+Code: parse_cron("* * * * 5-3")
+RAISED ValueError: ValueError: day_of_week: invalid range 5-3 (valid: 0-6)
+
+--- Snippet 25 [error]: Invalid non-integer value ---
+Code: parse_cron("a * * * *")
+RAISED ValueError: ValueError: invalid literal for int() with base 10: 'a'
+
+--- Snippet 26 [normal]: All fields using ranges with step covering min/max boundaries ---
+Code: parse_cron("0-59/59 0-23/23 1-31/31 1-12/12 0-6/6")
+Output: {'minute': [0, 59], 'hour': [0, 23], 'day_of_month': [1], 'month': [1], 'day_of_week': [0, 6]}
+
+--- Snippet 27 [normal]: Testing string trimming with extra spaces around fields ---
+Code: parse_cron("  0   0   1   1   0  ")
+Output: {'minute': [0], 'hour': [0], 'day_of_month': [1], 'month': [1], 'day_of_week': [0]}
+
+--- Snippet 28 [normal]: Long list of comma-separated values ---
+Code: parse_cron("1,2,3,4,5,6,7,8,9,10,11,12 * * * *")
+Output: {'minute': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 29 [normal]: Step equal to range size (should return only base value) ---
+Code: parse_cron("*/60 * * * *")
+Output: {'minute': [0], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 30 [normal]: Range that starts and ends on the same value combined with step 1 ---
+Code: parse_cron("1-1/1 * * * *")
+Output: {'minute': [1], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 31 [normal]: Zero-range (should result in [0]) ---
+Code: parse_cron("0-0 * * * *")
+Output: {'minute': [0], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 32 [normal]: Mixing single zero, comma, and wildcard-step accurately ---
+Code: parse_cron("0,*/59 * * * *")
+Output: {'minute': [0, 59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 33 [normal]: Max value range (single point) ---
+Code: parse_cron("59-59 * * * *")
+Output: {'minute': [59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 34 [normal]: Multiple discrete ranges combined with commas ---
+Code: parse_cron("1-3,5-7,9-10 * * * *")
+Output: {'minute': [1, 2, 3, 5, 6, 7, 9, 10], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 35 [normal]: Step of 1 for all fields (identical to asterisk) ---
+Code: parse_cron("*/1 */1 */1 */1 */1")
+Output: {'minute': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 'hour': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 'day_of_month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'day_of_week': [0, 1, 2, 3, 4, 5, 6]}
+
+--- Snippet 36 [error]: Range start greater than end (minute) ---
+Code: parse_cron("10-5 * * * *")
+RAISED ValueError: ValueError: minute: invalid range 10-5 (valid: 0-59)
+
+--- Snippet 37 [error]: Negative step value ---
+Code: parse_cron("* * */-5 * *")
+RAISED ValueError: ValueError: Step must be positive, got -5
+
+--- Snippet 38 [error]: Empty field in comma list ---
+Code: parse_cron("1,,2 * * * *")
+RAISED ValueError: ValueError: invalid literal for int() with base 10: ''
+
+--- Snippet 39 [error]: Malformed range (missing end) ---
+Code: parse_cron("1- * * * *")
+RAISED ValueError: ValueError: invalid literal for int() with base 10: ''
+
+--- Snippet 40 [error]: Malformed step (missing start) ---
+Code: parse_cron("* * * * /5")*
+RAISED SyntaxError: Expected an expression at byte range 25..25

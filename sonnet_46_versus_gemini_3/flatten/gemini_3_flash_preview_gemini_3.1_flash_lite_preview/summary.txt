@@ -1,0 +1,9 @@
+Scenario : flatten
+Model    : gemini-3-flash-preview | gemini-3.1-flash-lite-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 38  (raises=8)
+Snippets : 31  (error_snippets=6)
+Refines  : 0
+Time     : 15.3s
+Evals    : assertion, expected, raises

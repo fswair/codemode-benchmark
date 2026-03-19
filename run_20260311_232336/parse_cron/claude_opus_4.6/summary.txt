@@ -1,0 +1,9 @@
+Scenario : parse_cron
+Model    : openrouter:anthropic/claude-opus-4.6
+Success  : True
+Coverage : 100.0%
+Cases    : 55  (raises=19)
+Snippets : 44  (error_snippets=19)
+Refines  : 0
+Time     : 179.7s
+Evals    : assertion, expected, raises

@@ -1,0 +1,162 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    FastEnough:
+      duration: 10
+  dataset:
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: one_level_nesting
+      input:
+      - 1
+      - - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: deep_nesting
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: list_with_empty_lists
+      input:
+      - 1
+      - []
+      - - 2
+        - []
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: only_empty_lists
+      input:
+      - []
+      - []
+      - []
+      expected: []
+  - case:
+      id: list_of_strings
+      input:
+      - a
+      - - b
+        - c
+      - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: mixed_types_depths
+      input:
+      - - 1
+      - 2
+      - - 3
+        - - 4
+          - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: list_of_floats
+      input:
+      - 1.1
+      - - 2.2
+        - 3.3
+      expected:
+      - 1.1
+      - 2.2
+      - 3.3
+  - case:
+      id: list_with_none
+      input:
+      - null
+      - - null
+      expected:
+      - null
+      - null
+  - case:
+      id: outer_list_is_nest
+      input:
+      - - 1
+        - 2
+        - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: nesting_at_end
+      input:
+      - 1
+      - 2
+      - 3
+      - - 4
+        - 5
+        - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: duplicate_ref
+      input:
+      - - 1
+        - 2
+      - - 1
+        - 2
+      expected:
+      - 1
+      - 2
+      - 1
+      - 2
+  - case:
+      id: very_deep_nesting
+      input:
+      - - - - - - - - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+  - case:
+      id: error_integer_input
+      input: 123
+      raises: TypeError
+  - case:
+      id: error_string_input
+      input: not a list
+      raises: TypeError

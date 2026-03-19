@@ -1,0 +1,135 @@
+--- Snippet 1 [normal]: Simple flat list remains unchanged. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 2 [normal]: One level of nesting is flattened. ---
+Code: flatten([[1, 2], [3, 4]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 3 [normal]: Deeply nested list to a single level. ---
+Code: flatten([1, [2, [3, [4, 5]]]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 4 [normal]: Empty list returns empty list. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 5 [normal]: Nesting consisting only of empty lists. ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: Mixed types (non-lists) are preserved. ---
+Code: flatten([1, "a", 2.5, True])
+Output: [1, 'a', 2.5, True]
+
+--- Snippet 7 [normal]: List containing None is flattened correctly. ---
+Code: flatten([1, [None], 2])
+Output: [1, None, 2]
+
+--- Snippet 8 [normal]: Tuples are treated as leaf elements (not flattened). ---
+Code: flatten([(1, 2), [3, 4]])
+Output: [(1, 2), 3, 4]
+
+--- Snippet 9 [normal]: Single element in deep nesting. ---
+Code: flatten([[[[1]]]])
+Output: [1]
+
+--- Snippet 10 [normal]: Irregularly shaped nested list. ---
+Code: flatten([1, [2, 3], 4, [5, [6, 7]]])
+Output: [1, 2, 3, 4, 5, 6, 7]
+
+--- Snippet 11 [normal]: Check equivalence of differently nested structures. ---
+Code: flatten([1, 2, 3]) == flatten([1, [2], [[3]]])
+Output: True
+
+--- Snippet 12 [normal]: Verify return type is always a list. ---
+Code: isinstance(flatten([1, [2]]), list)
+Output: True
+
+--- Snippet 13 [normal]: Idempotency: flattening an already flat list. ---
+Code: flatten(flatten([[1, [2]], [3]]))
+Output: [1, 2, 3]
+
+--- Snippet 14 [normal]: Range objects are treated as leaf elements (not flattened). ---
+Code: flatten([range(3), [4, 5]])
+Output: [range(0, 3), 4, 5]
+
+--- Snippet 15 [normal]: Booleans in nested structures. ---
+Code: flatten([True, [False, [True]]])
+Output: [True, False, True]
+
+--- Snippet 16 [error]: Passing None triggers TypeError guard clause. ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Passing a string (iterable but not a list) triggers TypeError guard clause. ---
+Code: flatten("abc")
+RAISED TypeError: Expected list, got str
+
+--- Snippet 18 [error]: Passing an integer triggers TypeError guard clause. ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 19 [error]: Passing a dictionary triggers TypeError guard clause. ---
+Code: flatten({"key": "value"})
+RAISED TypeError: Expected list, got dict
+
+--- Snippet 20 [normal]: List containing multiple empty lists at the same level. ---
+Code: flatten([[], [], []])
+Output: []
+
+--- Snippet 21 [normal]: Increased depth of recursion (10 levels). ---
+Code: flatten([1, [2, [3, [4, [5, [6, [7, [8, [9, [10]]]]]]]]]])
+Output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+--- Snippet 22 [normal]: List containing dictionaries as leaf elements. ---
+Code: flatten([{"a": 1}, [{"b": 2}, {"c": 3}]])
+Output: [{'a': 1}, {'b': 2}, {'c': 3}]
+
+--- Snippet 23 [normal]: List containing sets (iterables that are not lists) as leaf elements. ---
+Code: flatten([set([1, 2]), [set([3, 4])]])
+Output: [{1, 2}, {3, 4}]
+
+--- Snippet 24 [normal]: Mixing byte-oriented leaf elements. ---
+Code: flatten([bytearray(b'abc'), [b'def']])
+Output: [bytearray(b'abc'), b'def']
+
+--- Snippet 25 [normal]: Interleaved empty lists and populated lists at various depths. ---
+Code: flatten([1, [2, 3], [], [4, [5, [], 6]], []])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 26 [normal]: Handling special float values (inf, nan) in nested structures. ---
+Code: flatten([float('inf'), [float('nan')], -float('inf')])
+Output: [inf, nan, -inf]
+
+--- Snippet 27 [normal]: Handling complex numbers as leaf elements. ---
+Code: flatten([complex(1, 2), [complex(3, 4)]])
+Output: [(1+2j), (3+4j)]
+
+--- Snippet 28 [normal]: Asymmetric empty lists mixed with values. ---
+Code: flatten([[[[]]], [1], [[], [2]]])
+Output: [1, 2]
+
+--- Snippet 29 [normal]: Verification of list length after flattening a large sub-list. ---
+Code: len(flatten([list(range(100))])) == 100
+Output: True
+
+--- Snippet 30 [normal]: Repeated None values across different nesting levels. ---
+Code: flatten([None, [None, [None]]])
+Output: [None, None, None]
+
+--- Snippet 31 [normal]: Verification that extra layers of nesting for the same sequence yield the same result. ---
+Code: flatten([[[1, 2]], [[3, 4]]]) == flatten([[1, 2], [3, 4]])
+Output: True
+
+--- Snippet 32 [error]: Passing a tuple (iterable but not a list) to the top-level function. ---
+Code: flatten((1, 2, 3))
+RAISED TypeError: Expected list, got tuple
+
+--- Snippet 33 [error]: Passing a range object to the top-level function. ---
+Code: flatten(range(5))
+RAISED TypeError: Expected list, got range
+
+--- Snippet 34 [error]: Passing a set to the top-level function. ---
+Code: flatten(set([1, 2, 3]))
+RAISED TypeError: Expected list, got set

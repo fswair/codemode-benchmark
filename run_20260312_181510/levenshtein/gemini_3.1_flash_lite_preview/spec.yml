@@ -1,0 +1,151 @@
+levenshtein:
+  evals:
+    IsPositive:
+      assertion: "output >= 0"
+    IsInt:
+      type: int
+  dataset:
+    - case:
+        id: kitten_sitting
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: empty_strings
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: empty_target
+        inputs: ["abc", ""]
+        expected: 3
+    - case:
+        id: empty_source
+        inputs: ["", "abc"]
+        expected: 3
+    - case:
+        id: identical_single
+        inputs: ["a", "a"]
+        expected: 0
+    - case:
+        id: single_sub
+        inputs: ["abc", "abd"]
+        expected: 1
+    - case:
+        id: longer_target
+        inputs: ["abc", "abcde"]
+        expected: 2
+    - case:
+        id: longer_source
+        inputs: ["abcde", "abc"]
+        expected: 2
+    - case:
+        id: case_sensitive_book_back
+        inputs: ["book", "back"]
+        expected: 2
+    - case:
+        id: short_deletion
+        inputs: ["hello", "helo"]
+        expected: 1
+    - case:
+        id: disparate_lengths
+        inputs: ["short", "verylongstring"]
+        expected: 12
+    - case:
+        id: numeric_strings
+        inputs: ["123", "123"]
+        expected: 0
+    - case:
+        id: order_swapped
+        inputs: ["abcdefg", "gfedcba"]
+        expected: 6
+    - case:
+        id: space_string
+        inputs: [" ", " "]
+        expected: 0
+    - case:
+        id: large_distance
+        inputs: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+        expected: 100
+    - case:
+        id: identical_long
+        inputs: ["levenshtein", "levenshtein"]
+        expected: 0
+    - case:
+        id: single_sub_a_b
+        inputs: ["a", "b"]
+        expected: 1
+    - case:
+        id: transposition
+        inputs: ["ab", "ba"]
+        expected: 2
+    - case:
+        id: suffix_add
+        inputs: ["cat", "cats"]
+        expected: 1
+    - case:
+        id: prefix_add
+        inputs: ["cat", "scat"]
+        expected: 1
+    - case:
+        id: suffix_remove
+        inputs: ["banana", "bana"]
+        expected: 2
+    - case:
+        id: prefix_remove
+        inputs: ["banana", "nana"]
+        expected: 2
+    - case:
+        id: whitespace_diff
+        inputs: ["\n", "\t"]
+        expected: 1
+    - case:
+        id: special_chars
+        inputs: ["!@#", "!$#"]
+        expected: 1
+    - case:
+        id: casing_only_A_a
+        inputs: ["A", "a"]
+        expected: 1
+    - case:
+        id: mixed_case_swap
+        inputs: ["AaBbCc", "abcABC"]
+        expected: 6
+    - case:
+        id: subset_swap
+        inputs: ["abc", "acb"]
+        expected: 2
+    - case:
+        id: repeated_substring_dist
+        inputs: ["distancedistancedistancedistancedistancedistancedistancedistancedistancedistance", "distancdistancdistancdistancdistancdistancdistancdistancdistancdistanc"]
+        expected: 10
+    - case:
+        id: error_none_first
+        inputs: [null, "abc"]
+        raises: TypeError
+    - case:
+        id: error_int_second
+        inputs: ["abc", 123]
+        raises: TypeError
+    - case:
+        id: error_list_inputs
+        inputs: [["a"], ["b"]]
+        raises: TypeError
+    - case:
+        id: error_both_ints
+        inputs: [1, 2]
+        raises: TypeError
+    - case:
+        id: error_none_second
+        inputs: ["abc", null]
+        raises: TypeError
+    - case:
+        id: error_dict_first
+        inputs: [{"a": 1}, "abc"]
+        raises: TypeError
+    - case:
+        id: error_list_second
+        inputs: ["abc", ["a", "b", "c"]]
+        raises: TypeError
+    - case:
+        id: logic_consistency
+        inputs: ["kitten", "kitten"]
+        assertion: "output == 0"

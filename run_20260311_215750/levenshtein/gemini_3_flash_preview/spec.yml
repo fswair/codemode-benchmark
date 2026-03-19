@@ -1,0 +1,116 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: "output >= 0"
+    LowerBound:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+    UpperBound:
+      assertion: "output <= max(len(input[0]), len(input[1]))"
+  dataset:
+    - case:
+        id: classic_kitten_sitting
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: empty_strings
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: identical_strings
+        inputs: ["abc", "abc"]
+        expected: 0
+    - case:
+        id: empty_vs_string_insertion
+        inputs: ["", "abc"]
+        expected: 3
+    - case:
+        id: string_vs_empty_deletion
+        inputs: ["abc", ""]
+        expected: 3
+    - case:
+        id: completely_different
+        inputs: ["abc", "def"]
+        expected: 3
+    - case:
+        id: single_vs_multiple_insertion
+        inputs: ["a", "abc"]
+        expected: 2
+    - case:
+        id: multiple_vs_single_deletion
+        inputs: ["abc", "a"]
+        expected: 2
+    - case:
+        id: long_identical
+        inputs: ["levenshtein", "levenshtein"]
+        expected: 0
+    - case:
+        id: case_sensitivity
+        inputs: ["FLOMAX", "Volmax"]
+        expected: 6
+    - case:
+        id: numeric_strings
+        inputs: ["123", "123456"]
+        expected: 3
+    - case:
+        id: whitespace_diff
+        inputs: [" ", "  "]
+        expected: 1
+    - case:
+        id: substitution_mix
+        inputs: ["book", "back"]
+        expected: 2
+    - case:
+        id: suffix_removal
+        inputs: ["testing", "test"]
+        expected: 3
+    - case:
+        id: suffix_addition
+        inputs: ["test", "testing"]
+        expected: 3
+    - case:
+        id: complex_saturday_sunday
+        inputs: ["Saturday", "Sunday"]
+        expected: 3
+    - case:
+        id: single_substitution
+        inputs: ["house", "mouse"]
+        expected: 1
+    - case:
+        id: argument_none_first
+        inputs: [null, "hello"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: argument_none_second
+        inputs: ["hello", null]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: argument_int
+        inputs: [123, "123"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: argument_list
+        inputs: [["a", "b"], "ab"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: argument_dict
+        inputs: ["test", {"a": 1}]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: long_strings_equality
+        inputs: ["dynamicprogramming", "dynamicprogramming"]
+        expected: 0
+    - case:
+        id: symmetry_check
+        inputs: ["sitting", "kitten"]
+        expected: 3
+    - case:
+        id: transpose_check_not_damerau
+        inputs: ["ab", "ba"]
+        expected: 2

@@ -1,0 +1,107 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    FlatteningProperty:
+      assertion: "all(not isinstance(x, list) for x in output)"
+  dataset:
+    - case:
+        id: simple_flat_list
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: empty_list
+        input: []
+        expected: []
+    - case:
+        id: basic_2d_nested
+        input: [[1, 2], [3, 4]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: deeply_nested
+        input: [1, [2, [3, [4]]]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: internal_empty_lists
+        input: [1, [], 2]
+        expected: [1, 2]
+    - case:
+        id: nested_empty_lists
+        input: [[[]]]
+        expected: []
+    - case:
+        id: lists_with_strings
+        input: ["a", ["b", "c"], "d"]
+        expected: ["a", "b", "c", "d"]
+    - case:
+        id: lists_with_booleans
+        input: [true, [false, true]]
+        expected: [true, false, true]
+    - case:
+        id: preserve_none
+        input: [null, [null]]
+        expected: [null, null]
+    - case:
+        id: tuples_as_elements
+        input: [1, [2, 3], [4, 5]]
+        assertion: "output == [1, 2, 3, 4, 5]"
+    - case:
+        id: nested_dicts
+        input: [{"a": 1}, [{"b": 2}]]
+        expected: [{"a": 1}, {"b": 2}]
+    - case:
+        id: multiple_references
+        input: [[1, 2], [1, 2]]
+        expected: [1, 2, 1, 2]
+    - case:
+        id: highly_segmented
+        input: [[[1]], [[2]], [[3]]]
+        expected: [1, 2, 3]
+    - case:
+        id: idempotency_logic
+        input: [1, 2, [3, 4]]
+        assertion: "all(not isinstance(x, list) for x in output)"
+    - case:
+        id: mixed_types_deep
+        input: [1, ["two", [3.0, [false]]], {"key": "val"}]
+        expected: [1, "two", 3.0, false, {"key": "val"}]
+    - case:
+        id: large_flat_input
+        input: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        expected: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    - case:
+        id: single_element_nested
+        input: [[[[[42]]]]]
+        expected: [42]
+    - case:
+        id: error_none
+        input: null
+        raises: TypeError
+        match: "Expected list, got NoneType"
+    - case:
+        id: error_string
+        input: "abc"
+        raises: TypeError
+        match: "Expected list, got str"
+    - case:
+        id: error_int
+        input: 123
+        raises: TypeError
+        match: "Expected list, got int"
+    - case:
+        id: error_dict
+        input: {"key": "value"}
+        raises: TypeError
+        match: "Expected list, got dict"
+    - case:
+        id: error_tuple
+        input: [1, 2, 3]
+        assertion: "output == [1, 2, 3]"
+    - case:
+        id: error_tuple_root
+        input: [1, 2]
+        assertion: "isinstance(output, list) and len(output) == 2"
+    - case:
+        id: final_error_check
+        input: 3.14
+        raises: TypeError

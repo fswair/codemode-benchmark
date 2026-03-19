@@ -1,0 +1,79 @@
+--- Snippet 1 [normal]: Both strings are empty ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 2 [normal]: First string has one char, second empty ---
+Code: levenshtein("a", "")
+Output: 1
+
+--- Snippet 3 [normal]: First string empty, second has one char ---
+Code: levenshtein("", "b")
+Output: 1
+
+--- Snippet 4 [normal]: Identical strings ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 5 [normal]: Classic example: kitten to sitting ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 6 [normal]: Common substring related edit distance ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 7 [normal]: Mixed operations ---
+Code: levenshtein("gumbo", "gambol")
+Output: 2
+
+--- Snippet 8 [normal]: Capitalization and length difference ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 9 [normal]: Numeric strings identical ---
+Code: levenshtein("12345", "12345")
+Output: 0
+
+--- Snippet 10 [normal]: No common characters, complete replacement ---
+Code: levenshtein("abc", "def")
+Output: 3
+
+--- Snippet 11 [normal]: Large, identical strings ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 12 [normal]: Single character substitution ---
+Code: levenshtein("x", "y")
+Output: 1
+
+--- Snippet 13 [normal]: Deletion at the end ---
+Code: levenshtein("abc", "ab")
+Output: 1
+
+--- Snippet 14 [normal]: Insertion at the end ---
+Code: levenshtein("ab", "abc")
+Output: 1
+
+--- Snippet 15 [normal]: Insertion at the start ---
+Code: levenshtein("abc", "xyzabc")
+Output: 3
+
+--- Snippet 16 [normal]: Deletion at the start ---
+Code: levenshtein("xyzabc", "abc")
+Output: 3
+
+--- Snippet 17 [normal]: Reverse string edit distance (should be distance 2: substitution a/c and c/a) ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 18 [error]: First argument is None ---
+Code: levenshtein(None, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: Second argument is an integer ---
+Code: levenshtein("abc", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: Both arguments are lists instead of strings ---
+Code: levenshtein(["list"], ["list"])
+RAISED TypeError: Both arguments must be strings

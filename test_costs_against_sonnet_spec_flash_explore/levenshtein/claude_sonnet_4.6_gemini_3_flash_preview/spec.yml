@@ -1,0 +1,275 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+    LowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+  dataset:
+  - case:
+      id: both_empty
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: identical_nonempty
+      inputs:
+      - kitten
+      - kitten
+      expected: 0
+  - case:
+      id: identity_self_levenshtein
+      inputs:
+      - levenshtein
+      - levenshtein
+      expected: 0
+  - case:
+      id: empty_to_hello
+      inputs:
+      - ''
+      - hello
+      expected: 5
+  - case:
+      id: world_to_empty
+      inputs:
+      - world
+      - ''
+      expected: 5
+  - case:
+      id: kitten_to_sitting
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: saturday_to_sunday
+      inputs:
+      - Saturday
+      - Sunday
+      expected: 3
+  - case:
+      id: flaw_to_lawn
+      inputs:
+      - flaw
+      - lawn
+      expected: 2
+  - case:
+      id: all_different_abc_def
+      inputs:
+      - abc
+      - def
+      expected: 3
+  - case:
+      id: single_substitution_middle
+      inputs:
+      - abc
+      - axc
+      expected: 1
+  - case:
+      id: single_insertion_end
+      inputs:
+      - string
+      - strings
+      expected: 1
+  - case:
+      id: single_deletion_end
+      inputs:
+      - strings
+      - string
+      expected: 1
+  - case:
+      id: single_insertion_middle
+      inputs:
+      - ab
+      - acb
+      expected: 1
+  - case:
+      id: single_deletion_middle
+      inputs:
+      - acb
+      - ab
+      expected: 1
+  - case:
+      id: transposition_ab_ba
+      inputs:
+      - ab
+      - ba
+      expected: 2
+  - case:
+      id: short_vs_long
+      inputs:
+      - short
+      - muchlongerstring
+      expected: 12
+  - case:
+      id: case_sensitivity
+      inputs:
+      - case
+      - CASE
+      expected: 4
+  - case:
+      id: emoji_substitution
+      inputs:
+      - 😊
+      - 😂
+      expected: 1
+  - case:
+      id: cafe_vs_cafe_accent
+      inputs:
+      - cafe
+      - café
+      expected: 1
+  - case:
+      id: single_space_vs_double_space
+      inputs:
+      - ' '
+      - '  '
+      expected: 1
+  - case:
+      id: newline_tab_vs_spaces
+      inputs:
+      - "\n\t"
+      - '  '
+      expected: 2
+  - case:
+      id: python_with_trailing_spaces
+      inputs:
+      - python
+      - 'python          '
+      expected: 10
+  - case:
+      id: digits_prefix_vs_full
+      inputs:
+      - '123'
+      - '123456789'
+      expected: 6
+  - case:
+      id: punctuation_stripping
+      inputs:
+      - '.., '
+      expected: 4
+  - case:
+      id: ten_a_vs_five_b
+      inputs:
+      - aaaaaaaaaa
+      - bbbbb
+      expected: 10
+  - case:
+      id: shifted_a_b
+      inputs:
+      - AAAAAAAAAAB
+      - BAAAAAAAAAA
+      expected: 2
+  - case:
+      id: large_identical_a100
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      expected: 0
+  - case:
+      id: large_mismatch_a50_b50
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      expected: 50
+  - case:
+      id: commutativity_abc_acb
+      inputs:
+      - abc
+      - acb
+      assertion: output == 2
+  - case:
+      id: commutativity_reverse_acb_abc
+      inputs:
+      - acb
+      - abc
+      assertion: output == 2
+  - case:
+      id: upper_bound_book_back
+      inputs:
+      - book
+      - back
+      assertion: output <= len(input[0]) + len(input[1])
+  - case:
+      id: symmetric_flaw_lawn
+      inputs:
+      - lawn
+      - flaw
+      expected: 2
+  - case:
+      id: single_char_identical
+      inputs:
+      - a
+      - a
+      expected: 0
+  - case:
+      id: single_char_different
+      inputs:
+      - a
+      - b
+      expected: 1
+  - case:
+      id: single_char_to_empty
+      inputs:
+      - a
+      - ''
+      expected: 1
+  - case:
+      id: empty_to_single_char
+      inputs:
+      - ''
+      - z
+      expected: 1
+  - case:
+      id: error_first_arg_none
+      inputs:
+      - null
+      - test
+      raises: TypeError
+  - case:
+      id: error_second_arg_int
+      inputs:
+      - test
+      - 123
+      raises: TypeError
+  - case:
+      id: error_first_arg_list
+      inputs:
+      - - list
+      - string
+      raises: TypeError
+  - case:
+      id: error_both_none
+      inputs:
+      - null
+      - null
+      raises: TypeError
+  - case:
+      id: error_both_integers
+      inputs:
+      - 123
+      - 456
+      raises: TypeError
+  - case:
+      id: error_second_arg_bytes
+      inputs:
+      - valid
+      - null
+      raises: TypeError
+  - case:
+      id: error_first_arg_dict
+      inputs:
+      - key: val
+      - string
+      raises: TypeError
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - valid
+      - !!binary |
+        Ynl0ZXM=
+      raises: TypeError

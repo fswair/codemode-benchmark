@@ -1,0 +1,15 @@
+{
+  "id": "test_sonnet_exploration_opus_spec_with_costs",
+  "timestamp": "20260317_204848",
+  "iso": "2026-03-17T20:48:48.408243+00:00",
+  "models": {
+    "case_1": {
+      "spec": "openrouter:anthropic/claude-opus-4.6",
+      "exploration": "openrouter:anthropic/claude-sonnet-4.6"
+    }
+  },
+  "scenarios": [
+    "parse_cron"
+  ],
+  "python": "3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)]"
+}

@@ -1,0 +1,14 @@
+Scenario : parse_cron
+Spec Model : openrouter:anthropic/claude-sonnet-4.6
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 53  (raises=20)
+Snippets : 46  (error_snippets=18)
+Refines  : 0
+Cost USD : 0.16892600
+Cost/Fn  : 0.16892600
+Tokens   : in=30561 out=7588 req=3
+Pricing  : costs.yml
+Time     : 79.0s
+Evals    : assertion, expected, raises

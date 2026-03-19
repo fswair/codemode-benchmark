@@ -1,0 +1,174 @@
+eval_rpn:
+  evals:
+    ReturnType:
+      type: int
+    PositiveDuration:
+      assertion: "duration > 0"
+  dataset:
+    - case:
+        id: standard_expression
+        input: ["2", "1", "+", "3", "*"]
+        expected: 9
+    - case:
+        id: truncation_division_positive
+        input: ["4", "13", "5", "/", "+"]
+        expected: 6
+    - case:
+        id: complex_expression
+        input: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
+        expected: 22
+    - case:
+        id: single_operand
+        input: ["42"]
+        expected: 42
+    - case:
+        id: division_negative_result
+        input: ["4", "-2", "/"]
+        expected: -2
+    - case:
+        id: truncation_negative_dividend
+        input: ["-10", "3", "/"]
+        expected: -3
+    - case:
+        id: truncation_negative_divisor
+        input: ["10", "-3", "/"]
+        expected: -3
+    - case:
+        id: zero_dividend
+        input: ["0", "5", "/"]
+        expected: 0
+    - case:
+        id: subtract_zero
+        input: ["5", "0", "-"]
+        expected: 5
+    - case:
+        id: multiply_negatives
+        input: ["-5", "-5", "*"]
+        expected: 25
+    - case:
+        id: simple_subtraction_positive
+        input: ["100", "50", "-"]
+        expected: 50
+    - case:
+        id: simple_subtraction_negative
+        input: ["50", "100", "-"]
+        expected: -50
+    - case:
+        id: addition_chain
+        input: ["1", "2", "+", "3", "+", "4", "+"]
+        expected: 10
+    - case:
+        id: subtraction_negatives_zero
+        input: ["-1", "-1", "-"]
+        expected: 0
+    - case:
+        id: multiply_mixed_signs
+        input: ["-1", "1", "*"]
+        expected: -1
+    - case:
+        id: multiply_zeros
+        input: ["0", "0", "*"]
+        expected: 0
+    - case:
+        id: truncation_check_1
+        input: ["-5", "2", "/"]
+        expected: -2
+    - case:
+        id: truncation_check_2
+        input: ["5", "-2", "/"]
+        expected: -2
+    - case:
+        id: truncation_check_3
+        input: ["-1", "-2", "/"]
+        expected: 0
+    - case:
+        id: large_integer_mul
+        input: ["1000000", "1000000", "*"]
+        expected: 1000000000000
+    - case:
+        id: sequential_ops
+        input: ["10", "2", "/", "5", "*"]
+        expected: 25
+    - case:
+        id: deep_stack
+        input: ["2", "3", "4", "*", "+"]
+        expected: 14
+    - case:
+        id: symmetric_expression
+        input: ["1", "5", "-", "1", "5", "-", "*"]
+        expected: 16
+    - case:
+        id: negative_zero_token
+        input: ["-0"]
+        expected: 0
+    - case:
+        id: leading_zeros
+        input: ["007"]
+        expected: 7
+    - case:
+        id: simple_addition
+        input: ["2", "3", "+"]
+        expected: 5
+    - case:
+        id: subtract_from_negative
+        input: ["-10", "5", "-"]
+        expected: -15
+    - case:
+        id: nested_subtraction
+        input: ["10", "5", "2", "-", "-"]
+        expected: 7
+    - case:
+        id: error_empty_list
+        input: []
+        raises: ValueError
+        match: "Empty expression"
+    - case:
+        id: error_not_enough_operands
+        input: ["1", "+"]
+        raises: ValueError
+        match: "Not enough operands for '\\+'"
+    - case:
+        id: error_division_by_zero
+        input: ["10", "0", "/"]
+        raises: ZeroDivisionError
+        match: "Division by zero"
+    - case:
+        id: error_invalid_token_alpha
+        input: ["1", "2", "abc"]
+        raises: ValueError
+        match: "Invalid token: 'abc'"
+    - case:
+        id: error_stack_remaining_two
+        input: ["1", "2"]
+        raises: ValueError
+        match: "Invalid expression: 2 values remaining on stack"
+    - case:
+        id: error_operator_no_operands
+        input: ["+"]
+        raises: ValueError
+        match: "Not enough operands for '\\+'"
+    - case:
+        id: error_stack_remaining_three_elements
+        input: ["1", "2", "3", "-"]
+        raises: ValueError
+        match: "Invalid expression: 2 values remaining on stack"
+    - case:
+        id: error_invalid_token_float
+        input: ["2.5"]
+        raises: ValueError
+        match: "Invalid token: '2.5'"
+    - case:
+        id: error_stack_remaining_four
+        input: ["1", "2", "3", "4", "5", "*"]
+        raises: ValueError
+        match: "Invalid expression: 4 values remaining on stack"
+    - case:
+        id: error_invalid_token_whitespace
+        input: ["5", "3", " "]
+        raises: ValueError
+        match: "Invalid token: ' '"
+    - case:
+        id: error_null_input
+        input: null
+        raises: ValueError
+        match: "Empty expression"

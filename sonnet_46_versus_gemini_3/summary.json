@@ -1,0 +1,100 @@
+{
+  "per_model": {
+    "claude_sonnet_4.6_gemini_3_flash_preview": {
+      "model": "claude-sonnet-4.6 | gemini-3-flash-preview",
+      "pass_rate": "2/2",
+      "avg_coverage": 1.0,
+      "avg_time_s": 69.28,
+      "avg_cases": 50.0,
+      "avg_raises": 14.0,
+      "avg_snippets": 42.0
+    },
+    "gemini_3_flash_preview_gemini_3.1_flash_lite_preview": {
+      "model": "gemini-3-flash-preview | gemini-3.1-flash-lite-preview",
+      "pass_rate": "2/2",
+      "avg_coverage": 1.0,
+      "avg_time_s": 33.08,
+      "avg_cases": 38.5,
+      "avg_raises": 11.0,
+      "avg_snippets": 35.5
+    }
+  },
+  "per_scenario": [
+    {
+      "scenario": "flatten",
+      "model": "claude-sonnet-4.6 | gemini-3-flash-preview",
+      "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 62.05,
+      "cases": 37,
+      "raises_cases": 9,
+      "snippets": 36,
+      "error_snippets": 11,
+      "refinements": 1,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "flatten",
+      "model": "gemini-3-flash-preview | gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3_flash_preview_gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 15.32,
+      "cases": 38,
+      "raises_cases": 8,
+      "snippets": 31,
+      "error_snippets": 6,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "claude-sonnet-4.6 | gemini-3-flash-preview",
+      "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 76.51,
+      "cases": 63,
+      "raises_cases": 19,
+      "snippets": 48,
+      "error_snippets": 19,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "parse_cron",
+      "model": "gemini-3-flash-preview | gemini-3.1-flash-lite-preview",
+      "model_slug": "gemini_3_flash_preview_gemini_3.1_flash_lite_preview",
+      "success": true,
+      "coverage": "100.0%",
+      "time_s": 50.84,
+      "cases": 39,
+      "raises_cases": 14,
+      "snippets": 40,
+      "error_snippets": 15,
+      "refinements": 0,
+      "evaluator_types": [
+        "assertion",
+        "expected",
+        "raises"
+      ],
+      "error": null
+    }
+  ]
+}

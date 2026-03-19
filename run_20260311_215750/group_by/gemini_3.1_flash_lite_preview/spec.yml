@@ -1,0 +1,172 @@
+group_by:
+  evals:
+    IsDict:
+      type: dict
+    FastEnough:
+      duration: 0.05
+  dataset:
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - id
+      expected: {}
+  - case:
+      id: standard_integer_grouping
+      inputs:
+      - - a: 1
+        - a: 2
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+        2:
+        - a: 2
+  - case:
+      id: standard_string_grouping
+      inputs:
+      - - type: fruit
+          name: apple
+        - type: vegetable
+          name: carrot
+      - type
+      expected:
+        fruit:
+        - type: fruit
+          name: apple
+        vegetable:
+        - type: vegetable
+          name: carrot
+  - case:
+      id: missing_key_grouped_as_none
+      inputs:
+      - - id: 1
+      - nonexistent
+      expected:
+        null:
+        - id: 1
+  - case:
+      id: multiple_missing_keys
+      inputs:
+      - - id: 1
+        - id: 1
+      - other
+      expected:
+        null:
+        - id: 1
+        - id: 1
+  - case:
+      id: mixed_presence_of_keys
+      inputs:
+      - - a: 1
+        - b: 2
+      - a
+      expected:
+        1:
+        - a: 1
+        null:
+        - b: 2
+  - case:
+      id: float_key_grouping
+      inputs:
+      - - a: 1.5
+        - a: 1.5
+      - a
+      expected:
+        1.5:
+        - a: 1.5
+        - a: 1.5
+  - case:
+      id: hashable_tuple_grouping
+      inputs:
+      - - a:
+          - 1
+      - a
+      assertion: isinstance(list(output.keys())[0], tuple)
+  - case:
+      id: case_sensitivity
+      inputs:
+      - - a: val
+        - a: VAL
+      - a
+      expected:
+        val:
+        - a: val
+        VAL:
+        - a: VAL
+  - case:
+      id: all_same_group
+      inputs:
+      - - a: 1
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+  - case:
+      id: no_items_have_key
+      inputs:
+      - - a: 1
+        - b: 2
+        - c: 3
+      - x
+      expected:
+        null:
+        - a: 1
+        - b: 2
+        - c: 3
+  - case:
+      id: explicit_none_value
+      inputs:
+      - - x: null
+      - x
+      expected:
+        null:
+        - x: null
+  - case:
+      id: none_value_and_missing_key_collision
+      inputs:
+      - - x: null
+        - y: 1
+      - x
+      expected:
+        null:
+        - x: null
+        - y: 1
+  - case:
+      id: structure_verification
+      inputs:
+      - - a: 1
+      - a
+      assertion: isinstance(output[1], list)
+  - case:
+      id: length_check
+      inputs:
+      - - a: 1
+        - a: 1
+        - b: 2
+      - a
+      assertion: len(output) == 2
+  - case:
+      id: non_string_key
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: item_not_dict_error
+      inputs:
+      - not a list
+      - key
+      raises: AttributeError
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - null
+      - key
+      raises: TypeError

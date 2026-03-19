@@ -1,0 +1,167 @@
+group_by:
+  evals:
+    ReturnsDict:
+      type: dict
+  dataset:
+  - case:
+      id: typical_grouping
+      inputs:
+      - - a: 1
+        - a: 2
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+        2:
+        - a: 2
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_group_none
+      inputs:
+      - - b: 1
+        - a: 2
+      - a
+      expected:
+        null:
+        - b: 1
+        2:
+        - a: 2
+  - case:
+      id: mixed_with_without_key
+      inputs:
+      - - type: fruit
+        - type: vegetable
+        - v: 1
+      - type
+      expected:
+        fruit:
+        - type: fruit
+        vegetable:
+        - type: vegetable
+        null:
+        - v: 1
+  - case:
+      id: string_values
+      inputs:
+      - - a: x
+        - a: y
+      - a
+      expected:
+        x:
+        - a: x
+        y:
+        - a: y
+  - case:
+      id: numeric_values
+      inputs:
+      - - id: 1
+        - id: 1.0
+      - id
+      expected:
+        1:
+        - id: 1
+        - id: 1.0
+  - case:
+      id: verify_all_included
+      inputs:
+      - - key: a
+        - key: a
+      - key
+      expected:
+        a:
+        - key: a
+        - key: a
+  - case:
+      id: key_not_in_any
+      inputs:
+      - - key: val1
+        - key: val2
+      - non_existent
+      expected:
+        null:
+        - key: val1
+        - key: val2
+  - case:
+      id: explicit_none_value
+      inputs:
+      - - a: null
+        - a: 1
+      - a
+      expected:
+        null:
+        - a: null
+        1:
+        - a: 1
+  - case:
+      id: single_dict
+      inputs:
+      - - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+  - case:
+      id: none_as_key
+      inputs:
+      - - a: 1
+        - b: 2
+      - null
+      expected:
+        null:
+        - a: 1
+        - b: 2
+  - case:
+      id: non_string_key_arg
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: large_input
+      inputs:
+      - - k: 0
+        - k: 1
+      - k
+      assertion: len(output) == 2
+  - case:
+      id: group_by_tuple_values
+      inputs:
+      - - a:
+          - 1
+          - 2
+        - a:
+          - 1
+          - 2
+      - a
+      assertion: len(output.keys()) == 1
+  - case:
+      id: grouping_count
+      inputs:
+      - - a: 1
+        - a: 1
+        - a: 2
+      - a
+      assertion: len(output) == 2
+  - case:
+      id: raise_non_dict_list
+      inputs:
+      - - 1
+        - 2
+        - 3
+      - key
+      raises: AttributeError
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - null
+      - key
+      raises: TypeError

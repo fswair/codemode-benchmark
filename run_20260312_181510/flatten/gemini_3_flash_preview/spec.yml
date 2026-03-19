@@ -1,0 +1,155 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    IsFlat:
+      assertion: "not any(isinstance(x, list) for x in output)"
+  dataset:
+    - case:
+        id: simple_flat_list
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: single_level_nesting
+        input: [[1, 2], [3, 4]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: deeply_nested
+        input: [1, [2, [3, [4, 5]]]]
+        expected: [1, 2, 3, 4, 5]
+    - case:
+        id: empty_list
+        input: []
+        expected: []
+    - case:
+        id: nested_empty_lists
+        input: [[], [[]], [[[]]]]
+        expected: []
+    - case:
+        id: mixed_types
+        input: [1, "a", 2.5, true]
+        expected: [1, "a", 2.5, true]
+    - case:
+        id: list_with_none
+        input: [1, [null], 2]
+        expected: [1, null, 2]
+    - case:
+        id: tuples_as_leaves
+        input: [[1, 2], [3, 4]]
+        assertion: "output == [1, 2, 3, 4]"
+    - case:
+        id: tuple_leaf_literal
+        input: [[1, 2], 3]
+        expected: [1, 2, 3]
+    - case:
+        id: deep_single_element
+        input: [[[[1]]]]
+        expected: [1]
+    - case:
+        id: irregular_structure
+        input: [1, [2, 3], 4, [5, [6, 7]]]
+        expected: [1, 2, 3, 4, 5, 6, 7]
+    - case:
+        id: idempotency_check
+        input: [1, [2], [[3]]]
+        expected: [1, 2, 3]
+    - case:
+        id: range_as_leaf
+        input: [0, 1, 2, [4, 5]]
+        assertion: "output == [0, 1, 2, 4, 5]"
+    - case:
+        id: nested_booleans
+        input: [true, [false, [true]]]
+        expected: [true, false, true]
+    - case:
+        id: multiple_empties_same_level
+        input: [[], [], []]
+        expected: []
+    - case:
+        id: depth_10_recursion
+        input: [1, [2, [3, [4, [5, [6, [7, [8, [9, [10]]]]]]]]]]
+        expected: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    - case:
+        id: dicts_as_leaves
+        input: [{"a": 1}, [{"b": 2}, {"c": 3}]]
+        expected: [{"a": 1}, {"b": 2}, {"c": 3}]
+    - case:
+        id: sets_as_leaves
+        input: [[1, 2], [3]]
+        assertion: "output == [1, 2, 3]"
+    - case:
+        id: byte_leaf_elements
+        input: ["abc", ["def"]]
+        expected: ["abc", "def"]
+    - case:
+        id: interleaved_empties
+        input: [1, [2, 3], [], [4, [5, [], 6]], []]
+        expected: [1, 2, 3, 4, 5, 6]
+    - case:
+        id: asymmetric_nesting
+        input: [[[[[]]], [1], [[], [2]]]]
+        expected: [1, 2]
+    - case:
+        id: large_sublist_check
+        input: [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]
+        assertion: "len(output) == 10"
+    - case:
+        id: repeated_none
+        input: [null, [null, [null]]]
+        expected: [null, null, null]
+    - case:
+        id: layers_equivalence
+        input: [[[1, 2]], [[3, 4]]]
+        expected: [1, 2, 3, 4]
+    - case:
+        id: integers_and_lists
+        input: [1, 2, [3, 4], 5]
+        expected: [1, 2, 3, 4, 5]
+    - case:
+        id: nested_strings
+        input: ["hello", ["world", ["!"]]]
+        expected: ["hello", "world", "!"]
+    - case:
+        id: single_element_list
+        input: [42]
+        expected: [42]
+    - case:
+        id: error_none_input
+        input: null
+        raises: TypeError
+        match: "Expected list, got NoneType"
+    - case:
+        id: error_string_input
+        input: "abc"
+        raises: TypeError
+        match: "Expected list, got str"
+    - case:
+        id: error_int_input
+        input: 123
+        raises: TypeError
+        match: "Expected list, got int"
+    - case:
+        id: error_dict_input
+        input: {"key": "value"}
+        raises: TypeError
+        match: "Expected list, got dict"
+    - case:
+        id: error_tuple_input
+        input: [1, 2, 3]
+        assertion: "output == [1, 2, 3]"
+    - case:
+        id: error_range_input
+        input: [0, 1, 2, 3, 4]
+        assertion: "output == [0, 1, 2, 3, 4]"
+    - case:
+        id: error_set_input
+        input: [1, 2, 3]
+        assertion: "output == [1, 2, 3]"
+    - case:
+        id: actual_tuple_error
+        input: [1, 2, 3]
+        expected: [1, 2, 3]
+    - case:
+        id: error_top_level_tuple
+        input: [1, 2, 3]
+        assertion: "isinstance(output, list)"

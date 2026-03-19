@@ -1,0 +1,208 @@
+group_by:
+  evals:
+    ReturnType:
+      type: dict
+  dataset:
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - key
+      expected: {}
+  - case:
+      id: happy_path_multiple_groups
+      inputs:
+      - - type: fruit
+          name: apple
+        - type: fruit
+          name: banana
+        - type: veg
+          name: carrot
+      - type
+      expected:
+        fruit:
+        - type: fruit
+          name: apple
+        - type: fruit
+          name: banana
+        veg:
+        - type: veg
+          name: carrot
+  - case:
+      id: missing_key_group
+      inputs:
+      - - a: 1
+        - b: 2
+      - a
+      expected:
+        1:
+        - a: 1
+        null:
+        - b: 2
+  - case:
+      id: multiple_items_same_group
+      inputs:
+      - - a: 1
+          id: 1
+        - a: 1
+          id: 2
+      - a
+      expected:
+        1:
+        - a: 1
+          id: 1
+        - a: 1
+          id: 2
+  - case:
+      id: duplicate_items
+      inputs:
+      - - a: 1
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+  - case:
+      id: key_missing_in_all
+      inputs:
+      - - name: test
+      - missing_key
+      expected:
+        null:
+        - name: test
+  - case:
+      id: mixed_type_equal_values
+      inputs:
+      - - val: 1
+        - val: 1.0
+        - val: 1
+      - val
+      expected:
+        1:
+        - val: 1
+        - val: 1.0
+        - val: 1
+  - case:
+      id: case_sensitive_strings
+      inputs:
+      - - key: a
+        - key: A
+      - key
+      expected:
+        a:
+        - key: a
+        A:
+        - key: A
+  - case:
+      id: boolean_values
+      inputs:
+      - - x: true
+        - x: false
+        - x: true
+      - x
+      expected:
+        true:
+        - x: true
+        - x: true
+        false:
+        - x: false
+  - case:
+      id: explicit_none_value
+      inputs:
+      - - x: null
+        - y: 1
+      - x
+      expected:
+        null:
+        - x: null
+        - y: 1
+  - case:
+      id: key_with_spaces
+      inputs:
+      - - a: 1
+      - '  spaces  '
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: scale_test_100_items
+      inputs:
+      - - a: 1
+        - a: 1
+        - a: 1
+        - a: 1
+        - a: 1
+        - a: 1
+        - a: 1
+        - a: 1
+      - a
+      assertion: len(output[1]) == 8
+  - case:
+      id: grouping_modulo_values
+      inputs:
+      - - a: 0
+        - a: 1
+        - a: 2
+        - a: 0
+        - a: 1
+        - a: 2
+        - a: 0
+        - a: 1
+        - a: 2
+        - a: 0
+      - a
+      expected:
+        0:
+        - a: 0
+        - a: 0
+        - a: 0
+        - a: 0
+        1:
+        - a: 1
+        - a: 1
+        - a: 1
+        2:
+        - a: 2
+        - a: 2
+        - a: 2
+  - case:
+      id: non_string_key
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: error_input_str
+      inputs:
+      - not a list
+      - key
+      raises: AttributeError
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - - data:
+          - 1
+          - 2
+        - data:
+          - 1
+          - 2
+      - data
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - - a:
+            b: 1
+        - a:
+            b: 1
+      - a
+      raises: TypeError
+  - case:
+      id: error_typeerror_2
+      inputs:
+      - null
+      - anything
+      raises: TypeError

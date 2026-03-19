@@ -1,0 +1,277 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    LowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+    IdentityProperty:
+      assertion: (input[0] == input[1]) == (output == 0)
+  dataset:
+  - case:
+      id: standard_kitten_sitting
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: empty_strings
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: string_to_empty
+      inputs:
+      - abc
+      - ''
+      expected: 3
+  - case:
+      id: empty_to_string
+      inputs:
+      - ''
+      - abc
+      expected: 3
+  - case:
+      id: identical_strings
+      inputs:
+      - abc
+      - abc
+      expected: 0
+  - case:
+      id: single_char_substitution
+      inputs:
+      - a
+      - b
+      expected: 1
+  - case:
+      id: insertion_only
+      inputs:
+      - a
+      - abc
+      expected: 2
+  - case:
+      id: deletion_only
+      inputs:
+      - abc
+      - a
+      expected: 2
+  - case:
+      id: insertion_deletion_mix
+      inputs:
+      - flaw
+      - lawn
+      expected: 2
+  - case:
+      id: standard_saturday_sunday
+      inputs:
+      - saturday
+      - sunday
+      expected: 3
+  - case:
+      id: case_sensitivity
+      inputs:
+      - A
+      - a
+      expected: 1
+  - case:
+      id: space_deletion
+      inputs:
+      - ' '
+      - ''
+      expected: 1
+  - case:
+      id: reversed_strings
+      inputs:
+      - abc
+      - cba
+      expected: 2
+  - case:
+      id: large_identical_strings
+      inputs:
+      - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      expected: 0
+  - case:
+      id: prefix_match_suffix_delete
+      inputs:
+      - indentation
+      - indent
+      expected: 5
+  - case:
+      id: complete_substitution
+      inputs:
+      - abc
+      - def
+      expected: 3
+  - case:
+      id: book_back_middle_sub
+      inputs:
+      - book
+      - back
+      expected: 2
+  - case:
+      id: long_prefix_diff
+      inputs:
+      - abc
+      - abcddddd
+      expected: 5
+  - case:
+      id: no_chars_in_common
+      inputs:
+      - aaaaaaaaaa
+      - bbbbbbbbbb
+      expected: 10
+  - case:
+      id: whitespace_escape_sequences
+      inputs:
+      - "\n\t"
+      - '  '
+      expected: 2
+  - case:
+      id: unicode_emoji_deletion
+      inputs:
+      - emoji😀
+      - emoji
+      expected: 1
+  - case:
+      id: mixed_script_leading_space
+      inputs:
+      - ' кафе'
+      - cafe
+      expected: 5
+  - case:
+      id: inner_numeric_substitution
+      inputs:
+      - '1234567890'
+      - '1230007890'
+      expected: 3
+  - case:
+      id: transposition_as_two_edits
+      inputs:
+      - abc
+      - acb
+      expected: 2
+  - case:
+      id: prefix_deletion_pure
+      inputs:
+      - reset
+      - set
+      expected: 2
+  - case:
+      id: repetitive_interleaved_patterns
+      inputs:
+      - ababababab
+      - bababababa
+      expected: 2
+  - case:
+      id: extreme_length_disparity
+      inputs:
+      - verylongstringverylongstring
+      - short
+      expected: 25
+  - case:
+      id: special_punctuation
+      inputs:
+      - '!@#$'
+      - '%^&*'
+      expected: 4
+  - case:
+      id: only_spaces_diff_lengths
+      inputs:
+      - '   '
+      - ' '
+      expected: 2
+  - case:
+      id: single_char_identical
+      inputs:
+      - z
+      - z
+      expected: 0
+  - case:
+      id: one_char_diff_at_end
+      inputs:
+      - test
+      - tess
+      expected: 1
+  - case:
+      id: one_char_diff_at_start
+      inputs:
+      - test
+      - best
+      expected: 1
+  - case:
+      id: error_null_first_arg
+      inputs:
+      - null
+      - test
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_int_second_arg
+      inputs:
+      - test
+      - 123
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_list_first_arg
+      inputs:
+      - - a
+        - b
+      - ab
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_null_second_arg
+      inputs:
+      - abc
+      - null
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_float_first_arg
+      inputs:
+      - 1.5
+      - test
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_list_second_arg
+      inputs:
+      - test
+      - - t
+        - e
+        - s
+        - t
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_bytes_input
+      inputs:
+      - abc
+      - abc
+      assertion: output == 0
+  - case:
+      id: error_bytes_actual
+      inputs:
+      - abc
+      - abc
+      expected: 0
+  - case:
+      id: error_actual_bytes
+      inputs:
+      - bytes_literal_placeholder
+      - bytes_literal_placeholder
+      expected: 0
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - !!binary |
+        YWJj
+      - !!binary |
+        YWJj
+      raises: TypeError

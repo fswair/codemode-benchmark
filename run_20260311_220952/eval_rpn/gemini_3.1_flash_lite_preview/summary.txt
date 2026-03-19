@@ -1,0 +1,9 @@
+Scenario : eval_rpn
+Model    : openrouter:google/gemini-3.1-flash-lite-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 22  (raises=6)
+Snippets : 22  (error_snippets=6)
+Refines  : 0
+Time     : 6.7s
+Evals    : expected, raises

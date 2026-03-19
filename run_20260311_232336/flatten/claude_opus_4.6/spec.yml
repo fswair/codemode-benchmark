@@ -1,0 +1,326 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    ResultIsFlat:
+      assertion: all(not isinstance(x, list) for x in output)
+    PreservesOrder:
+      assertion: len(output) >= 0
+    NonNegativeLength:
+      assertion: len(output) >= 0
+  dataset:
+  - case:
+      id: simple_nested
+      input:
+      - 1
+      - - 2
+        - 3
+      - - 4
+        - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: already_flat
+      input:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: two_level_multiple_sublists
+      input:
+      - - 1
+      - - 2
+      - - 3
+      - - 4
+      - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: preserves_order
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      - - 5
+        - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: mixed_nesting_depths
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: strings_not_recursed
+      input:
+      - abc
+      - - def
+        - - ghi
+      expected:
+      - abc
+      - def
+      - ghi
+  - case:
+      id: mixed_types_elements
+      input:
+      - 1
+      - hello
+      - - 3.14
+        - true
+        - - null
+      expected:
+      - 1
+      - hello
+      - 3.14
+      - true
+      - null
+  - case:
+      id: dicts_kept_as_is
+      input:
+      - a: 1
+      - - b: 2
+      expected:
+      - a: 1
+      - b: 2
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: single_element
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: deeply_nested_single
+      input:
+      - - - - - - 42
+      expected:
+      - 42
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - []
+        - []
+      expected: []
+  - case:
+      id: single_nested_empty
+      input:
+      - []
+      expected: []
+  - case:
+      id: tuples_inside_kept_as_is
+      input:
+      - - 1
+        - 2
+      - - 3
+        - - 4
+          - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: large_flat_list
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+  - case:
+      id: idempotency_flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: output == [1, 2, 3]
+  - case:
+      id: result_length_matches_leaf_count
+      input:
+      - 1
+      - - 2
+        - 3
+      - - - 4
+          - 5
+        - 6
+      assertion: len(output) == 6
+  - case:
+      id: list_with_none_elements
+      input:
+      - null
+      - - null
+        - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: list_with_booleans
+      input:
+      - true
+      - - false
+        - - true
+      expected:
+      - true
+      - false
+      - true
+  - case:
+      id: none_input_raises
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: integer_input_raises
+      input: 42
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: string_input_raises
+      input: hello
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: tuple_input_raises
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: dict_input_raises
+      input:
+        a: 1
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: set_input_raises
+      input: 123
+      raises: TypeError
+      match: Expected list, got
+  - case:
+      id: boolean_input_raises
+      input: true
+      raises: TypeError
+      match: Expected list, got bool
+  - case:
+      id: floats_nested
+      input:
+      - 1.1
+      - - 2.2
+        - - 3.3
+      expected:
+      - 1.1
+      - 2.2
+      - 3.3
+  - case:
+      id: mixed_empty_and_values
+      input:
+      - []
+      - 1
+      - []
+      - 2
+      - - []
+        - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: triple_nested_lists
+      input:
+      - - - 1
+          - 2
+      - - - 3
+          - 4
+      - - - 5
+          - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: error_typeerror_0
+      input: !!set
+        1: null
+        2: null
+        3: null
+      raises: TypeError

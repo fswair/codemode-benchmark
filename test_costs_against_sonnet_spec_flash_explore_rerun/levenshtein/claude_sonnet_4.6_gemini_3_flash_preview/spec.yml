@@ -1,0 +1,263 @@
+levenshtein:
+  evals:
+    ReturnType:
+      type: int
+    NonNegative:
+      assertion: output >= 0
+    UpperBound:
+      assertion: output <= max(len(input[0]), len(input[1]))
+    LowerBound:
+      assertion: output >= abs(len(input[0]) - len(input[1]))
+    IdentityProperty:
+      assertion: (input[0] == input[1]) == (output == 0)
+  dataset:
+  - case:
+      id: both_empty
+      inputs:
+      - ''
+      - ''
+      expected: 0
+  - case:
+      id: identical_short
+      inputs:
+      - same
+      - same
+      expected: 0
+  - case:
+      id: identical_single_char
+      inputs:
+      - x
+      - x
+      expected: 0
+  - case:
+      id: identical_long_100
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      expected: 0
+  - case:
+      id: empty_to_word
+      inputs:
+      - ''
+      - banana
+      expected: 6
+  - case:
+      id: word_to_empty
+      inputs:
+      - apple
+      - ''
+      expected: 5
+  - case:
+      id: single_char_substitution
+      inputs:
+      - a
+      - b
+      expected: 1
+  - case:
+      id: case_sensitive_upper_lower
+      inputs:
+      - A
+      - a
+      expected: 1
+  - case:
+      id: kitten_sitting
+      inputs:
+      - kitten
+      - sitting
+      expected: 3
+  - case:
+      id: saturday_sunday
+      inputs:
+      - Saturday
+      - Sunday
+      expected: 3
+  - case:
+      id: flaw_lawn
+      inputs:
+      - flaw
+      - lawn
+      expected: 2
+  - case:
+      id: brief_belief
+      inputs:
+      - Brief
+      - Belief
+      expected: 2
+  - case:
+      id: book_back
+      inputs:
+      - book
+      - back
+      expected: 2
+  - case:
+      id: single_deletion_end
+      inputs:
+      - abc
+      - ab
+      expected: 1
+  - case:
+      id: single_insertion_end
+      inputs:
+      - ab
+      - abc
+      expected: 1
+  - case:
+      id: prefix_deletion
+      inputs:
+      - longword
+      - word
+      expected: 4
+  - case:
+      id: leading_whitespace_insertion
+      inputs:
+      - indentation
+      - '    indentation'
+      expected: 4
+  - case:
+      id: single_substitution_middle
+      inputs:
+      - abc
+      - axc
+      expected: 1
+  - case:
+      id: full_substitution_100
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      expected: 100
+  - case:
+      id: transposition_two_edits
+      inputs:
+      - abc
+      - cba
+      expected: 2
+  - case:
+      id: symmetry_abc_def
+      inputs:
+      - abc
+      - def
+      assertion: output == 3
+  - case:
+      id: symmetry_reverse_def_abc
+      inputs:
+      - def
+      - abc
+      assertion: output == 3
+  - case:
+      id: numeric_string_partial_match
+      inputs:
+      - '1234567890'
+      - '1230007890'
+      expected: 3
+  - case:
+      id: spaces_5_vs_3
+      inputs:
+      - '     '
+      - '   '
+      expected: 2
+  - case:
+      id: control_chars_vs_spaces
+      inputs:
+      - "\n\t"
+      - '  '
+      expected: 2
+  - case:
+      id: all_special_chars
+      inputs:
+      - '!@#'
+      - $%^
+      expected: 3
+  - case:
+      id: accented_vs_plain
+      inputs:
+      - café
+      - cafe
+      expected: 1
+  - case:
+      id: triangle_inequality_python_py
+      inputs:
+      - python
+      - py
+      assertion: output + 2 >= 0 and output >= 0
+  - case:
+      id: longword_is_substring_distance
+      inputs:
+      - longword
+      - word
+      assertion: output == len(input[0]) - len(input[1])
+  - case:
+      id: numeric_digits_edits
+      inputs:
+      - '1234567890'
+      - '1230007890'
+      assertion: output == 3
+  - case:
+      id: large_full_substitution
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      assertion: output == 98
+      duration: 1000
+  - case:
+      id: large_identical_performance
+      inputs:
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      expected: 0
+      duration: 1000
+  - case:
+      id: error_first_arg_none
+      inputs:
+      - null
+      - test
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_second_arg_integer
+      inputs:
+      - test
+      - 123
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_both_lists
+      inputs:
+      - []
+      - []
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_first_arg_integer
+      inputs:
+      - 123
+      - string
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_second_arg_none
+      inputs:
+      - string
+      - null
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_both_booleans
+      inputs:
+      - true
+      - false
+      raises: TypeError
+      match: Both arguments must be strings
+  - case:
+      id: error_both_bytes
+      inputs:
+      - bytes_placeholder
+      - bytes_placeholder
+      assertion: isinstance(output, int) and output == 0
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - !!binary |
+        Ynl0ZXM=
+      - !!binary |
+        Ynl0ZXM=
+      raises: TypeError

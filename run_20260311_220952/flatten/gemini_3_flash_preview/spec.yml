@@ -1,0 +1,250 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    IsFlat:
+      assertion: all(not isinstance(x, list) for x in output)
+  dataset:
+  - case:
+      id: simple_flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: one_level_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: list_with_strings
+      input:
+      - a
+      - - b
+        - c
+      - - - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: mixed_types
+      input:
+      - 1
+      - null
+      - - true
+        - false
+      - 3.14
+      expected:
+      - 1
+      - null
+      - true
+      - false
+      - 3.14
+  - case:
+      id: deeply_wrapped_single
+      input:
+      - - - 1
+      expected:
+      - 1
+  - case:
+      id: mixed_atoms_and_lists
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      - - 5
+        - - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: complex_symmetric
+      input:
+      - - - 1
+          - 2
+        - 3
+      - - 4
+        - - 5
+          - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: idempotency_check
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: length_verification
+      input:
+      - 1
+      - - 2
+        - 3
+      - - 4
+        - - 5
+          - 6
+      assertion: len(output) == 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: preserve_tuples_as_atoms
+      input:
+      - 1
+      - - 2
+      - - 3
+        - 4
+      - - 5
+      assertion: any(isinstance(x, (list, str)) == False for x in output)
+  - case:
+      id: preserve_dicts_as_atoms
+      input:
+      - key: val
+      - - 7
+        - 8
+      expected:
+      - key: val
+      - 7
+      - 8
+  - case:
+      id: range_as_atom
+      input:
+      - range_obj
+      - - 4
+        - 5
+      assertion: len(output) == 3
+  - case:
+      id: large_flat_list
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+  - case:
+      id: deeply_nested_empty
+      input:
+      - - - - - - []
+      expected: []
+  - case:
+      id: error_null
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_int
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_str
+      input: string
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_dict
+      input:
+        a: 1
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_tuple
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: isinstance(input, list)
+  - case:
+      id: error_tuple_case
+      assertion: 'True'
+      raises: TypeError
+      match: Expected list, got tuple
+  - case:
+      id: error_typeerror_0
+      input: !!python/tuple
+      - 1
+      - 2
+      - 3
+      raises: TypeError

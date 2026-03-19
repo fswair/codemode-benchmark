@@ -1,0 +1,79 @@
+--- Snippet 1 [normal]: Standard example case ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Both empty strings ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: First string non-empty, second empty ---
+Code: levenshtein("a", "")
+Output: 1
+
+--- Snippet 4 [normal]: First string empty, second non-empty ---
+Code: levenshtein("", "a")
+Output: 1
+
+--- Snippet 5 [normal]: Identical strings (distance 0) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 6 [normal]: Single character substitution ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 7 [normal]: Single character insertion at end ---
+Code: levenshtein("abc", "abcd")
+Output: 1
+
+--- Snippet 8 [normal]: Single character deletion from end ---
+Code: levenshtein("abcd", "abc")
+Output: 1
+
+--- Snippet 9 [normal]: Single character deletion in middle ---
+Code: levenshtein("abc", "ac")
+Output: 1
+
+--- Snippet 10 [normal]: Single character insertion in middle ---
+Code: levenshtein("abc", "axbc")
+Output: 1
+
+--- Snippet 11 [normal]: Single substitution at start ---
+Code: levenshtein("hello", "yello")
+Output: 1
+
+--- Snippet 12 [normal]: Single substitution at end ---
+Code: levenshtein("hello", "hellx")
+Output: 1
+
+--- Snippet 13 [normal]: Transposition test (should be distance 2) ---
+Code: levenshtein("ab", "ba")
+Output: 2
+
+--- Snippet 14 [normal]: Identity property (distance 0) for non-empty string ---
+Code: levenshtein("same", "same")
+Output: 0
+
+--- Snippet 15 [normal]: Verifying long string handling (large enough to check basic loop) ---
+Code: levenshtein("abcdefgh", "abcdefgh")*0
+Output: 0
+
+--- Snippet 16 [error]: None first argument ---
+Code: levenshtein(None, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 17 [error]: None second argument ---
+Code: levenshtein("abc", None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 18 [error]: Integer first argument ---
+Code: levenshtein(123, "abc")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: Integer second argument ---
+Code: levenshtein("abc", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: List arguments instead of strings ---
+Code: levenshtein([], [])
+RAISED TypeError: Both arguments must be strings

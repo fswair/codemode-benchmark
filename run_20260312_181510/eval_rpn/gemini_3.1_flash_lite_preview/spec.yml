@@ -1,0 +1,149 @@
+eval_rpn:
+  evals:
+    IsInt:
+      type: int
+  dataset:
+    - case:
+        id: "addition"
+        input: ["1", "2", "+"]
+        expected: 3
+    - case:
+        id: "subtraction"
+        input: ["5", "3", "-"]
+        expected: 2
+    - case:
+        id: "multiplication"
+        input: ["4", "5", "*"]
+        expected: 20
+    - case:
+        id: "division"
+        input: ["10", "2", "/"]
+        expected: 5
+    - case:
+        id: "negative_division"
+        input: ["10", "-3", "/"]
+        expected: -3
+    - case:
+        id: "mixed_mul_div"
+        input: ["5", "2", "/", "2", "*"]
+        expected: 4
+    - case:
+        id: "rpn_grouping"
+        input: ["2", "1", "+", "3", "*"]
+        expected: 9
+    - case:
+        id: "mixed_ops"
+        input: ["4", "13", "5", "/", "+"]
+        expected: 6
+    - case:
+        id: "single_int"
+        input: ["100"]
+        expected: 100
+    - case:
+        id: "negative_add"
+        input: ["-5", "-2", "+"]
+        expected: -7
+    - case:
+        id: "negative_mul"
+        input: ["-5", "-2", "*"]
+        expected: 10
+    - case:
+        id: "multiple_adds"
+        input: ["1", "2", "3", "4", "+", "+", "+"]
+        expected: 10
+    - case:
+        id: "sub_add"
+        input: ["4", "3", "-", "10", "+"]
+        expected: 11
+    - case:
+        id: "div_mul_denominator"
+        input: ["10", "2", "3", "*", "/"]
+        expected: 1
+    - case:
+        id: "mul_before_add"
+        input: ["2", "3", "4", "*", "+"]
+        expected: 14
+    - case:
+        id: "neg_div_neg_trunc"
+        input: ["-10", "-3", "/"]
+        expected: 3
+    - case:
+        id: "neg_div_pos"
+        input: ["-10", "3", "/"]
+        expected: -3
+    - case:
+        id: "add_zero"
+        input: ["0", "5", "+"]
+        expected: 5
+    - case:
+        id: "sub_zero_first"
+        input: ["0", "5", "-"]
+        expected: -5
+    - case:
+        id: "sub_zero_second"
+        input: ["5", "0", "-"]
+        expected: 5
+    - case:
+        id: "mul_zero_pos"
+        input: ["0", "5", "*"]
+        expected: 0
+    - case:
+        id: "mul_zero_neg"
+        input: ["-5", "0", "*"]
+        expected: 0
+    - case:
+        id: "div_numerator_zero"
+        input: ["0", "5", "/"]
+        expected: 0
+    - case:
+        id: "large_int"
+        input: ["999999999", "1", "+"]
+        expected: 1000000000
+    - case:
+        id: "large_int_neg"
+        input: ["-1", "2147483647", "+"]
+        expected: 2147483646
+    - case:
+        id: "multi_div_added"
+        input: ["10", "3", "/", "10", "3", "/", "+"]
+        expected: 6
+    - case:
+        id: "passed_as_list"
+        input: ["1", "2", "+"]
+        expected: 3
+    - case:
+        id: "error_empty_input"
+        input: []
+        raises: ValueError
+    - case:
+        id: "error_insufficient_ops"
+        input: ["1", "+"]
+        raises: ValueError
+    - case:
+        id: "error_div_zero"
+        input: ["1", "0", "/"]
+        raises: ZeroDivisionError
+    - case:
+        id: "error_extra_stack"
+        input: ["1", "2", "3"]
+        raises: ValueError
+    - case:
+        id: "error_invalid_token"
+        input: ["1", "abc", "+"]
+        raises: ValueError
+    - case:
+        id: "error_none_input"
+        input: null
+        raises: ValueError
+    - case:
+        id: "error_invalid_precedence"
+        input: ["1", "+", "2"]
+        raises: ValueError
+    - case:
+        id: "error_space_token"
+        input: ["1", " "]
+        raises: ValueError
+    - case:
+        id: "error_float_token"
+        input: ["1", "1.5", "+"]
+        raises: ValueError

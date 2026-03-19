@@ -1,0 +1,325 @@
+eval_rpn:
+  evals:
+    ReturnType:
+      type: int
+  dataset:
+  - case:
+      id: single_operand
+      input:
+      - '42'
+      expected: 42
+  - case:
+      id: simple_addition
+      input:
+      - '2'
+      - '3'
+      - +
+      expected: 5
+  - case:
+      id: simple_subtraction
+      input:
+      - '5'
+      - '5'
+      - '-'
+      expected: 0
+  - case:
+      id: simple_multiplication
+      input:
+      - '2'
+      - '-3'
+      - '*'
+      expected: -6
+  - case:
+      id: positive_division_truncation
+      input:
+      - '10'
+      - '3'
+      - /
+      expected: 3
+  - case:
+      id: negative_numerator_division_truncation
+      input:
+      - '-10'
+      - '3'
+      - /
+      expected: -3
+  - case:
+      id: negative_denominator_division_truncation
+      input:
+      - '10'
+      - '-3'
+      - /
+      expected: -3
+  - case:
+      id: zero_numerator_division
+      input:
+      - '0'
+      - '5'
+      - /
+      expected: 0
+  - case:
+      id: negative_addition
+      input:
+      - '-5'
+      - '3'
+      - +
+      expected: -2
+  - case:
+      id: complex_mixed_operators
+      input:
+      - '4'
+      - '13'
+      - '5'
+      - /
+      - +
+      expected: 6
+  - case:
+      id: long_nested_expression
+      input:
+      - '10'
+      - '6'
+      - '9'
+      - '3'
+      - +
+      - '-11'
+      - '*'
+      - /
+      - '*'
+      - '17'
+      - +
+      - '5'
+      - +
+      expected: 22
+  - case:
+      id: multistep_multiply_subtract
+      input:
+      - '2'
+      - '3'
+      - '*'
+      - '5'
+      - '-'
+      expected: 1
+  - case:
+      id: large_integer_result
+      input:
+      - '100'
+      - '200'
+      - +
+      - '300'
+      - '*'
+      expected: 90000
+  - case:
+      id: negative_times_negative
+      input:
+      - '-1'
+      - '-1'
+      - '*'
+      expected: 1
+  - case:
+      id: positive_numerator_negative_denominator
+      input:
+      - '5'
+      - '-2'
+      - /
+      expected: -2
+  - case:
+      id: negative_numerator_negative_denominator
+      input:
+      - '-7'
+      - '-3'
+      - /
+      expected: 2
+  - case:
+      id: subtract_zero_from_zero
+      input:
+      - '0'
+      - '0'
+      - '-'
+      expected: 0
+  - case:
+      id: chained_addition
+      input:
+      - '1'
+      - '1'
+      - +
+      - '1'
+      - +
+      - '1'
+      - +
+      expected: 4
+  - case:
+      id: rpn_precedence_multiply_then_add
+      input:
+      - '2'
+      - '3'
+      - '4'
+      - '*'
+      - +
+      expected: 14
+  - case:
+      id: rpn_precedence_add_then_multiply
+      input:
+      - '2'
+      - '3'
+      - +
+      - '4'
+      - '*'
+      expected: 20
+  - case:
+      id: multiply_by_zero
+      input:
+      - '1000'
+      - '0'
+      - '*'
+      expected: 0
+  - case:
+      id: add_two_negatives
+      input:
+      - '-5'
+      - '-5'
+      - +
+      expected: -10
+  - case:
+      id: subtract_negative_number
+      input:
+      - '1'
+      - '-1'
+      - '-'
+      expected: 2
+  - case:
+      id: zero_divided_by_negative
+      input:
+      - '0'
+      - '-5'
+      - /
+      expected: 0
+  - case:
+      id: negative_zero_token
+      input:
+      - '-0'
+      expected: 0
+  - case:
+      id: sequential_subtraction_order
+      input:
+      - '10'
+      - '2'
+      - '-'
+      - '3'
+      - '-'
+      expected: 5
+  - case:
+      id: return_type_is_int
+      input:
+      - '5'
+      type: int
+  - case:
+      id: result_is_non_negative_for_positive_inputs
+      input:
+      - '3'
+      - '4'
+      - +
+      assertion: output >= 0
+  - case:
+      id: result_bounded_by_operands_multiplication
+      input:
+      - '6'
+      - '7'
+      - '*'
+      assertion: output == 42
+  - case:
+      id: division_truncates_not_floors
+      input:
+      - '-10'
+      - '3'
+      - /
+      assertion: output == -3 and output > -4
+  - case:
+      id: operator_order_subtraction
+      input:
+      - '10'
+      - '2'
+      - '-'
+      assertion: output == 8
+  - case:
+      id: error_notimplementederror_0
+      input:
+      - '2'
+      - '1'
+      - +
+      expected: 3
+  - case:
+      id: error_empty_expression
+      input: []
+      raises: ValueError
+  - case:
+      id: error_insufficient_operands
+      input:
+      - '1'
+      - +
+      raises: ValueError
+  - case:
+      id: error_division_by_zero
+      input:
+      - '10'
+      - '0'
+      - /
+      raises: ZeroDivisionError
+  - case:
+      id: error_invalid_token_string
+      input:
+      - '1'
+      - '2'
+      - abc
+      raises: ValueError
+  - case:
+      id: error_extra_operands_two_remaining
+      input:
+      - '1'
+      - '2'
+      raises: ValueError
+  - case:
+      id: error_none_input
+      input: null
+      raises: ValueError
+  - case:
+      id: error_multiple_extra_operands
+      input:
+      - '10'
+      - '2'
+      - '3'
+      - +
+      raises: ValueError
+  - case:
+      id: error_prefix_notation
+      input:
+      - +
+      - '1'
+      - '2'
+      raises: ValueError
+  - case:
+      id: error_float_string_token
+      input:
+      - '1.5'
+      - '1'
+      - +
+      raises: ValueError
+  - case:
+      id: error_combined_operator_invalid_token
+      input:
+      - '1'
+      - '2'
+      - -*
+      raises: ValueError
+  - case:
+      id: error_whitespace_token
+      input:
+      - ' '
+      - '5'
+      raises: ValueError
+  - case:
+      id: error_notimplementederror_0
+      input:
+      - '2'
+      - '1'
+      - +
+      raises: NotImplementedError

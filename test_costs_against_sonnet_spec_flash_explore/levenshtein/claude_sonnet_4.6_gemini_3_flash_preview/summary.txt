@@ -1,0 +1,14 @@
+Scenario : levenshtein
+Spec Model : openrouter:anthropic/claude-sonnet-4.6
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : False
+Coverage : 97.7%
+Cases    : 44  (raises=8)
+Snippets : 37  (error_snippets=7)
+Refines  : 3
+Cost USD : 0.00424950
+Cost/Fn  : 0.00424950
+Tokens   : in=49193 out=6706 req=5
+Pricing  : costs.yml, missing
+Time     : 88.5s
+Evals    : assertion, expected, raises

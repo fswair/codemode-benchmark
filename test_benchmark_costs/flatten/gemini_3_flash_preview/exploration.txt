@@ -1,0 +1,139 @@
+--- Snippet 1 [normal]: Basic flat list remains unchanged. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 2 [normal]: Single level of nesting is flattened. ---
+Code: flatten([[1, 2], [3, 4]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 3 [normal]: Deeply nested list is flattened to a single level. ---
+Code: flatten([1, [2, [3, [4]]], 5])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 4 [normal]: Empty list returns an empty list. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 5 [normal]: List containing only nested empty lists results in an empty list. ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: List with various non-list types at the top level. ---
+Code: flatten([1, "string", None, True])
+Output: [1, 'string', None, True]
+
+--- Snippet 7 [normal]: Mixed types within nested structures are preserved. ---
+Code: flatten([1, ["a", [None]], [[True]]])
+Output: [1, 'a', None, True]
+
+--- Snippet 8 [normal]: Extreme nesting of a single element. ---
+Code: flatten([[[[1]]]])
+Output: [1]
+
+--- Snippet 9 [normal]: Composition with list concatenation. ---
+Code: flatten([1, 2, 3] + [[4, 5]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 10 [normal]: Idempotency: flattening an already flattened list results in the same list. ---
+Code: flatten(flatten([[1, [2]], [3]]))
+Output: [1, 2, 3]
+
+--- Snippet 11 [normal]: Verify return type is a list. ---
+Code: result = flatten([1, [2, 3]]); isinstance(result, list)
+Output: True
+
+--- Snippet 12 [normal]: Structural independence: different nesting of same elements yields same flat result. ---
+Code: flatten([1, [2, 3]]) == flatten([[1, 2], 3])
+Output: True
+
+--- Snippet 13 [normal]: Non-list iterables (like range) are treated as atoms, not flattened. ---
+Code: flatten([range(3), [4, 5]])
+Output: ['range(0, 3)', 4, 5]
+
+--- Snippet 14 [normal]: Dictionaries inside lists are treated as atoms. ---
+Code: flatten([{ "a": 1 }, [ { "b": 2 } ]])
+Output: [{'a': 1}, {'b': 2}]
+
+--- Snippet 15 [normal]: Complex mix of shallow and deep nesting. ---
+Code: flatten([1, [2, 3], [4, [5, 6]]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 16 [error]: Passing None instead of a list should trigger TypeError. ---
+Code: flatten(None)
+RAISED TypeError: TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Passing a string instead of a list should trigger TypeError. ---
+Code: flatten("not a list")
+RAISED TypeError: TypeError: Expected list, got str
+
+--- Snippet 18 [error]: Passing an integer instead of a list should trigger TypeError. ---
+Code: flatten(123)
+RAISED TypeError: TypeError: Expected list, got int
+
+--- Snippet 19 [error]: Passing a dictionary instead of a list should trigger TypeError. ---
+Code: flatten({"key": "value"})
+RAISED TypeError: TypeError: Expected list, got dict
+
+--- Snippet 20 [error]: Passing a tuple instead of a list should trigger TypeError. ---
+Code: flatten((1, 2, [3]))
+RAISED TypeError: TypeError: Expected list, got tuple
+
+--- Snippet 21 [normal]: List containing exactly one empty list. ---
+Code: flatten([[]])
+Output: []
+
+--- Snippet 22 [normal]: Extremely deep nesting to check recursion depth limits (moderate). ---
+Code: flatten([[[[[[[[[[[[[[[1]]]]]]]]]]]]]]])
+Output: [1]
+
+--- Snippet 23 [normal]: List containing a tuple of lists; tuples should be treated as atoms even if they contain lists. ---
+Code: flatten([([1, 2], [3, 4])])
+Output: [([1, 2], [3, 4])]
+
+--- Snippet 24 [normal]: List containing built-in functions and types as elements. ---
+Code: flatten([print, len, range])
+Output: [<built-in function print>, <built-in function len>, <class 'range'>]
+
+--- Snippet 25 [normal]: Flattening a list created by multiplication. ---
+Code: flatten([1, [2, [3, [4, [5]]]]] * 2)
+Output: [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+
+--- Snippet 26 [error]: List containing binary data types. ---
+Code: flatten([b'bytes', bytearray([65, 66])])
+RAISED NotImplementedError: NotImplementedError: External function 'bytearray' not implemented with standard execution
+
+--- Snippet 27 [normal]: List containing special float values. ---
+Code: flatten([float('inf'), float('nan')])
+Output: [inf, nan]
+
+--- Snippet 28 [error]: List containing complex numbers. ---
+Code: flatten([complex(1, 2), (3+4j)])
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support complex constants
+
+--- Snippet 29 [normal]: List containing results of list comprehensions. ---
+Code: flatten([ [x for x in range(2)], [x for x in range(2, 4)] ])
+Output: [0, 1, 2, 3]
+
+--- Snippet 30 [normal]: Deeply sparse list with multiple empty lists and one value. ---
+Code: flatten([[], [], [1], []])
+Output: [1]
+
+--- Snippet 31 [normal]: Verification that a list containing an empty dict is NOT an empty list. ---
+Code: flatten([{}]) == []
+Output: False
+
+--- Snippet 32 [normal]: Concatenating results of two flatten calls. ---
+Code: flatten([1, [2, 3]]) + flatten([4, [5, 6]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 33 [error]: Passing a set instead of a list (checking guard clause) ---
+Code: flatten(set([1, 2]))
+RAISED TypeError: TypeError: Expected list, got set
+
+--- Snippet 34 [error]: Passing a float instead of a list (checking guard clause) ---
+Code: flatten(3.14159)
+RAISED TypeError: TypeError: Expected list, got float
+
+--- Snippet 35 [error]: Passing a boolean instead of a list (checking guard clause) ---
+Code: flatten(True)
+RAISED TypeError: TypeError: Expected list, got bool

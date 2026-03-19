@@ -1,0 +1,16 @@
+{
+  "scenario": "flatten",
+  "spec_model": "openrouter:google/gemini-3-flash-preview",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "gemini_3_flash_preview",
+  "success": false,
+  "coverage": "0.0%",
+  "time_s": 29.1,
+  "cases": 0,
+  "raises_cases": 0,
+  "snippets": 20,
+  "error_snippets": 5,
+  "refinements": 3,
+  "evaluator_types": [],
+  "error": "Eval run error: could not determine a constructor for the tag 'tag:yaml.org,2002:python/tuple'\n  in \"<unicode string>\", line 246, column 14:\n          input: !!python/tuple\n                 ^"
+}

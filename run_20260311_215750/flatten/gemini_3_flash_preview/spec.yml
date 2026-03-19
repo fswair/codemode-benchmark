@@ -1,0 +1,224 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    FlatOutput:
+      assertion: all(not isinstance(x, list) for x in output)
+    ItemConsistency:
+      assertion: len(output) >= len(input) if isinstance(input, list) else True
+  dataset:
+  - case:
+      id: simple_flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: list_of_lists
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested_lists
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_list
+      input:
+      - []
+      expected: []
+  - case:
+      id: multiple_layers_empty
+      input:
+      - - - - []
+      expected: []
+  - case:
+      id: list_of_strings
+      input:
+      - a
+      - - b
+        - c
+      - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: mixed_types_preserved
+      input:
+      - 1
+      - - null
+        - 3
+      - false
+      expected:
+      - 1
+      - null
+      - 3
+      - false
+  - case:
+      id: tuples_as_atoms
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      assertion: output == [1, 2, 3, 4]
+  - case:
+      id: tuples_inside_untouched
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: dicts_in_list
+      input:
+      - a: 1
+      - - b: 2
+      expected:
+      - a: 1
+      - b: 2
+  - case:
+      id: duplicates_preserved
+      input:
+      - 1
+      - - 2
+        - 2
+      - 1
+      expected:
+      - 1
+      - 2
+      - 2
+      - 1
+  - case:
+      id: identical_nested_lists
+      input:
+      - - - 1
+      - - - 1
+      - - - 1
+      expected:
+      - 1
+      - 1
+      - 1
+  - case:
+      id: already_flattened
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: range_iterable_as_atom
+      input:
+      - some_range_placeholder
+      assertion: len(output) > 0
+  - case:
+      id: single_element_list
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: deep_nesting_large
+      input:
+      - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: heterogeneous_nesting
+      input:
+      - 1
+      - - 2
+        - 3
+      - - - 4
+          - 5
+        - 6
+      - 7
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+  - case:
+      id: null_in_list
+      input:
+      - null
+      - - null
+      - - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: strings_with_spaces
+      input:
+      - hello world
+      - - foo bar
+      expected:
+      - hello world
+      - foo bar
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_int_input
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_str_input
+      input: not a list
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_dict_input
+      input:
+        key: value
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_typeerror_0
+      input: !!python/tuple
+      - 1
+      - 2
+      - 3
+      raises: TypeError

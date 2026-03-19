@@ -1,0 +1,94 @@
+levenshtein:
+  evals:
+    IsInteger:
+      type: int
+    NonNegative:
+      assertion: "output >= 0"
+    LowerBound:
+      assertion: "output >= abs(len(input[0]) - len(input[1]))"
+    UpperBound:
+      assertion: "output <= max(len(input[0]), len(input[1]))"
+  dataset:
+    - case:
+        id: "empty_vs_empty"
+        inputs: ["", ""]
+        expected: 0
+    - case:
+        id: "one_char_vs_empty"
+        inputs: ["a", ""]
+        expected: 1
+    - case:
+        id: "empty_vs_one_char"
+        inputs: ["", "b"]
+        expected: 1
+    - case:
+        id: "identical_strings"
+        inputs: ["abc", "abc"]
+        expected: 0
+    - case:
+        id: "kitten_vs_sitting"
+        inputs: ["kitten", "sitting"]
+        expected: 3
+    - case:
+        id: "flaw_vs_lawn"
+        inputs: ["flaw", "lawn"]
+        expected: 2
+    - case:
+        id: "mixed_operations"
+        inputs: ["gumbo", "gambol"]
+        expected: 2
+    - case:
+        id: "saturday_vs_sunday"
+        inputs: ["Saturday", "Sunday"]
+        expected: 3
+    - case:
+        id: "numeric_strings_identical"
+        inputs: ["12345", "12345"]
+        expected: 0
+    - case:
+        id: "no_common_chars"
+        inputs: ["abc", "def"]
+        expected: 3
+    - case:
+        id: "large_identical"
+        inputs: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+        expected: 0
+    - case:
+        id: "single_char_sub"
+        inputs: ["x", "y"]
+        expected: 1
+    - case:
+        id: "deletion_at_end"
+        inputs: ["abc", "ab"]
+        expected: 1
+    - case:
+        id: "insertion_at_end"
+        inputs: ["ab", "abc"]
+        expected: 1
+    - case:
+        id: "insertion_at_start"
+        inputs: ["abc", "xyzabc"]
+        expected: 3
+    - case:
+        id: "deletion_at_start"
+        inputs: ["xyzabc", "abc"]
+        expected: 3
+    - case:
+        id: "reverse_string"
+        inputs: ["abc", "cba"]
+        expected: 2
+    - case:
+        id: "error_none_first"
+        inputs: [null, "abc"]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_int_second"
+        inputs: ["abc", 123]
+        raises: TypeError
+        match: "Both arguments must be strings"
+    - case:
+        id: "error_lists"
+        inputs: [["list"], ["list"]]
+        raises: TypeError
+        match: "Both arguments must be strings"

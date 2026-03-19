@@ -1,0 +1,16 @@
+{
+  "scenario": "group_by",
+  "spec_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "exploration_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "model_slug": "gemini_3.1_flash_lite_preview",
+  "success": false,
+  "coverage": "0.0%",
+  "time_s": 29.58,
+  "cases": 0,
+  "raises_cases": 0,
+  "snippets": 33,
+  "error_snippets": 6,
+  "refinements": 3,
+  "evaluator_types": [],
+  "error": "Eval run error: [Errno 2] No such file or directory: ''"
+}

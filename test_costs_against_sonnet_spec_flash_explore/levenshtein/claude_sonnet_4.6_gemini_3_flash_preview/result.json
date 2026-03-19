@@ -1,0 +1,31 @@
+{
+  "scenario": "levenshtein",
+  "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+  "success": false,
+  "coverage": "97.7%",
+  "time_s": 88.5,
+  "cases": 44,
+  "raises_cases": 8,
+  "snippets": 37,
+  "error_snippets": 7,
+  "refinements": 3,
+  "cost_usd": 0.0042495,
+  "cost_cents": 0.4249,
+  "input_tokens": 49193,
+  "output_tokens": 6706,
+  "requests": 5,
+  "price_sources": [
+    "costs.yml",
+    "missing"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.0042495,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

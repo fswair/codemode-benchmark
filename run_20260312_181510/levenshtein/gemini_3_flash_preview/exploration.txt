@@ -1,0 +1,135 @@
+--- Snippet 1 [normal]: Standard example: kitten to sitting (3 edits) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Two empty strings (0 distance) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Full deletion: string to empty (distance equals length) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Full insertion: empty to string (distance equals length) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Mixed operations: substitution and shift (2 edits) ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 6 [normal]: Identical strings (0 distance) ---
+Code: levenshtein("same", "same")
+Output: 0
+
+--- Snippet 7 [normal]: Case sensitivity check (1 substitution) ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 8 [normal]: Multiple substitutions (case sensitivity) ---
+Code: levenshtein("abc", "ABC")
+Output: 3
+
+--- Snippet 9 [normal]: Long identical strings ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 10 [normal]: Multiple internal edits ---
+Code: levenshtein("abcdef", "azcedf")
+Output: 3
+
+--- Snippet 11 [normal]: Another classic example: Saturday to Sunday (3 edits) ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 12 [normal]: Two substitutions ---
+Code: levenshtein("book", "back")
+Output: 2
+
+--- Snippet 13 [normal]: Single insertion at the end ---
+Code: levenshtein("yo", "you")
+Output: 1
+
+--- Snippet 14 [normal]: Single deletion at the end ---
+Code: levenshtein("you", "yo")
+Output: 1
+
+--- Snippet 15 [normal]: Max distance for equal length strings (all substitutions) ---
+Code: levenshtein("a" * 50, "b" * 50)
+Output: 50
+
+--- Snippet 16 [normal]: Transposition represented as multiple edits (substitutions) ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 17 [error]: TypeError when first argument is None ---
+Code: levenshtein(None, "hello")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 18 [error]: TypeError when second argument is an integer ---
+Code: levenshtein("hello", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError when first argument is a list instead of a string ---
+Code: levenshtein(["h", "i"], "hi")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 20 [normal]: Unicode character difference (non-ASCII). ---
+Code: levenshtein("cafe", "café")
+Output: 1
+
+--- Snippet 21 [normal]: Leading whitespace differences (deletions). ---
+Code: levenshtein("  abc", "abc")
+Output: 2
+
+--- Snippet 22 [normal]: Trailing whitespace differences. ---
+Code: levenshtein("abc  ", "abc")
+Output: 2
+
+--- Snippet 23 [normal]: Escape characters (newline vs space) as single character edits. ---
+Code: levenshtein("a\nb", "a b")
+Output: 1
+
+--- Snippet 24 [normal]: One string is exactly a prefix and half the length of the other. ---
+Code: levenshtein("levenshtein", "levenshtein" * 2)
+Output: 11
+
+--- Snippet 25 [normal]: Numeric strings with complete reversal (mostly substitutions). ---
+Code: levenshtein("1234567890", "0987654321")
+Output: 10
+
+--- Snippet 26 [normal]: Single character symbols substitution. ---
+Code: levenshtein("!", "?")
+Output: 1
+
+--- Snippet 27 [normal]: Single character substitution at the start. ---
+Code: levenshtein("python", "cython")
+Output: 1
+
+--- Snippet 28 [normal]: Rhyming words: single substitution at the start. ---
+Code: levenshtein("reach", "beach")
+Output: 1
+
+--- Snippet 29 [normal]: Multiple scattered insertions in a long string. ---
+Code: levenshtein("abcdefghijklmnopqrstuvwxyz", "abcde_fgh_ijkl_m_nopqr_stuvwxyz")
+Output: 5
+
+--- Snippet 30 [normal]: Different repeated symbols of equal length. ---
+Code: levenshtein("-" * 10, "_" * 10)
+Output: 10
+
+--- Snippet 31 [normal]: Swapped blocks of characters. ---
+Code: levenshtein("A" * 10 + "B" * 10, "B" * 10 + "A" * 10)
+Output: 20
+
+--- Snippet 32 [error]: Both arguments are integers, triggering TypeError at the first guard clause. ---
+Code: levenshtein(123, 456)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 33 [error]: Second argument is None, triggering TypeError at the second part of the guard clause. ---
+Code: levenshtein("valid", None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 34 [error]: First argument is bytes, which is not a string, triggering TypeError. ---
+Code: levenshtein(b"binary", "string")
+RAISED TypeError: Both arguments must be strings

@@ -1,0 +1,9 @@
+Scenario : flatten
+Model    : openrouter:google/gemini-3.1-flash-lite-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 17  (raises=3)
+Snippets : 18  (error_snippets=3)
+Refines  : 0
+Time     : 6.2s
+Evals    : assertion, expected, raises

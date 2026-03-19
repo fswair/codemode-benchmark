@@ -1,0 +1,5 @@
+{
+  "scenario": "levenshtein",
+  "spec_model": "openrouter:anthropic/claude-opus-4.6",
+  "exploration_model": "openrouter:anthropic/claude-opus-4.6"
+}

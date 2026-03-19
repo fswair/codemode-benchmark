@@ -1,0 +1,9 @@
+Scenario : levenshtein
+Model    : openrouter:anthropic/claude-opus-4.6
+Success  : True
+Coverage : 100.0%
+Cases    : 42  (raises=9)
+Snippets : 33  (error_snippets=8)
+Refines  : 0
+Time     : 92.1s
+Evals    : assertion, expected, raises

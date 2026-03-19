@@ -1,0 +1,332 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+  dataset:
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - 4
+        - 5
+      - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: mixed_types
+      input:
+      - 1
+      - a
+      - 2.5
+      - true
+      expected:
+      - 1
+      - a
+      - 2.5
+      - true
+  - case:
+      id: mixed_structure
+      input:
+      - 1
+      - - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: minimal_nesting_depth_1
+      input:
+      - - 1
+      expected:
+      - 1
+  - case:
+      id: maximal_nesting_depth_4
+      input:
+      - - - - 1
+      expected:
+      - 1
+  - case:
+      id: non_homogeneous_nesting
+      input:
+      - 1
+      - 2
+      - - 3
+        - 4
+      - 5
+      - - 6
+        - - 7
+          - 8
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+  - case:
+      id: none_elements
+      input:
+      - null
+      - - 1
+        - null
+      - - null
+      expected:
+      - null
+      - 1
+      - null
+      - null
+  - case:
+      id: uniform_nested
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: right_skewed
+      input:
+      - 1
+      - - 2
+        - 3
+        - - 4
+          - 5
+          - - 6
+            - 7
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+  - case:
+      id: left_skewed
+      input:
+      - - - - 1
+            - 2
+          - 3
+        - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: adjacent_empty_lists
+      input:
+      - []
+      - []
+      expected: []
+  - case:
+      id: empty_interspersed
+      input:
+      - 1
+      - []
+      - 2
+      - []
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: mixed_empty_at_levels
+      input:
+      - []
+      - 1
+      - - 2
+        - []
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: branching_uniform
+      input:
+      - - - 1
+      - - - 2
+      - - - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: branching_asymmetric
+      input:
+      - - 1
+        - 2
+        - - 3
+          - 4
+      - - 5
+        - - 6
+          - 7
+        - 8
+      - 9
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+  - case:
+      id: tree_structure
+      input:
+      - - - 1
+          - 2
+        - - 3
+          - 4
+      - - - 5
+          - 6
+        - - 7
+          - 8
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+  - case:
+      id: multiple_nested_empty_flat_container
+      input:
+      - []
+      - - []
+      - - []
+      - []
+      expected: []
+  - case:
+      id: list_comprehensions
+      input:
+      - - 0
+        - 1
+        - 2
+      - - 3
+        - 4
+        - 5
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: verify_length
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      assertion: len(output) == 5
+  - case:
+      id: idempotency
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      assertion: output == [1, 2, 3, 4]
+  - case:
+      id: verify_new_object
+      input:
+      - 1
+      - 2
+      assertion: output is not input
+  - case:
+      id: none_input_error
+      input: null
+      raises: TypeError
+  - case:
+      id: int_input_error
+      input: 123
+      raises: TypeError
+  - case:
+      id: str_input_error
+      input: string
+      raises: TypeError
+  - case:
+      id: tuple_input_error
+      input:
+      - 1
+      - 2
+      - 3
+      assertion: type(input).__name__ == 'list' and True
+  - case:
+      id: tuple_actual_error
+      input: 123
+      raises: TypeError
+  - case:
+      id: dict_input_error
+      input:
+        a: 1
+      raises: TypeError
+  - case:
+      id: object_input_error
+      input: 0
+      raises: TypeError
+  - case:
+      id: list_of_empty_lists_deep
+      input:
+      - - - []
+      expected: []
+  - case:
+      id: sanity_check_list_boolean
+      input:
+      - true
+      - - false
+      expected:
+      - true
+      - false
+  - case:
+      id: error_typeerror_0
+      input:
+        a: 1
+        b: 2
+      raises: TypeError

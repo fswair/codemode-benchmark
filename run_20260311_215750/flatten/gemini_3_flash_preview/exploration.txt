@@ -1,0 +1,79 @@
+--- Snippet 1 [normal]: Simple flat list remains unchanged. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 2 [normal]: List of lists is flattened one level. ---
+Code: flatten([[1, 2], [3, 4]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 3 [normal]: Deeply nested lists are fully flattened. ---
+Code: flatten([1, [2, [3, [4]]], 5])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 4 [normal]: Empty list returns an empty list. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 5 [normal]: List containing an empty list returns an empty list. ---
+Code: flatten([[]])
+Output: []
+
+--- Snippet 6 [normal]: Multiple layers of empty lists return an empty list. ---
+Code: flatten([[[[]]]])
+Output: []
+
+--- Snippet 7 [normal]: List of strings behaves like numbers. ---
+Code: flatten(["a", ["b", "c"], "d"])
+Output: ['a', 'b', 'c', 'd']
+
+--- Snippet 8 [normal]: Mixed types including None and Bool inside the list are preserved. ---
+Code: flatten([1, [None, 3], False])
+Output: [1, None, 3, False]
+
+--- Snippet 9 [normal]: Tuples inside the list are treated as non-list elements and not flattened. ---
+Code: flatten([1, (2, 3), 4])
+Output: [1, (2, 3), 4]
+
+--- Snippet 10 [normal]: Dictionaries inside the list are preserved as-is. ---
+Code: flatten([{"a": 1}, [{"b": 2}]])
+Output: [{'a': 1}, {'b': 2}]
+
+--- Snippet 11 [normal]: Duplicates are preserved in the flattened result. ---
+Code: flatten([1, [2, 2], 1])
+Output: [1, 2, 2, 1]
+
+--- Snippet 12 [normal]: List of identical nested lists. ---
+Code: flatten([[[1]] * 3])
+Output: [1, 1, 1]
+
+--- Snippet 13 [normal]: Idempotency: flattening an already flattened list results in the same list. ---
+Code: flatten(flatten([[1, [2]], [3]]))
+Output: [1, 2, 3]
+
+--- Snippet 14 [normal]: Verify return type is always a list. ---
+Code: isinstance(flatten([1, [2]]), list)
+Output: True
+
+--- Snippet 15 [normal]: Other iterables like range are treated as atoms if they aren't explicitly instances of list. ---
+Code: flatten([range(3)])
+Output: [range(0, 3)]
+
+--- Snippet 16 [error]: Passing None triggers TypeError guard clause. ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Passing an integer triggers TypeError guard clause. ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 18 [error]: Passing a string triggers TypeError guard clause. ---
+Code: flatten("not a list")
+RAISED TypeError: Expected list, got str
+
+--- Snippet 19 [error]: Passing a dictionary triggers TypeError guard clause. ---
+Code: flatten({"key": "value"})
+RAISED TypeError: Expected list, got dict
+
+--- Snippet 20 [error]: Passing a tuple (even though it is iterable) triggers TypeError guard clause. ---
+Code: flatten((1, 2, 3))
+RAISED TypeError: Expected list, got tuple

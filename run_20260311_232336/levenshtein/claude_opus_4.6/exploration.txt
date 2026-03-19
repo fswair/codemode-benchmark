@@ -1,0 +1,134 @@
+--- Snippet 1 [normal]: Happy path: simple substitution (kitten -> sitting) ---
+Code: levenshtein('kitten', 'sitting')
+Output: 3
+
+--- Snippet 2 [normal]: Identical strings should return 0 ---
+Code: levenshtein('hello', 'hello')
+Output: 0
+
+--- Snippet 3 [normal]: Both empty strings should return 0 ---
+Code: levenshtein('', '')
+Output: 0
+
+--- Snippet 4 [normal]: First string empty, second non-empty (all insertions) ---
+Code: levenshtein('', 'abc')
+Output: 3
+
+--- Snippet 5 [normal]: Second string empty, first non-empty (all deletions) ---
+Code: levenshtein('abc', '')
+Output: 3
+
+--- Snippet 6 [normal]: Single character same ---
+Code: levenshtein('a', 'a')
+Output: 0
+
+--- Snippet 7 [normal]: Single character different ---
+Code: levenshtein('a', 'b')
+Output: 1
+
+--- Snippet 8 [normal]: One insertion needed ---
+Code: levenshtein('abc', 'abcd')
+Output: 1
+
+--- Snippet 9 [normal]: One deletion needed ---
+Code: levenshtein('abcd', 'abc')
+Output: 1
+
+--- Snippet 10 [normal]: One substitution needed ---
+Code: levenshtein('abc', 'aXc')
+Output: 1
+
+--- Snippet 11 [normal]: Completely different strings of same length ---
+Code: levenshtein('abc', 'xyz')
+Output: 3
+
+--- Snippet 12 [normal]: Symmetry: distance(s,t) == distance(t,s) ---
+Code: levenshtein('kitten', 'sitting') == levenshtein('sitting', 'kitten')
+Output: True
+
+--- Snippet 13 [normal]: Triangle inequality check ---
+Code: d_ab = levenshtein('abc', 'axc')
+d_bc = levenshtein('axc', 'axy')
+d_ac = levenshtein('abc', 'axy')
+d_ac <= d_ab + d_bc
+Output: True
+
+--- Snippet 14 [normal]: Distance equals length of longer string when one is empty ---
+Code: levenshtein('', 'hello') == len('hello')
+Output: True
+
+--- Snippet 15 [normal]: Strings differing only in case ---
+Code: levenshtein('Hello', 'hello')
+Output: 1
+
+--- Snippet 16 [normal]: Unicode characters ---
+Code: levenshtein('café', 'cafe')
+Output: 1
+
+--- Snippet 17 [normal]: Longer strings with known distance ---
+Code: levenshtein('saturday', 'sunday')
+Output: 3
+
+--- Snippet 18 [normal]: Return type is int ---
+Code: type(levenshtein('a', 'b'))
+Output: <class 'int'>
+
+--- Snippet 19 [normal]: Repeated characters ---
+Code: levenshtein('aaa', 'aaaa')
+Output: 1
+
+--- Snippet 20 [normal]: String with spaces ---
+Code: levenshtein('hello world', 'hello world!')
+Output: 1
+
+--- Snippet 21 [normal]: Prefix relationship ---
+Code: levenshtein('pre', 'prefix')
+Output: 3
+
+--- Snippet 22 [normal]: Suffix relationship ---
+Code: levenshtein('fix', 'prefix')
+Output: 3
+
+--- Snippet 23 [normal]: Idempotency: calling twice gives same result ---
+Code: levenshtein('foo', 'bar') == levenshtein('foo', 'bar')
+Output: True
+
+--- Snippet 24 [normal]: Distance between string and itself with one char appended equals 1 ---
+Code: levenshtein('test', 'tests')
+Output: 1
+
+--- Snippet 25 [normal]: Whitespace-only strings ---
+Code: levenshtein('   ', '  ')
+Output: 1
+
+--- Snippet 26 [error]: None as first argument ---
+Code: levenshtein(None, 'hello')
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 27 [error]: None as second argument ---
+Code: levenshtein('hello', None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 28 [error]: Both arguments None ---
+Code: levenshtein(None, None)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 29 [error]: Integer as first argument ---
+Code: levenshtein(123, 'hello')
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 30 [error]: List as second argument ---
+Code: levenshtein('hello', ['h', 'e'])
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 31 [error]: No arguments provided ---
+Code: levenshtein()
+RAISED TypeError: levenshtein() missing 2 required positional arguments: 's' and 't'
+
+--- Snippet 32 [error]: Only one argument provided ---
+Code: levenshtein('hello')
+RAISED TypeError: levenshtein() missing 1 required positional argument: 't'
+
+--- Snippet 33 [error]: Boolean input (bool is subclass of int but also of str check) ---
+Code: levenshtein(True, 'hello')
+RAISED TypeError: Both arguments must be strings

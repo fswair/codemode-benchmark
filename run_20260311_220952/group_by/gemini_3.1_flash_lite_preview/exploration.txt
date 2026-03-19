@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Empty list input. ---
+Code: group_by([], "key")
+Output: {}
+
+--- Snippet 2 [normal]: Standard happy-path with multiple groups. ---
+Code: group_by([{"type": "fruit", "name": "apple"}, {"type": "fruit", "name": "banana"}, {"type": "veg", "name": "carrot"}], "type")
+Output: {'fruit': [{'type': 'fruit', 'name': 'apple'}, {'type': 'fruit', 'name': 'banana'}], 'veg': [{'type': 'veg', 'name': 'carrot'}]}
+
+--- Snippet 3 [normal]: Dicts missing the grouping key. ---
+Code: group_by([{"a": 1}, {"b": 2}], "a")
+Output: {1: [{'a': 1}], None: [{'b': 2}]}
+
+--- Snippet 4 [normal]: Multiple items in the same group. ---
+Code: group_by([{"a": 1, "id": 1}, {"a": 1, "id": 2}], "a")
+Output: {1: [{'a': 1, 'id': 1}, {'a': 1, 'id': 2}]}
+
+--- Snippet 5 [normal]: Duplicate logic confirms items are preserved in list. ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}]}
+
+--- Snippet 6 [normal]: Key present in no dicts. ---
+Code: group_by([{"name": "test"}], "missing_key")
+Output: {None: [{'name': 'test'}]}
+
+--- Snippet 7 [normal]: Grouping by mixed types that are equal (integer vs float). ---
+Code: group_by([{"val": 1}, {"val": 1.0}, {"val": 1}], "val")
+Output: {1: [{'val': 1}, {'val': 1.0}, {'val': 1}]}
+
+--- Snippet 8 [normal]: Grouping by case-sensitive strings. ---
+Code: group_by([{"key": "a"}, {"key": "A"}], "key")
+Output: {'a': [{'key': 'a'}], 'A': [{'key': 'A'}]}
+
+--- Snippet 9 [normal]: Grouping by boolean values. ---
+Code: group_by([{"x": True}, {"x": False}, {"x": True}], "x")
+Output: {True: [{'x': True}, {'x': True}], False: [{'x': False}]}
+
+--- Snippet 10 [normal]: Grouping by a key whose value is explicitly None. ---
+Code: group_by([{"x": None}, {"y": 1}], "x")
+Output: {None: [{'x': None}, {'y': 1}]}
+
+--- Snippet 11 [error]: Attempting to group by unhashable types (lists as values). ---
+Code: group_by([{"data": [1, 2]}, {"data": [1, 2]}], "data")
+RAISED TypeError: unhashable type: 'list'
+
+--- Snippet 12 [error]: Attempting to group by dictionary values (unhashable). ---
+Code: group_by([{"a": {'b': 1}}, {"a": {'b': 1}}], "a")
+RAISED TypeError: unhashable type: 'dict'
+
+--- Snippet 13 [normal]: Key with leading/trailing spaces. ---
+Code: group_by([{"a": 1}], "  spaces  ")
+Output: {None: [{'a': 1}]}
+
+--- Snippet 14 [normal]: Performance/scale: 100 items with same key. ---
+Code: group_by([{"a": 1}] * 100, "a")
+Output: {1: [{'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}, {'a': 1}]}
+
+--- Snippet 15 [normal]: Group by calculated modulo values. ---
+Code: group_by([{"a": i % 3} for i in range(10)], "a")
+Output: {0: [{'a': 0}, {'a': 0}, {'a': 0}, {'a': 0}], 1: [{'a': 1}, {'a': 1}, {'a': 1}], 2: [{'a': 2}, {'a': 2}, {'a': 2}]}
+
+--- Snippet 16 [error]: Passing None instead of a list of dicts. ---
+Code: group_by(None, "anything")
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [normal]: Passing non-string key (should trigger attribute/method expectation on the item). ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 18 [error]: Passing a string instead of a list. ---
+Code: group_by("not a list", "key")
+RAISED AttributeError: 'str' object has no attribute 'get'

@@ -1,0 +1,16 @@
+{
+  "timestamp": "20260312_175707",
+  "iso": "2026-03-12T17:57:07.739679+00:00",
+  "models": {
+    "case_1": {
+      "spec": "openrouter:google/gemini-3-flash-preview",
+      "exploration": "openrouter:google/gemini-3-flash-preview"
+    }
+  },
+  "scenarios": [
+    "flatten",
+    "parse_cron",
+    "levenshtein"
+  ],
+  "python": "3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)]"
+}

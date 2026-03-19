@@ -1,0 +1,20 @@
+{
+  "scenario": "group_by",
+  "spec_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "exploration_model": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "model_slug": "gemini_3.1_flash_lite_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 13.53,
+  "cases": 17,
+  "raises_cases": 2,
+  "snippets": 18,
+  "error_snippets": 3,
+  "refinements": 2,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

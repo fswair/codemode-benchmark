@@ -1,0 +1,517 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    Flattened:
+      assertion: all(not isinstance(x, list) for x in output)
+  dataset:
+  - case:
+      id: simple_flat
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: one_level_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deeply_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: strings_as_atoms
+      input:
+      - a
+      - - b
+        - - c
+      expected:
+      - a
+      - b
+      - c
+  - case:
+      id: heterogeneous_types
+      input:
+      - 1
+      - mixed
+      - - 2.5
+        - true
+      - null
+      expected:
+      - 1
+      - mixed
+      - 2.5
+      - true
+      - null
+  - case:
+      id: duplicates_preserved
+      input:
+      - 1
+      - - 2
+        - 3
+      - 1
+      - - 2
+        - 3
+      expected:
+      - 1
+      - 2
+      - 3
+      - 1
+      - 2
+      - 3
+  - case:
+      id: range_conversion_lists
+      input:
+      - - 0
+        - 1
+        - 2
+      - - - 3
+          - 4
+          - 5
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: single_element_deep
+      input:
+      - - - - 1
+      expected:
+      - 1
+  - case:
+      id: mixed_empty_and_vals
+      input:
+      - 1
+      - []
+      - 2
+      expected:
+      - 1
+      - 2
+  - case:
+      id: booleans
+      input:
+      - true
+      - - false
+        - - true
+      expected:
+      - true
+      - false
+      - true
+  - case:
+      id: multiple_empty
+      input:
+      - []
+      - []
+      - []
+      expected: []
+  - case:
+      id: tuples_as_atoms
+      input:
+      - - - 1
+          - 2
+        - - 3
+          - 4
+      - - - 5
+          - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: dicts_as_atoms
+      input:
+      - - key:
+          - 1
+          - 2
+      - other: value
+      expected:
+      - key:
+        - 1
+        - 2
+      - other: value
+  - case:
+      id: interleaved_empty
+      input:
+      - []
+      - - 1
+      - []
+      - - 2
+        - 3
+      - []
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: complex_nesting_with_empty
+      input:
+      - - - - []
+      - - 1
+      - - - []
+      expected:
+      - 1
+  - case:
+      id: large_flat_list
+      input:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      expected:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+  - case:
+      id: repeating_sublists
+      input:
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      - - 1
+      expected:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+  - case:
+      id: list_comprehension_result
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: nested_floats_and_ints
+      input:
+      - 1.0
+      - - 2
+        - - 3.5
+          - 4
+      expected:
+      - 1.0
+      - 2
+      - 3.5
+      - 4
+  - case:
+      id: none_in_nested_list
+      input:
+      - - null
+      - null
+      - - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: deep_nesting_strings
+      input:
+      - - - level3
+        - level2
+      - level1
+      expected:
+      - level3
+      - level2
+      - level1
+  - case:
+      id: mixed_atoms_and_lists
+      input:
+      - 0
+      - - 1
+        - 2
+      - 3
+      - - 4
+        - - 5
+          - 6
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_string_input
+      input: not a list
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_int_input
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_dict_input
+      input:
+        key: value
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_float_input
+      input: 3.14159
+      raises: TypeError
+      match: Expected list, got float
+  - case:
+      id: error_bytes_input
+      input: bytes
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_typeerror_0
+      input: !!binary |
+        Ynl0ZXM=
+      raises: TypeError

@@ -1,0 +1,75 @@
+--- Snippet 1 [normal]: Typical happy-path example (3 edits) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Distance between two empty strings (boundary case) ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Distance between a string and an empty string (all deletions) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Distance between empty string and a string (all insertions) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Distance between identical strings (0 edits) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 6 [normal]: One string is a prefix of the other (2 insertions) ---
+Code: levenshtein("abc", "abcde")
+Output: 2
+
+--- Snippet 7 [normal]: Strings with overlap requiring substitution and deletion ---
+Code: levenshtein("flaw", "lawn")
+Output: 2
+
+--- Snippet 8 [normal]: Common example (3 edits) ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 9 [normal]: Substitution and insertion example ---
+Code: levenshtein("gumbo", "gambol")
+Output: 2
+
+--- Snippet 10 [normal]: Single character substitution (distance 1) ---
+Code: levenshtein("a", "b")
+Output: 1
+
+--- Snippet 11 [normal]: Reversed strings (distance 2) ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 12 [normal]: Case sensitivity check (distance 1) ---
+Code: levenshtein("A", "a")
+Output: 1
+
+--- Snippet 13 [normal]: Unicode/Multi-byte character handling ---
+Code: levenshtein("cafe", "café")
+Output: 1
+
+--- Snippet 14 [normal]: Large identical strings to test performance/looping ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 15 [normal]: Strings with no common characters (total substitution) ---
+Code: levenshtein("abcde", "fghij")
+Output: 5
+
+--- Snippet 16 [normal]: Symmetry invariant: dist(s, t) == dist(t, s) ---
+Code: levenshtein("kitten", "sitting") == levenshtein("sitting", "kitten")
+Output: True
+
+--- Snippet 17 [error]: TypeError: first argument is None instead of str ---
+Code: levenshtein(None, "hello")
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 18 [error]: TypeError: second argument is int instead of str ---
+Code: levenshtein("hello", 123)
+RAISED TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: TypeError: arguments are lists instead of strings ---
+Code: levenshtein(["a"], ["b"])
+RAISED TypeError: Both arguments must be strings

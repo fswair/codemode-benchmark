@@ -1,0 +1,14 @@
+Scenario : parse_cron
+Spec Model : openrouter:google/gemini-3-flash-preview
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 44  (raises=17)
+Snippets : 44  (error_snippets=17)
+Refines  : 0
+Cost USD : 0.04860850
+Cost/Fn  : 0.04860850
+Tokens   : in=28967 out=11375 req=3
+Pricing  : costs.yml
+Time     : 89.2s
+Evals    : assertion, expected, raises

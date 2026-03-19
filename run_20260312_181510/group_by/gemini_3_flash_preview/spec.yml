@@ -1,0 +1,358 @@
+group_by:
+  evals:
+    IsDict:
+      type: dict
+    PreservesCount:
+      assertion: sum(len(group) for group in output.values()) == len(input[0])
+  dataset:
+  - case:
+      id: happy_path_int_key
+      inputs:
+      - - id: 1
+          name: A
+        - id: 2
+          name: B
+        - id: 1
+          name: C
+      - id
+      expected:
+        1:
+        - id: 1
+          name: A
+        - id: 1
+          name: C
+        2:
+        - id: 2
+          name: B
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_partial
+      inputs:
+      - - type: fruit
+          name: apple
+        - type: vibe
+      - type
+      expected:
+        fruit:
+        - type: fruit
+          name: apple
+        vibe:
+        - type: vibe
+  - case:
+      id: single_group
+      inputs:
+      - - val: 10
+        - val: 10
+        - val: 10
+      - val
+      expected:
+        10:
+        - val: 10
+        - val: 10
+        - val: 10
+  - case:
+      id: all_missing_keys_to_none_group
+      inputs:
+      - - a: 1
+        - b: 2
+      - c
+      expected:
+        null:
+        - a: 1
+        - b: 2
+  - case:
+      id: boolean_keys
+      inputs:
+      - - status: true
+        - status: false
+        - status: true
+      - status
+      expected:
+        true:
+        - status: true
+        - status: true
+        false:
+        - status: false
+  - case:
+      id: explicit_none_vs_missing
+      inputs:
+      - - id: null
+        - id: 1
+      - id
+      expected:
+        null:
+        - id: null
+        1:
+        - id: 1
+  - case:
+      id: empty_string_keys
+      inputs:
+      - - tag: ''
+        - tag: urgent
+        - tag: ''
+      - tag
+      expected:
+        ? ''
+        : - tag: ''
+          - tag: ''
+        urgent:
+        - tag: urgent
+  - case:
+      id: tuple_keys_as_lists
+      inputs:
+      - - nested:
+          - 1
+          - 2
+        - nested:
+          - 1
+          - 2
+      - nested
+      assertion: len(output) == 1 and [1, 2] in output
+  - case:
+      id: heterogeneous_dicts
+      inputs:
+      - - x: 1
+          y: 2
+        - x: 1
+          z: 3
+      - x
+      expected:
+        1:
+        - x: 1
+          y: 2
+        - x: 1
+          z: 3
+  - case:
+      id: single_empty_dict
+      inputs:
+      - - {}
+      - anything
+      expected:
+        null:
+        - {}
+  - case:
+      id: none_as_key_argument
+      inputs:
+      - - a: 1
+      - null
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: float_keys
+      inputs:
+      - - a: 1.5
+        - a: 1.5
+        - a: 2.5
+      - a
+      expected:
+        1.5:
+        - a: 1.5
+        - a: 1.5
+        2.5:
+        - a: 2.5
+  - case:
+      id: numeric_equality_int_float
+      inputs:
+      - - val: 1
+        - val: 1.0
+      - val
+      expected:
+        1:
+        - val: 1
+        - val: 1.0
+  - case:
+      id: insertion_order_keys
+      inputs:
+      - - a: 2
+        - b: 1
+        - a: 1
+      - a
+      assertion: list(output.keys()) == [2, None, 1]
+  - case:
+      id: case_sensitivity
+      inputs:
+      - - A: 1
+        - a: 1
+      - a
+      expected:
+        null:
+        - A: 1
+        1:
+        - a: 1
+  - case:
+      id: identity_verification
+      inputs:
+      - - a: 1
+        - a: 1
+      - a
+      assertion: output[1][0] is not output[1][1]
+  - case:
+      id: group_content_verification
+      inputs:
+      - - key: a
+        - key: b
+      - key
+      assertion: 'output[''a''] == [{''key'': ''a''}]'
+  - case:
+      id: number_of_groups
+      inputs:
+      - - a: 1
+        - a: 2
+        - a: 3
+      - a
+      assertion: len(output) == 3
+  - case:
+      id: non_existent_group_get
+      inputs:
+      - - a: 1
+        - a: 2
+      - a
+      assertion: output.get('non_existent') is None
+  - case:
+      id: large_number_of_groups
+      inputs:
+      - - id: 0
+        - id: 1
+        - id: 2
+        - id: 3
+        - id: 4
+        - id: 5
+        - id: 6
+        - id: 7
+        - id: 8
+        - id: 9
+      - id
+      assertion: len(output) == 10
+  - case:
+      id: duplicate_full_dicts
+      inputs:
+      - - k: v
+        - k: v
+      - k
+      expected:
+        v:
+        - k: v
+        - k: v
+  - case:
+      id: mixed_types_in_key_values
+      inputs:
+      - - a: 1
+        - a: '1'
+      - a
+      expected:
+        1:
+        - a: 1
+        '1':
+        - a: '1'
+  - case:
+      id: deeply_nested_dict_as_item_preserve
+      inputs:
+      - - id: 1
+          meta:
+            sub: data
+      - id
+      expected:
+        1:
+        - id: 1
+          meta:
+            sub: data
+  - case:
+      id: zero_value_key
+      inputs:
+      - - count: 0
+        - count: 1
+      - count
+      expected:
+        0:
+        - count: 0
+        1:
+        - count: 1
+  - case:
+      id: key_is_empty_string
+      inputs:
+      - - ? ''
+          : empty
+        - ? ''
+          : val
+      - ''
+      expected:
+        empty:
+        - ? ''
+          : empty
+        val:
+        - ? ''
+          : val
+  - case:
+      id: all_items_missing_key
+      inputs:
+      - - a: 1
+        - b: 2
+        - c: 3
+      - d
+      expected:
+        null:
+        - a: 1
+        - b: 2
+        - c: 3
+  - case:
+      id: complex_numbers
+      inputs:
+      - - complex: 1j
+        - complex: 2j
+      - complex
+      assertion: len(output) == 2
+  - case:
+      id: item_is_none
+      inputs:
+      - - null
+      - any
+      raises: AttributeError
+      match: object has no attribute 'get'
+  - case:
+      id: item_is_int
+      inputs:
+      - - 1
+        - 2
+        - 3
+      - any
+      raises: AttributeError
+      match: object has no attribute 'get'
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - null
+      - id
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - 123
+      - id
+      raises: TypeError
+  - case:
+      id: error_typeerror_2
+      inputs:
+      - - a:
+          - 1
+          - 2
+      - a
+      raises: TypeError
+  - case:
+      id: error_typeerror_3
+      inputs:
+      - - a:
+            unhashable: dict
+      - a
+      raises: TypeError
+  - case:
+      id: error_typeerror_4
+      inputs:
+      - - a: 1
+      - - key_as_list
+      raises: TypeError

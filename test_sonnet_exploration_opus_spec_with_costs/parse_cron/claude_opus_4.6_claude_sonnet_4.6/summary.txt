@@ -1,0 +1,14 @@
+Scenario : parse_cron
+Spec Model : openrouter:anthropic/claude-opus-4.6
+Expl Model : openrouter:anthropic/claude-sonnet-4.6
+Success  : True
+Coverage : 100.0%
+Cases    : 65  (raises=21)
+Snippets : 58  (error_snippets=21)
+Refines  : 0
+Cost USD : 0.28704000
+Cost/Fn  : 0.28704000
+Tokens   : in=28744 out=7698 req=3
+Pricing  : costs.yml
+Time     : 90.0s
+Evals    : assertion, expected, raises

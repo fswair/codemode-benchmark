@@ -1,0 +1,20 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "openrouter:anthropic/claude-opus-4.6",
+  "exploration_model": "openrouter:anthropic/claude-opus-4.6",
+  "model_slug": "claude_opus_4.6",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 179.71,
+  "cases": 55,
+  "raises_cases": 19,
+  "snippets": 44,
+  "error_snippets": 19,
+  "refinements": 0,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

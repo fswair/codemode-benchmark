@@ -1,0 +1,71 @@
+--- Snippet 1 [normal]: Empty list input ---
+Code: flatten([])
+Output: []
+
+--- Snippet 2 [normal]: Flat list of integers ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 3 [normal]: One level of nesting ---
+Code: flatten([1, [2], 3])
+Output: [1, 2, 3]
+
+--- Snippet 4 [normal]: Deep nesting ---
+Code: flatten([1, [2, [3, [4]]]])
+Output: [1, 2, 3, 4]
+
+--- Snippet 5 [normal]: List containing empty lists at various depths ---
+Code: flatten([1, [], [2, []], 3])
+Output: [1, 2, 3]
+
+--- Snippet 6 [normal]: List containing only empty lists ---
+Code: flatten([[], [], []])
+Output: []
+
+--- Snippet 7 [normal]: List of strings with nesting ---
+Code: flatten(['a', ['b', 'c'], 'd'])
+Output: ['a', 'b', 'c', 'd']
+
+--- Snippet 8 [normal]: Nested lists with mixed types and depths ---
+Code: flatten([[1], 2, [3, [4, 5]]])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 9 [normal]: List of floats with nesting ---
+Code: flatten([1.1, [2.2, 3.3]])
+Output: [1.1, 2.2, 3.3]
+
+--- Snippet 10 [error]: List of booleans with nesting ---
+Code: flatten([True, [False, [True]]]), [True]]
+RAISED SyntaxError: unmatched ']' (<vowel-session>, line 1)
+
+--- Snippet 11 [normal]: List containing None elements and nesting ---
+Code: flatten([None, [None]])
+Output: [None, None]
+
+--- Snippet 12 [normal]: Outer list has only one element which is a list ---
+Code: flatten([[1, 2, 3]])
+Output: [1, 2, 3]
+
+--- Snippet 13 [normal]: Nesting at the end of the list ---
+Code: flatten([1, 2, 3, [4, 5, 6]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 14 [normal]: Reference to same nested list twice ---
+Code: x = [1, 2]; flatten([x, x])
+Output: [1, 2, 1, 2]
+
+--- Snippet 15 [normal]: Very deep nesting (11 levels) ---
+Code: flatten([[[[[[[[[[[1]]]]]]]]]]])
+Output: [1]
+
+--- Snippet 16 [error]: Input is None instead of list ---
+Code: flatten(None)
+RAISED TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Input is integer instead of list ---
+Code: flatten(123)
+RAISED TypeError: Expected list, got int
+
+--- Snippet 18 [error]: Input is string instead of list ---
+Code: flatten("not a list")
+RAISED TypeError: Expected list, got str
