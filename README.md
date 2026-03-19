@@ -12,10 +12,10 @@ From repository root:
 python -m codemode-benchmark
 ```
 
-If your environment uses the `py` launcher, this is equivalent:
+If your environment uses the `python3` launcher, this is equivalent:
 
 ```bash
-py -m codemode-benchmark
+python3 -m codemode-benchmark
 ```
 
 ## What It Benchmarks
