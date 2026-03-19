@@ -1,0 +1,30 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "openrouter:anthropic/claude-sonnet-4.6",
+  "exploration_model": "openrouter:google/gemini-3-flash-preview",
+  "model_slug": "claude_sonnet_4.6_gemini_3_flash_preview",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 98.16,
+  "cases": 51,
+  "raises_cases": 17,
+  "snippets": 43,
+  "error_snippets": 16,
+  "refinements": 0,
+  "cost_usd": 0.2089135,
+  "cost_cents": 20.8913,
+  "input_tokens": 32019,
+  "output_tokens": 10123,
+  "requests": 3,
+  "price_sources": [
+    "costs.yml"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.2089135,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

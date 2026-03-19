@@ -1,0 +1,15 @@
+{
+  "id": "for_douwe",
+  "timestamp": "20260319_190012",
+  "iso": "2026-03-19T19:00:12.545289+00:00",
+  "models": {
+    "case_1": {
+      "spec": "openrouter:anthropic/claude-sonnet-4.6",
+      "exploration": "openrouter:google/gemini-3-flash-preview"
+    }
+  },
+  "scenarios": [
+    "parse_cron"
+  ],
+  "python": "3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)]"
+}
