@@ -1,0 +1,308 @@
+group_by:
+  evals:
+    ReturnType:
+      type: dict
+  dataset:
+  - case:
+      id: basic_grouping
+      inputs:
+      - - type: A
+          val: 1
+        - type: B
+          val: 2
+        - type: A
+          val: 3
+      - type
+      expected:
+        A:
+        - type: A
+          val: 1
+        - type: A
+          val: 3
+        B:
+        - type: B
+          val: 2
+  - case:
+      id: empty_list
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: missing_key_maps_to_none
+      inputs:
+      - - id: 1
+        - name: missing
+      - id
+      expected:
+        1:
+        - id: 1
+        null:
+        - name: missing
+  - case:
+      id: all_missing_keys
+      inputs:
+      - - a: 1
+        - b: 2
+      - c
+      expected:
+        null:
+        - a: 1
+        - b: 2
+  - case:
+      id: explicit_none_vs_missing
+      inputs:
+      - - status: null
+        - status: active
+      - status
+      expected:
+        null:
+        - status: null
+        active:
+        - status: active
+  - case:
+      id: integer_keys
+      inputs:
+      - - val: 10
+        - val: 10
+        - val: 20
+      - val
+      expected:
+        10:
+        - val: 10
+        - val: 10
+        20:
+        - val: 20
+  - case:
+      id: identical_items
+      inputs:
+      - - tag: x
+        - tag: x
+      - tag
+      expected:
+        x:
+        - tag: x
+        - tag: x
+  - case:
+      id: list_of_empty_dicts
+      inputs:
+      - - {}
+        - {}
+      - any
+      expected:
+        null:
+        - {}
+        - {}
+  - case:
+      id: boolean_keys
+      inputs:
+      - - key: true
+        - key: false
+        - key: true
+      - key
+      expected:
+        true:
+        - key: true
+        - key: true
+        false:
+        - key: false
+  - case:
+      id: empty_string_as_lookup_key
+      inputs:
+      - - a: 1
+      - ''
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: space_string_as_lookup_key
+      inputs:
+      - - ' ': space
+      - ' '
+      expected:
+        space:
+        - ' ': space
+  - case:
+      id: numeric_equality_grouping
+      inputs:
+      - - a: 1
+        - a: 1.0
+      - a
+      expected:
+        1:
+        - a: 1.0
+  - case:
+      id: shared_key_different_fields
+      inputs:
+      - - a: 1
+          b: 2
+        - a: 1
+          c: 3
+      - a
+      expected:
+        1:
+        - a: 1
+          b: 2
+        - a: 1
+          c: 3
+  - case:
+      id: falsy_values_discrimination
+      inputs:
+      - - a: 0
+        - a: false
+      - a
+      expected:
+        0:
+        - a: false
+  - case:
+      id: lookup_key_not_in_output_keys
+      inputs:
+      - - x: 1
+        - x: 2
+      - x
+      assertion: '''x'' not in output'
+  - case:
+      id: none_as_lookup_key
+      inputs:
+      - - a: 1
+      - null
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: integer_as_lookup_key
+      inputs:
+      - - a: 1
+      - 123
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: tuple_as_lookup_key
+      inputs:
+      - - a: 1
+      - - 1
+        - 2
+      expected:
+        null:
+        - a: 1
+  - case:
+      id: large_group_check
+      inputs:
+      - - a: v
+        - a: v
+        - a: v
+        - a: v
+        - a: v
+      - a
+      assertion: len(output['v']) == 5
+  - case:
+      id: items_not_dicts
+      inputs:
+      - - 1
+        - 2
+        - 3
+      - id
+      raises: AttributeError
+      match: '''int'' object has no attribute ''get'''
+  - case:
+      id: unhashable_set_value
+      inputs:
+      - - key:
+          - 1
+          - 2
+      - key
+      assertion: 'True'
+  - case:
+      id: mixed_invalid_types_in_list
+      inputs:
+      - - a: 1
+        - 5.5
+      - a
+      raises: AttributeError
+      match: '''float'' object has no attribute ''get'''
+  - case:
+      id: property_all_items_accounted_for
+      inputs:
+      - - z: 1
+        - z: 2
+        - y: 3
+      - z
+      assertion: sum(len(v) for v in output.values()) == 3
+  - case:
+      id: property_keys_match_values
+      inputs:
+      - - k: v1
+        - k: v2
+      - k
+      assertion: all(item['k'] == key for key, items in output.items() for item in
+        items)
+  - case:
+      id: string_key_case_sensitivity
+      inputs:
+      - - Key: 1
+        - key: 2
+      - Key
+      expected:
+        1:
+        - Key: 1
+        null:
+        - key: 2
+  - case:
+      id: nested_dict_as_item_value
+      inputs:
+      - - id: 1
+          meta:
+            sub: a
+      - id
+      expected:
+        1:
+        - id: 1
+          meta:
+            sub: a
+  - case:
+      id: heterogeneous_val_types
+      inputs:
+      - - a: str
+        - a: 123
+        - a: null
+      - a
+      expected:
+        str:
+        - a: str
+        123:
+        - a: 123
+        null:
+        - a: null
+  - case:
+      id: single_item_list
+      inputs:
+      - - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - - data:
+          - 1
+          - 2
+        - data:
+          - 1
+          - 2
+      - data
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - null
+      - id
+      raises: TypeError
+  - case:
+      id: error_typeerror_2
+      inputs:
+      - - key:
+            1: 2
+      - key
+      raises: TypeError

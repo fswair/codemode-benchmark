@@ -1,0 +1,336 @@
+flatten:
+  evals:
+    ReturnTypeList:
+      type: list
+    FlatteningInvariant:
+      assertion: all(not isinstance(x, list) for x in output)
+  dataset:
+  - case:
+      id: flat_integers
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: list_of_single_item_lists
+      input:
+      - - 1
+      - - 2
+      - - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: deeply_nested_mixed
+      input:
+      - 1
+      - - 2
+        - - 3
+          - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: nested_empty_lists
+      input:
+      - []
+      - - []
+      - - - []
+      expected: []
+  - case:
+      id: list_containing_strings
+      input:
+      - a
+      - - b
+        - c
+      - - d
+      expected:
+      - a
+      - b
+      - c
+      - d
+  - case:
+      id: contains_none
+      input:
+      - 1
+      - null
+      - 2
+      expected:
+      - 1
+      - null
+      - 2
+  - case:
+      id: contains_tuple_opaque
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: extreme_nesting_single_element
+      input:
+      - - - - 1
+      expected:
+      - 1
+  - case:
+      id: alternating_elements
+      input:
+      - 1
+      - - 2
+        - 3
+      - 4
+      - - 5
+        - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: falsy_truthy_values
+      input:
+      - 0
+      - false
+      - true
+      - ''
+      expected:
+      - 0
+      - false
+      - true
+      - ''
+  - case:
+      id: contains_dict
+      input:
+      - key: value
+      - - 7
+        - 8
+      expected:
+      - key: value
+      - 7
+      - 8
+  - case:
+      id: nesting_complexity_empty_interspersed
+      input:
+      - - []
+      - []
+      - - 1
+        - - []
+      - []
+      expected:
+      - 1
+  - case:
+      id: boolean_nested
+      input:
+      - true
+      - - false
+        - - true
+      - false
+      expected:
+      - true
+      - false
+      - true
+      - false
+  - case:
+      id: list_multiplication_results
+      input:
+      - - 1
+        - 1
+      - - 2
+        - 2
+      expected:
+      - 1
+      - 1
+      - 2
+      - 2
+  - case:
+      id: opaque_tuples_with_nested_lists
+      input:
+      - - 1
+        - - 2
+          - 3
+      - - 4
+        - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: nesting_depth_10
+      input:
+      - - - - - - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: structural_equivalence_1
+      input:
+      - 1
+      - - 2
+        - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: structural_equivalence_2
+      input:
+      - - 1
+        - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: non_list_iterable_string
+      input:
+      - hello
+      expected:
+      - hello
+  - case:
+      id: mixed_types_nested
+      input:
+      - 1.5
+      - - a
+        - - null
+      - - true
+      expected:
+      - 1.5
+      - a
+      - null
+      - true
+  - case:
+      id: all_empty_at_various_depths
+      input:
+      - []
+      - - []
+        - []
+      - - []
+        - - []
+      - []
+      expected: []
+  - case:
+      id: single_level_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: deep_nesting_end_of_list
+      input:
+      - 1
+      - 2
+      - - 3
+        - - 4
+          - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: deep_nesting_start_of_list
+      input:
+      - - - - 1
+          - 2
+        - 3
+      - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: error_none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: error_str_input
+      input: not a list
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: error_int_input
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: error_dict_input
+      input:
+        a: 1
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_tuple_input
+      input:
+      - 1
+      - 2
+      expected:
+      - 1
+      - 2
+  - case:
+      id: error_float_input
+      input: 3.14159
+      raises: TypeError
+      match: Expected list, got float
+  - case:
+      id: error_set_input
+      input:
+        a: null
+        b: null
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: idempotency_check
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: zero_and_false_differentiation
+      input:
+      - - 0
+      - - false
+      expected:
+      - 0
+      - false
+  - case:
+      id: error_typeerror_0
+      input: !!binary |
+        Ynl0ZXM=
+      raises: TypeError

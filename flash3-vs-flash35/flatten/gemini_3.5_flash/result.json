@@ -1,0 +1,29 @@
+{
+  "scenario": "flatten",
+  "spec_model": "openrouter:google/gemini-3.5-flash",
+  "exploration_model": "openrouter:google/gemini-3.5-flash",
+  "model_slug": "gemini_3.5_flash",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 160.99,
+  "cases": 47,
+  "raises_cases": 7,
+  "snippets": 39,
+  "error_snippets": 15,
+  "refinements": 1,
+  "cost_usd": 0.4095015,
+  "cost_cents": 40.9502,
+  "input_tokens": 31561,
+  "output_tokens": 40240,
+  "requests": 4,
+  "price_sources": [
+    "costs.yml"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.4095015,
+  "evaluator_types": [
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

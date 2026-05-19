@@ -1,0 +1,5 @@
+{
+  "scenario": "largest_color_value",
+  "spec_model": "openrouter:google/gemini-3.5-flash",
+  "exploration_model": "openrouter:google/gemini-3.5-flash"
+}

@@ -1,0 +1,185 @@
+--- Snippet 1 [normal]: Happy path grouping list of dicts by existing string keys ---
+Code: group_by([{"category": "A", "val": 1}, {"category": "B", "val": 2}, {"category": "A", "val": 3}], "category")
+Output: {'A': [{'category': 'A', 'val': 1}, {'category': 'A', 'val': 3}], 'B': [{'category': 'B', 'val': 2}]}
+
+--- Snippet 2 [normal]: Handling missing keys which should group under None ---
+Code: group_by([{"id": 1, "type": "X"}, {"id": 2}, {"id": 3, "type": "Y"}], "type")
+Output: {'X': [{'id': 1, 'type': 'X'}], None: [{'id': 2}], 'Y': [{'id': 3, 'type': 'Y'}]}
+
+--- Snippet 3 [normal]: Empty list input returns empty dictionary ---
+Code: group_by([], "any_key")
+Output: {}
+
+--- Snippet 4 [normal]: All items missing the key results in all elements grouped under None ---
+Code: group_by([{"a": 1}, {"b": 2}], "c")
+Output: {None: [{'a': 1}, {'b': 2}]}
+
+--- Snippet 5 [normal]: Falsy keys are grouped separately from each other and from None ---
+Code: group_by([{"val": 0}, {"val": False}, {"val": ""}, {}], "val")
+Output: {0: [{'val': False}], '': [{'val': ''}], None: [{}]}
+
+--- Snippet 6 [normal]: Explicit None value vs missing key both map to None group ---
+Code: group_by([{"x": None}, {}], "x")
+Output: {None: [{'x': None}, {}]}
+
+--- Snippet 7 [normal]: Single item list grouping ---
+Code: group_by([{"name": "Alice"}], "name")
+Output: {'Alice': [{'name': 'Alice'}]}
+
+--- Snippet 8 [normal]: All items sharing the same group key ---
+Code: group_by([{"status": "active"}, {"status": "active"}, {"status": "active"}], "status")
+Output: {'active': [{'status': 'active'}, {'status': 'active'}, {'status': 'active'}]}
+
+--- Snippet 9 [normal]: Identical dictionaries in input list ---
+Code: group_by([{"a": 1}, {"a": 1}], "a")
+Output: {1: [{'a': 1}, {'a': 1}]}
+
+--- Snippet 10 [normal]: Float and integer values that represent the same value group together due to Python hash equality ---
+Code: group_by([{"num": 1}, {"num": 1.0}], "num")
+Output: {1: [{'num': 1.0}]}
+
+--- Snippet 11 [normal]: Boolean values as key values ---
+Code: group_by([{"flag": True}, {"flag": False}, {"flag": True}], "flag")
+Output: {True: [{'flag': True}, {'flag': True}], False: [{'flag': False}]}
+
+--- Snippet 12 [normal]: Complex hashable key values like tuples are supported ---
+Code: group_by([{"loc": (10, 20)}, {"loc": (10, 20)}, {"loc": (30, 40)}], "loc")
+Output: {(10, 20): [{'loc': (10, 20)}, {'loc': (10, 20)}], (30, 40): [{'loc': (30, 40)}]}
+
+--- Snippet 13 [normal]: Grouping with an empty string as the search key ---
+Code: group_by([{"": "empty_key_val"}, {"other": "val"}], "")
+Output: {'empty_key_val': [{'': 'empty_key_val'}], None: [{'other': 'val'}]}
+
+--- Snippet 14 [normal]: Verifying identity preservation of dictionaries in the result ---
+Code: items = [{"id": 1, "k": "a"}]
+result = group_by(items, "k")
+result["a"][0] is items[0]
+Output: True
+
+--- Snippet 15 [normal]: Verifying key order preservation tracking appearance order ---
+Code: group_by([{"k": "first"}, {"k": "second"}, {"k": "first"}], "k")
+Output: {'first': [{'k': 'first'}, {'k': 'first'}], 'second': [{'k': 'second'}]}
+
+--- Snippet 16 [normal]: Using dict subclasses inside the input list ---
+Code: from collections import OrderedDict
+group_by([OrderedDict(a=1, b=2), {"a": 1}], "a")
+Output: {1: [OrderedDict([('a', 1), ('b', 2)]), {'a': 1}]}
+
+--- Snippet 17 [error]: None passed as items list raises TypeError in the loop ---
+Code: group_by(None, "key")
+RAISED TypeError: TypeError: 'NoneType' object is not iterable
+
+--- Snippet 18 [error]: Int in items list raises AttributeError since it lacks a .get() method ---
+Code: group_by([{"key": "val"}, 42], "key")
+RAISED AttributeError: AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 19 [error]: Unhashable dictionary value (list) raises TypeError when used as a dict key ---
+Code: group_by([{"key": [1, 2, 3]}], "key")
+RAISED TypeError: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+
+--- Snippet 20 [error]: None in items list raises AttributeError during loop ---
+Code: group_by([None], "key")
+RAISED AttributeError: AttributeError: 'NoneType' object has no attribute 'get'
+
+--- Snippet 21 [normal]: Tuple as items container instead of list ---
+Code: group_by(({"k": "a"}, {"k": "b"}), "k")
+Output: {'a': [{'k': 'a'}], 'b': [{'k': 'b'}]}
+
+--- Snippet 22 [normal]: Generator as items container instead of list ---
+Code: group_by(({"k": i % 2} for i in range(3)), "k")
+Output: {0: [{'k': 0}, {'k': 0}], 1: [{'k': 1}]}
+
+--- Snippet 23 [normal]: Integer as the grouping key argument instead of string ---
+Code: group_by([{1: "a"}, {1: "b"}, {2: "c"}], 1)
+Output: {'a': [{1: 'a'}], 'b': [{1: 'b'}], None: [{2: 'c'}]}
+
+--- Snippet 24 [normal]: None as the grouping key argument instead of string ---
+Code: group_by([{None: "apple"}, {None: "banana"}], None)
+Output: {'apple': [{None: 'apple'}], 'banana': [{None: 'banana'}]}
+
+--- Snippet 25 [normal]: Tuple as the grouping key argument instead of string ---
+Code: group_by([{(1, 2): "x"}, {"other": "y"}], (1, 2))
+Output: {'x': [{(1, 2): 'x'}], None: [{'other': 'y'}]}
+
+--- Snippet 26 [normal]: Decimal and Float with identical mathematical values grouping together ---
+Code: from decimal import Decimal
+group_by([{"v": Decimal("2.0")}, {"v": 2.0}], "v")
+Output: {Decimal('2.0'): [{'v': Decimal('2.0')}, {'v': 2.0}]}
+
+--- Snippet 27 [normal]: Boolean True and integer 1 grouping together due to value and hash identity ---
+Code: group_by([{"v": True}, {"v": 1}], "v")
+Output: {True: [{'v': 1}]}
+
+--- Snippet 28 [error]: Custom hashable class instances as key values ---
+Code: class HashableVal:
+    def __init__(self, x):
+        self.x = x
+    def __hash__(self):
+        return hash(self.x)
+    def __eq__(self, other):
+        return isinstance(other, HashableVal) and self.x == other.x
+
+group_by([{"k": HashableVal(5)}, {"k": HashableVal(5)}], "k")
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 29 [normal]: Frozenset objects as key values ---
+Code: group_by([{"v": frozenset([1, 2])}, {"v": frozenset([2, 1])}], "v")
+Output: {frozenset({1, 2}): [{'v': frozenset({1, 2})}, {'v': frozenset({1, 2})}]}
+
+--- Snippet 30 [normal]: Built-in functions as key values ---
+Code: group_by([{"action": len}, {"action": sum}, {"action": len}], "action")
+Output: {<built-in function len>: [{'action': <built-in function len>}, {'action': <built-in function len>}], <built-in function sum>: [{'action': <built-in function sum>}]}
+
+--- Snippet 31 [error]: String subclass as the query key argument ---
+Code: class MyStr(str): pass
+group_by([{"target": "yes"}, {"other": "no"}], MyStr("target"))
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 32 [error]: Custom dictionary subclass with fallback generator logic in .get() ---
+Code: class CustomDict(dict):
+    def get(self, key, default=None):
+        return super().get(key, "fallback")
+
+group_by([CustomDict(a=1), CustomDict(b=2)], "a")
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 33 [error]: Identical nan object values grouping together ---
+Code: nan_obj = float('nan')
+group_by([{"v": nan_obj}, {"v": nan_obj}], "v")
+RAISED KeyError: KeyError: NaN.0
+
+--- Snippet 34 [normal]: Using collections.UserDict wrappers as items ---
+Code: from collections import UserDict
+group_by([UserDict(a=1), UserDict(b=2)], "a")
+Output: {1: [{'a': 1}], None: [{'b': 2}]}
+
+--- Snippet 35 [error]: Module objects as grouping values ---
+Code: import sys, math
+group_by([{"mod": sys}, {"mod": math}, {"mod": sys}], "mod")
+RAISED TypeError: TypeError: cannot use 'module' as a dict key (unhashable type: 'module')
+
+--- Snippet 36 [error]: Colliding custom keys with an __eq__ method that raises ZeroDivisionError ---
+Code: class EvilKey:
+    def __hash__(self):
+        return 42
+    def __eq__(self, other):
+        raise ZeroDivisionError("Equality failure")
+
+group_by([{"v": EvilKey()}, {"v": EvilKey()}], "v")
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 37 [error]: Generator that raises ValueError mid-iteration ---
+Code: def error_gen():
+    yield {"key": 1}
+    raise ValueError("Stream failure")
+
+group_by(error_gen(), "key")
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support yield expressions
+
+--- Snippet 38 [error]: Custom dict subclass raising KeyError when executing .get() ---
+Code: class BrokenDict(dict):
+    def get(self, key, default=None):
+        raise KeyError("Access denied")
+
+group_by([BrokenDict(a=1)], "a")
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions

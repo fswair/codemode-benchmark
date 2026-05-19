@@ -1,0 +1,14 @@
+Scenario : group_by
+Spec Model : openrouter:google/gemini-3-flash-preview
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : False
+Coverage : 90.3%
+Cases    : 31  (raises=5)
+Snippets : 31  (error_snippets=9)
+Refines  : 3
+Cost USD : 0.04478100
+Cost/Fn  : 0.04478100
+Tokens   : in=46092 out=7245 req=5
+Pricing  : costs.yml
+Time     : 46.9s
+Evals    : assertion, expected, raises

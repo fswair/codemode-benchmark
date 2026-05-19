@@ -1,0 +1,143 @@
+--- Snippet 1 [normal]: Flat list of integers. ---
+Code: flatten([1, 2, 3])
+Output: [1, 2, 3]
+
+--- Snippet 2 [normal]: List of single-item lists. ---
+Code: flatten([[1], [2], [3]])
+Output: [1, 2, 3]
+
+--- Snippet 3 [normal]: Deeply nested list with mixed levels. ---
+Code: flatten([1, [2, [3, 4]], 5])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 4 [normal]: Empty list input. ---
+Code: flatten([])
+Output: []
+
+--- Snippet 5 [normal]: List containing only empty nested lists. ---
+Code: flatten([[], [[]], [[[]]]])
+Output: []
+
+--- Snippet 6 [normal]: List containing strings. ---
+Code: flatten(["a", ["b", "c"], ["d"]])
+Output: ['a', 'b', 'c', 'd']
+
+--- Snippet 7 [normal]: List containing None as an element (should be kept as-is). ---
+Code: flatten([1, None, 2])
+Output: [1, None, 2]
+
+--- Snippet 8 [normal]: List containing a tuple (tuples should not be flattened). ---
+Code: flatten([1, (2, 3), 4])
+Output: [1, (2, 3), 4]
+
+--- Snippet 9 [normal]: Multiple levels of single-element nesting. ---
+Code: flatten([[[[1]]]])
+Output: [1]
+
+--- Snippet 10 [normal]: Alternating elements and lists. ---
+Code: flatten([1, [2, 3], 4, [5, 6]])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 11 [normal]: Various falsy and truthy non-list values. ---
+Code: flatten([0, False, True, ""])
+Output: [0, False, True, '']
+
+--- Snippet 12 [normal]: List containing a dictionary and another list. ---
+Code: flatten([{"key": "value"}, [7, 8]])
+Output: [{'key': 'value'}, 7, 8]
+
+--- Snippet 13 [normal]: Lists generated from ranges. ---
+Code: flatten([list(range(3)), [list(range(3, 6))]])
+Output: [0, 1, 2, 3, 4, 5]
+
+--- Snippet 14 [normal]: Idempotency: flattening an already flat list should return the same result. ---
+Code: flatten(flatten([[1, [2]], [3]]))
+Output: [1, 2, 3]
+
+--- Snippet 15 [normal]: Verify return type is a list. ---
+Code: type(flatten([1, [2]]))
+Output: <class 'list'>
+
+--- Snippet 16 [error]: Input is None, should raise TypeError. ---
+Code: flatten(None)
+RAISED TypeError: TypeError: Expected list, got NoneType
+
+--- Snippet 17 [error]: Input is a string instead of a list. ---
+Code: flatten("not a list")
+RAISED TypeError: TypeError: Expected list, got str
+
+--- Snippet 18 [error]: Input is an integer. ---
+Code: flatten(123)
+RAISED TypeError: TypeError: Expected list, got int
+
+--- Snippet 19 [error]: Input is a dictionary. ---
+Code: flatten({"a": 1})
+RAISED TypeError: TypeError: Expected list, got dict
+
+--- Snippet 20 [error]: Input is a tuple (only lists are allowed). ---
+Code: flatten((1, 2))
+RAISED TypeError: TypeError: Expected list, got tuple
+
+--- Snippet 21 [error]: List containing complex numbers. ---
+Code: flatten([complex(1, 2), [complex(3, 4)]])
+RAISED NameError: NameError: name 'complex' is not defined
+
+--- Snippet 22 [normal]: High density of empty lists interspersed with values. ---
+Code: flatten([[[]], [], [1, [[]]], []])
+Output: [1]
+
+--- Snippet 23 [normal]: Deeply nested boolean values. ---
+Code: flatten([True, [False, [True]], False])
+Output: [True, False, True, False]
+
+--- Snippet 24 [normal]: List containing type objects as elements. ---
+Code: flatten([list, [dict, str]])
+Output: [<class 'list'>, <class 'dict'>, <class 'str'>]
+
+--- Snippet 25 [normal]: List containing built-in functions. ---
+Code: flatten([print, [len, range]])
+Output: [<built-in function print>, <built-in function len>, <class 'range'>]
+
+--- Snippet 26 [normal]: List containing results of list multiplication. ---
+Code: flatten([[1]*2, [2]*2])
+Output: [1, 1, 2, 2]
+
+--- Snippet 27 [normal]: Nested lists containing tuples which themselves contain lists (tuples should remain opaque). ---
+Code: flatten([ (1, [2, 3]), [(4, 5)] ])
+Output: [(1, [2, 3]), (4, 5)]
+
+--- Snippet 28 [normal]: Extreme nesting depth (10 levels). ---
+Code: flatten([[[[[[[[[[1]]]]]]]]]])
+Output: [1]
+
+--- Snippet 29 [error]: List containing bytearray objects. ---
+Code: flatten([bytearray([65, 66]), [bytearray([67])]])
+RAISED NameError: NameError: name 'bytearray' is not defined
+
+--- Snippet 30 [normal]: List containing slice objects. ---
+Code: flatten([slice(0, 10, 1), [slice(None)]])
+Output: ['slice(0, 10, 1)', 'slice(None, None, None)']
+
+--- Snippet 31 [normal]: Checking if different nesting structures flatten to the same result (structural equivalence). ---
+Code: flatten([1, [2, 3]]) == flatten([[1, 2], 3])
+Output: True
+
+--- Snippet 32 [normal]: Verifying the length of the resulting flat list. ---
+Code: len(flatten([[1], [2], [3, [4, 5]]]))
+Output: 5
+
+--- Snippet 33 [error]: Input is a float, checking TypeError message for 'float'. ---
+Code: flatten(3.14159)
+RAISED TypeError: TypeError: Expected list, got float
+
+--- Snippet 34 [error]: Input is a set, another iterable that is not a list. ---
+Code: flatten(set([1, 2, 3]))
+RAISED TypeError: TypeError: Expected list, got set
+
+--- Snippet 35 [error]: Input is a range object, which is iterable but not a list. ---
+Code: flatten(range(10))
+RAISED TypeError: TypeError: Expected list, got range
+
+--- Snippet 36 [error]: Input is a bytes object, checking TypeError message for 'bytes'. ---
+Code: flatten(b'bytes')
+RAISED TypeError: TypeError: Expected list, got bytes

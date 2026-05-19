@@ -1,0 +1,123 @@
+--- Snippet 1 [normal]: Basic grouping by a string key with multiple matches. ---
+Code: group_by([{"type": "A", "val": 1}, {"type": "B", "val": 2}, {"type": "A", "val": 3}], "type")
+Output: {'A': [{'type': 'A', 'val': 1}, {'type': 'A', 'val': 3}], 'B': [{'type': 'B', 'val': 2}]}
+
+--- Snippet 2 [normal]: Empty list of items returns an empty dictionary. ---
+Code: group_by([], "any_key")
+Output: {}
+
+--- Snippet 3 [normal]: One item has the key, one is missing it; missing key maps to None. ---
+Code: group_by([{"id": 1}, {"name": "missing"}], "id")
+Output: {1: [{'id': 1}], None: [{'name': 'missing'}]}
+
+--- Snippet 4 [normal]: All items are missing the specified key; all should be grouped under None. ---
+Code: group_by([{"a": 1}, {"b": 2}], "c")
+Output: {None: [{'a': 1}, {'b': 2}]}
+
+--- Snippet 5 [normal]: Handling an explicit None value for the key vs a missing key (both should group under None). ---
+Code: group_by([{"status": None}, {"status": "active"}], "status")
+Output: {None: [{'status': None}], 'active': [{'status': 'active'}]}
+
+--- Snippet 6 [normal]: Grouping by integer values as keys. ---
+Code: group_by([{"val": 10}, {"val": 10}, {"val": 20}], "val")
+Output: {10: [{'val': 10}, {'val': 10}], 20: [{'val': 20}]}
+
+--- Snippet 7 [error]: Testing unhashable values (lists) as the group key. (Note: this should fail at runtime, exploring behavior). ---
+Code: group_by([{"data": [1, 2]}, {"data": [1, 2]}], "data")
+RAISED TypeError: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+
+--- Snippet 8 [normal]: Identical items grouped under the same key. ---
+Code: group_by([{"tag": "x"}, {"tag": "x"}], "tag")
+Output: {'x': [{'tag': 'x'}, {'tag': 'x'}]}
+
+--- Snippet 9 [normal]: List of empty dictionaries results in all items under the None key. ---
+Code: group_by([{}, {}], "any")
+Output: {None: [{}, {}]}
+
+--- Snippet 10 [normal]: Grouping by boolean values. ---
+Code: group_by([{"key": True}, {"key": False}, {"key": True}], "key")
+Output: {True: [{'key': True}, {'key': True}], False: [{'key': False}]}
+
+--- Snippet 11 [normal]: Using an empty string as the key to search for in dictionaries. ---
+Code: group_by([{"a": 1}], "")
+Output: {None: [{'a': 1}]}
+
+--- Snippet 12 [normal]: Using a single space string as the key. ---
+Code: group_by([{" ": "space"}], " ")
+Output: {'space': [{' ': 'space'}]}
+
+--- Snippet 13 [normal]: Grouping where key values are different types (int vs float) that are equal (1 == 1.0). ---
+Code: group_by([{"a": 1}, {"a": 1.0}], "a")
+Output: {1: [{'a': 1.0}]}
+
+--- Snippet 14 [normal]: Grouping by hashable tuples as values. ---
+Code: group_by([{"meta": (1, 2)}, {"meta": (1, 2)}], "meta")
+Output: {(1, 2): [{'meta': (1, 2)}, {'meta': (1, 2)}]}
+
+--- Snippet 15 [normal]: Verification that the key itself is not present in result if not found in any dict (only None is used). ---
+Code: group_by([{"a": 1}], "b")["b"] if "b" in group_by([{"a": 1}], "b") else "Key 'b' not found"
+Output: "Key 'b' not found"
+
+--- Snippet 16 [error]: Passing None instead of a list for the items argument. ---
+Code: group_by(None, "id")
+RAISED TypeError: TypeError: 'NoneType' object is not iterable
+
+--- Snippet 17 [normal]: Passing None as the key string, which causes an error in dict.get(). ---
+Code: group_by([{"a": 1}], None)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 18 [error]: Passing a list of integers instead of a list of dicts; integers do not have a .get() method. ---
+Code: group_by([1, 2, 3], "id")
+RAISED AttributeError: AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 19 [normal]: Using an integer as the look-up key (valid since dict.get accepts any hashable). ---
+Code: group_by([{"a": 1}], 123)
+Output: {None: [{'a': 1}]}
+
+--- Snippet 20 [normal]: Using a tuple as the look-up key. ---
+Code: group_by([{"a": 1}], (1, 2))
+Output: {None: [{'a': 1}]}
+
+--- Snippet 21 [normal]: Verify idempotency: multiple calls with same input produce same result. ---
+Code: group_by([{"a": 1}, {"a": 1}], "a") == group_by([{"a": 1}, {"a": 1}], "a")
+Output: True
+
+--- Snippet 22 [error]: Grouping by NaNs (which typically do not compare equal to themselves). ---
+Code: group_by([{"val": float('nan')}, {"val": float('nan')}], "val")
+RAISED KeyError: KeyError: NaN.0
+
+--- Snippet 23 [normal]: Verify that the grouping key name 'x' does not appear as a key in the returned dict unless it was a value. ---
+Code: group_by([{"x": 1}, {"x": 2}], "x")["x"] if "x" in group_by([{"x": 1}, {"x": 2}], "x") else "No 'x' key in outer dict"
+Output: "No 'x' key in outer dict"
+
+--- Snippet 24 [normal]: Grouping by built-in function objects. ---
+Code: group_by([{"a": bin}, {"a": sum}], "a")
+Output: {<built-in function bin>: [{'a': <built-in function bin>}], <built-in function sum>: [{'a': <built-in function sum>}]}
+
+--- Snippet 25 [normal]: Items with shared grouping key but different other keys. ---
+Code: group_by([{"a": 1, "b": 2}, {"a": 1, "c": 3}], "a")
+Output: {1: [{'a': 1, 'b': 2}, {'a': 1, 'c': 3}]}
+
+--- Snippet 26 [error]: Grouping by complex numbers. ---
+Code: group_by([{"key": complex(1, 1)}, {"key": complex(1, 1)}], "key")
+RAISED NameError: NameError: name 'complex' is not defined
+
+--- Snippet 27 [error]: Check list length for a large number of items in one group. ---
+Code: group_by([{"a": "v"} for _ in range(1000)], "a")["v"].__len__()
+RAISED AttributeError: AttributeError: 'list' object has no attribute '__len__'
+
+--- Snippet 28 [normal]: Discrimination between different falsy values (0, False, None) as values. ---
+Code: group_by([{"a": 0}, {"a": False}, {"a": None}], "a")
+Output: {0: [{'a': False}], None: [{'a': None}]}
+
+--- Snippet 29 [error]: Unhashable type 'dict' used as a value for the grouping key. ---
+Code: group_by([{"key": {1: 2}}], "key")
+RAISED TypeError: TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')
+
+--- Snippet 30 [error]: Unhashable type 'set' used as a value for the grouping key. ---
+Code: group_by([{"key": set([1, 2])}], "key")
+RAISED TypeError: TypeError: cannot use 'set' as a dict key (unhashable type: 'set')
+
+--- Snippet 31 [error]: Mixing dicts with a float in the items list; float has no .get() method. ---
+Code: group_by([{"a": 1}, 5.5], "a")
+RAISED AttributeError: AttributeError: 'float' object has no attribute 'get'

@@ -294,8 +294,62 @@ def levenshtein(s: str, t: str) -> int:
     return dp[n]
 ''',
     ),
+    Scenario(
+        name="largest_color_value",
+        difficulty="advanced",
+        description="Largest color value in a directed graph. Return the largest count of any color along a valid directed path, or -1 if the graph contains a cycle.",
+        code='''
+from collections import deque
+
+
+def largest_color_value(colors: str, edges: list[list[int]]) -> int:
+    """Return the largest color value of any valid path in a directed graph.
+
+    Nodes are colored by colors[i]. Edges are directed [u, v]. The color value
+    of a path is the maximum frequency of any single color along that path.
+    Return -1 if the graph contains a cycle.
+    """
+    n = len(colors)
+    graph = [[] for _ in range(n)]
+    indegree = [0] * n
+
+    for u, v in edges:
+        graph[u].append(v)
+        indegree[v] += 1
+
+    dp = [[0] * 26 for _ in range(n)]
+    queue = deque()
+
+    for i in range(n):
+        if indegree[i] == 0:
+            queue.append(i)
+            dp[i][ord(colors[i]) - ord("a")] = 1
+
+    visited = 0
+    answer = 0
+
+    while queue:
+        node = queue.popleft()
+        visited += 1
+        answer = max(answer, max(dp[node]))
+
+        for nei in graph[node]:
+            for c in range(26):
+                dp[nei][c] = max(
+                    dp[nei][c],
+                    dp[node][c] + (1 if c == ord(colors[nei]) - ord("a") else 0),
+                )
+
+            indegree[nei] -= 1
+            if indegree[nei] == 0:
+                queue.append(nei)
+
+    return answer if visited == n else -1
+''',
+    ),
 ]
 
+SCENARIOS.pop(-1)
 
 # ─────────────────────────────────────────────────────────────────────
 # Result model
@@ -784,44 +838,51 @@ def _print_comparison_to(
         (
             "Avg Coverage",
             lambda rs: f"{_avg([r.coverage for r in rs]) * 100:.1f}%",
-            lambda a,
-            b: f"{(_avg([r.coverage for r in a]) - _avg([r.coverage for r in b])) * 100:+.1f}pp",
+            lambda a, b: (
+                f"{(_avg([r.coverage for r in a]) - _avg([r.coverage for r in b])) * 100:+.1f}pp"
+            ),
         ),
         (
             "Avg Time (s)",
             lambda rs: f"{_avg([r.total_time_s for r in rs]):.1f}",
-            lambda a,
-            b: f"{_avg([r.total_time_s for r in a]) - _avg([r.total_time_s for r in b]):+.1f}",
+            lambda a, b: (
+                f"{_avg([r.total_time_s for r in a]) - _avg([r.total_time_s for r in b]):+.1f}"
+            ),
         ),
         (
             "Avg Cases",
             lambda rs: f"{_avg([float(r.case_count) for r in rs]):.1f}",
-            lambda a,
-            b: f"{_avg([float(r.case_count) for r in a]) - _avg([float(r.case_count) for r in b]):+.1f}",
+            lambda a, b: (
+                f"{_avg([float(r.case_count) for r in a]) - _avg([float(r.case_count) for r in b]):+.1f}"
+            ),
         ),
         (
             "Avg Snippets",
             lambda rs: f"{_avg([float(r.snippet_count) for r in rs]):.1f}",
-            lambda a,
-            b: f"{_avg([float(r.snippet_count) for r in a]) - _avg([float(r.snippet_count) for r in b]):+.1f}",
+            lambda a, b: (
+                f"{_avg([float(r.snippet_count) for r in a]) - _avg([float(r.snippet_count) for r in b]):+.1f}"
+            ),
         ),
         (
             "Avg Raises Cases",
             lambda rs: f"{_avg([float(r.raises_count) for r in rs]):.1f}",
-            lambda a,
-            b: f"{_avg([float(r.raises_count) for r in a]) - _avg([float(r.raises_count) for r in b]):+.1f}",
+            lambda a, b: (
+                f"{_avg([float(r.raises_count) for r in a]) - _avg([float(r.raises_count) for r in b]):+.1f}"
+            ),
         ),
         (
             "Avg Input Tokens",
             lambda rs: f"{_avg([float(r.input_tokens) for r in rs]):.0f}",
-            lambda a,
-            b: f"{_avg([float(r.input_tokens) for r in a]) - _avg([float(r.input_tokens) for r in b]):+.0f}",
+            lambda a, b: (
+                f"{_avg([float(r.input_tokens) for r in a]) - _avg([float(r.input_tokens) for r in b]):+.0f}"
+            ),
         ),
         (
             "Avg Output Tokens",
             lambda rs: f"{_avg([float(r.output_tokens) for r in rs]):.0f}",
-            lambda a,
-            b: f"{_avg([float(r.output_tokens) for r in a]) - _avg([float(r.output_tokens) for r in b]):+.0f}",
+            lambda a, b: (
+                f"{_avg([float(r.output_tokens) for r in a]) - _avg([float(r.output_tokens) for r in b]):+.0f}"
+            ),
         ),
         (
             "Total Cost ($)",
@@ -831,8 +892,9 @@ def _print_comparison_to(
         (
             "Cost Per Function ($)",
             lambda rs: f"{(sum(r.cost_usd for r in rs) / max(len(rs), 1)):.5f}",
-            lambda a,
-            b: f"{(sum(r.cost_usd for r in a) / max(len(a), 1)) - (sum(r.cost_usd for r in b) / max(len(b), 1)):+.5f}",
+            lambda a, b: (
+                f"{(sum(r.cost_usd for r in a) / max(len(a), 1)) - (sum(r.cost_usd for r in b) / max(len(b), 1)):+.5f}"
+            ),
         ),
     ]
 

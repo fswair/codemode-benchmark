@@ -1,0 +1,672 @@
+flatten:
+  evals:
+    IsList:
+      type: list
+    NoNestedListsLeft:
+      assertion: all(not isinstance(x, list) for x in output)
+    FastEnough:
+      duration: 0.05
+  dataset:
+  - case:
+      id: flat_integers
+      input:
+      - 1
+      - 2
+      - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: empty_list
+      input: []
+      expected: []
+  - case:
+      id: simple_nesting
+      input:
+      - - 1
+        - 2
+      - - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: right_nested
+      input:
+      - 1
+      - - 2
+        - - 3
+          - - 4
+            - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: left_nested
+      input:
+      - - - - 1
+          - 2
+        - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: flat_diverse_primitives
+      input:
+      - 1
+      - a
+      - 3.14
+      - true
+      - null
+      expected:
+      - 1
+      - a
+      - 3.14
+      - true
+      - null
+  - case:
+      id: nested_diverse_primitives
+      input:
+      - 1
+      - - 2
+        - a
+      - - 3.14
+        - - true
+          - null
+      expected:
+      - 1
+      - 2
+      - a
+      - 3.14
+      - true
+      - null
+  - case:
+      id: nested_empty_mixed
+      input:
+      - []
+      - - []
+      - - 1
+        - []
+      - - - []
+      expected:
+      - 1
+  - case:
+      id: deeply_nested_empty
+      input:
+      - - []
+      expected: []
+  - case:
+      id: deeply_nested_one_element
+      input:
+      - - - 1
+      expected:
+      - 1
+  - case:
+      id: nesting_level_9
+      input:
+      - - - - - - - - - 1
+      expected:
+      - 1
+  - case:
+      id: nesting_level_50
+      input:
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 50
+      expected:
+      - 50
+  - case:
+      id: wide_nested_list
+      input:
+      - - 0
+      - - 1
+      - - 2
+      - - 3
+      - - 4
+      - - 5
+      - - 6
+      - - 7
+      - - 8
+      - - 9
+      - - 10
+      - - 11
+      - - 12
+      - - 13
+      - - 14
+      - - 15
+      - - 16
+      - - 17
+      - - 18
+      - - 19
+      - - 20
+      - - 21
+      - - 22
+      - - 23
+      - - 24
+      - - 25
+      - - 26
+      - - 27
+      - - 28
+      - - 29
+      - - 30
+      - - 31
+      - - 32
+      - - 33
+      - - 34
+      - - 35
+      - - 36
+      - - 37
+      - - 38
+      - - 39
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+  - case:
+      id: falsy_values
+      input:
+      - 0
+      - 0.0
+      - false
+      - ''
+      expected:
+      - 0
+      - 0.0
+      - false
+      - ''
+  - case:
+      id: nested_falsy
+      input:
+      - - 0
+      - - - 0.0
+      - - false
+        - - ''
+      expected:
+      - 0
+      - 0.0
+      - false
+      - ''
+  - case:
+      id: mixed_ints_strings
+      input:
+      - - 1
+        - hello
+      - - world
+        - 2
+      expected:
+      - 1
+      - hello
+      - world
+      - 2
+  - case:
+      id: all_empty_nested
+      input:
+      - - []
+      - []
+      - - []
+      - - []
+        - []
+      expected: []
+  - case:
+      id: extremely_wide_flat
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+  - case:
+      id: nested_with_negative_numbers
+      input:
+      - -1
+      - - -2
+        - - -3
+          - - -4
+      expected:
+      - -1
+      - -2
+      - -3
+      - -4
+  - case:
+      id: mixed_floats_ints
+      input:
+      - 1.0
+      - - 2
+        - - 3.0
+          - - 4
+      expected:
+      - 1.0
+      - 2
+      - 3.0
+      - 4
+  - case:
+      id: repeated_values
+      input:
+      - 1
+      - - 1
+        - - 1
+          - - 1
+      expected:
+      - 1
+      - 1
+      - 1
+      - 1
+  - case:
+      id: large_integers
+      input:
+      - 1000000
+      - - 2000000
+        - 3000000
+      expected:
+      - 1000000
+      - 2000000
+      - 3000000
+  - case:
+      id: dicts_as_primitives
+      input:
+      - a: 1
+      - - b: 2
+      expected:
+      - a: 1
+      - b: 2
+  - case:
+      id: nested_dicts
+      input:
+      - - x:
+            y: 1
+      - - z:
+          - 3
+          - 4
+      expected:
+      - x:
+          y: 1
+      - z:
+        - 3
+        - 4
+  - case:
+      id: nested_strings
+      input:
+      - - apple
+        - banana
+      - - - cherry
+      expected:
+      - apple
+      - banana
+      - cherry
+  - case:
+      id: special_characters_strings
+      input:
+      - - '!@#'
+        - $%^
+      - - '&*()'
+      expected:
+      - '!@#'
+      - $%^
+      - '&*()'
+  - case:
+      id: empty_strings_nested
+      input:
+      - - ''
+      - - - ''
+      - ''
+      expected:
+      - ''
+      - ''
+      - ''
+  - case:
+      id: booleans_only
+      input:
+      - - true
+        - false
+      - - - true
+        - false
+      expected:
+      - true
+      - false
+      - true
+      - false
+  - case:
+      id: nulls_only
+      input:
+      - - null
+      - - - null
+        - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: zig_zag_nesting
+      input:
+      - - 1
+      - 2
+      - - 3
+        - - 4
+      - 5
+      - - - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: staircase_nesting
+      input:
+      - 1
+      - - 2
+        - 3
+      - - 4
+        - 5
+        - 6
+      - - 7
+        - 8
+        - 9
+        - 10
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+  - case:
+      id: deep_and_wide
+      input:
+      - - - 1
+          - 2
+      - - - 3
+          - 4
+        - - 5
+          - 6
+      - - - - 7
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+  - case:
+      id: already_flat
+      input:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: single_element_flat
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: alternating_nesting
+      input:
+      - - 1
+      - 2
+      - - - 3
+      - 4
+      - - - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: nested_empty_with_single_value
+      input:
+      - - - - - []
+        - 1
+      expected:
+      - 1
+  - case:
+      id: sparse_lists
+      input:
+      - []
+      - - 1
+      - []
+      - []
+      - - 2
+      - - 3
+      - []
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: large_dense_nesting_matrix
+      input:
+      - - 1
+        - 2
+        - 3
+      - - 4
+        - 5
+        - 6
+      - - 7
+        - 8
+        - 9
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+  - case:
+      id: mixed_all_primitives
+      input:
+      - - 1
+        - hello
+        - 3.14
+      - - true
+        - null
+        - false
+      expected:
+      - 1
+      - hello
+      - 3.14
+      - true
+      - null
+      - false
+  - case:
+      id: deep_strings_nesting
+      input:
+      - - - - deep_string
+      expected:
+      - deep_string
+  - case:
+      id: none_input
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: string_input
+      input: hello
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: integer_input
+      input: 42
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: dict_input
+      input:
+        a: 1
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: float_input
+      input: 3.14
+      raises: TypeError
+      match: Expected list, got float
+  - case:
+      id: bool_input
+      input: true
+      raises: TypeError
+      match: Expected list, got bool
+  - case:
+      id: error_typeerror_0
+      input: !!set
+        1: null
+        2: null
+        3: null
+      raises: TypeError

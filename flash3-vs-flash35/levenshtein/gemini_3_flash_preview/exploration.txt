@@ -1,0 +1,139 @@
+--- Snippet 1 [normal]: Common case: kitten to sitting (distance 3) ---
+Code: levenshtein("kitten", "sitting")
+Output: 3
+
+--- Snippet 2 [normal]: Boundary case: both strings empty ---
+Code: levenshtein("", "")
+Output: 0
+
+--- Snippet 3 [normal]: Boundary case: source has content, target is empty (deletions) ---
+Code: levenshtein("abc", "")
+Output: 3
+
+--- Snippet 4 [normal]: Boundary case: source empty, target has content (insertions) ---
+Code: levenshtein("", "abc")
+Output: 3
+
+--- Snippet 5 [normal]: Identity: same strings (distance 0) ---
+Code: levenshtein("abc", "abc")
+Output: 0
+
+--- Snippet 6 [normal]: Single substitution at the end ---
+Code: levenshtein("abc", "abd")
+Output: 1
+
+--- Snippet 7 [normal]: Commutativity check: distance(a, b) == distance(b, a) ---
+Code: levenshtein("abd", "abc")
+Output: 1
+
+--- Snippet 8 [normal]: Single substitution at the beginning ---
+Code: levenshtein("abc", "ybc")
+Output: 1
+
+--- Snippet 9 [normal]: Single substitution in the middle ---
+Code: levenshtein("abc", "ayc")
+Output: 1
+
+--- Snippet 10 [normal]: Single insertion at the end ---
+Code: levenshtein("abc", "abcd")
+Output: 1
+
+--- Snippet 11 [normal]: Single deletion at the end ---
+Code: levenshtein("abcd", "abc")
+Output: 1
+
+--- Snippet 12 [normal]: Significantly different lengths ---
+Code: levenshtein("short", "muchlongerstring")
+Output: 12
+
+--- Snippet 13 [normal]: Mixed edits: Saturday to Sunday (distance 3) ---
+Code: levenshtein("Saturday", "Sunday")
+Output: 3
+
+--- Snippet 14 [normal]: Longer identical strings ---
+Code: levenshtein("a" * 100, "a" * 100)
+Output: 0
+
+--- Snippet 15 [normal]: Case sensitivity check ---
+Code: levenshtein("abc", "ABC")
+Output: 3
+
+--- Snippet 16 [normal]: Numeric strings ---
+Code: levenshtein("123", "124")
+Output: 1
+
+--- Snippet 17 [normal]: Special characters and transposition (which counts as 2 edits in Levenshtein) ---
+Code: levenshtein("!@#", "#@!")
+Output: 2
+
+--- Snippet 18 [error]: First argument is None (wrong type) ---
+Code: levenshtein(None, "abc")
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 19 [error]: Second argument is an integer (wrong type) ---
+Code: levenshtein("abc", 123)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 20 [error]: Arguments are lists of strings instead of strings ---
+Code: levenshtein(["a", "b"], ["a", "c"])
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 21 [normal]: Deletion of multiple characters from the end down to a single character. ---
+Code: levenshtein("python", "p")
+Output: 5
+
+--- Snippet 22 [normal]: Insertion of multiple characters at the end of a single character string. ---
+Code: levenshtein("p", "python")
+Output: 5
+
+--- Snippet 23 [normal]: Strings consisting only of whitespace with different lengths. ---
+Code: levenshtein("   ", " ")
+Output: 2
+
+--- Snippet 24 [normal]: Unicode emoji strings with one substitution. ---
+Code: levenshtein("😀😁😂", "😀😁🤣")
+Output: 1
+
+--- Snippet 25 [normal]: Common algorithmic test case involving multiple insertions, deletions, and substitutions. ---
+Code: levenshtein("intention", "execution")
+Output: 5
+
+--- Snippet 26 [normal]: Reversed string (checks multiple substitutions/edits). ---
+Code: levenshtein("abc", "cba")
+Output: 2
+
+--- Snippet 27 [normal]: Large strings with 100% substitution required. ---
+Code: levenshtein("a" * 50, "b" * 50)
+Output: 50
+
+--- Snippet 28 [normal]: Adding a trailing newline character. ---
+Code: levenshtein("word", "word" + "\n")
+Output: 1
+
+--- Snippet 29 [normal]: Comparison involving a leading space and a multi-byte character vs ascii. ---
+Code: levenshtein(" café", "cafe")
+Output: 2
+
+--- Snippet 30 [normal]: Shortest non-trivial swap (transposition) to verify it costs 2 per Levenshtein rules. ---
+Code: levenshtein("ab", "ba")
+Output: 2
+
+--- Snippet 31 [normal]: Case sensitivity on longer repetitive strings. ---
+Code: levenshtein("A" * 10, "a" * 10)
+Output: 10
+
+--- Snippet 32 [normal]: Interleaved matches and deletions. ---
+Code: levenshtein("concatenate", "coneat")
+Output: 5
+
+--- Snippet 33 [error]: Both arguments are integers instead of strings. ---
+Code: levenshtein(123, 456)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 34 [error]: Second argument is None. ---
+Code: levenshtein("valid", None)
+RAISED TypeError: TypeError: Both arguments must be strings
+
+--- Snippet 35 [error]: First argument is bytes, which is a common string-like type mistake. ---
+Code: levenshtein(b"bytes", "string")
+RAISED TypeError: TypeError: Both arguments must be strings

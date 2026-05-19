@@ -1,0 +1,15 @@
+Scenario : eval_rpn
+Spec Model : openrouter:google/gemini-3.5-flash
+Expl Model : openrouter:google/gemini-3.5-flash
+Success  : False
+Coverage : 0.0%
+Cases    : 0  (raises=0)
+Snippets : 0  (error_snippets=0)
+Refines  : 0
+Cost USD : 0.00000000
+Cost/Fn  : 0.00000000
+Tokens   : in=0 out=0 req=0
+Pricing  : -
+Time     : 0.6s
+Evals    : -
+Error    : ModelHTTPError: status_code: 402, model_name: google/gemini-3.5-flash, body: {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 65536 tokens, but can only afford 57936. To increase, visit https://openrouter.ai/settings/credits and add more credits', 'code': 402, 'metadata': {'

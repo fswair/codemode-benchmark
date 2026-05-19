@@ -1,0 +1,14 @@
+Scenario : levenshtein
+Spec Model : openrouter:google/gemini-3-flash-preview
+Expl Model : openrouter:google/gemini-3-flash-preview
+Success  : True
+Coverage : 100.0%
+Cases    : 36  (raises=6)
+Snippets : 35  (error_snippets=6)
+Refines  : 0
+Cost USD : 0.01590750
+Cost/Fn  : 0.01590750
+Tokens   : in=16947 out=2478 req=3
+Pricing  : costs.yml
+Time     : 16.5s
+Evals    : assertion, expected, raises

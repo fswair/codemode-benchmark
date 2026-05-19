@@ -1,0 +1,175 @@
+--- Snippet 1 [normal]: Single node, no edges ---
+Code: largest_color_value("a", [])
+Output: 1
+
+--- Snippet 2 [normal]: Two disconnected nodes with different colors ---
+Code: largest_color_value("ab", [])
+Output: 1
+
+--- Snippet 3 [normal]: Empty graph and empty colors ---
+Code: largest_color_value("", [])
+Output: 0
+
+--- Snippet 4 [normal]: Straight line of length 3 with identical colors ---
+Code: largest_color_value("aaa", [[0, 1], [1, 2]])
+Output: 3
+
+--- Snippet 5 [normal]: Straight line of length 3 with distinct colors ---
+Code: largest_color_value("abc", [[0, 1], [1, 2]])
+Output: 1
+
+--- Snippet 6 [normal]: Self-loop cycle on a single node (should return -1) ---
+Code: largest_color_value("a", [[0, 0]])
+Output: -1
+
+--- Snippet 7 [normal]: Simple cycle of length 3 (should return -1) ---
+Code: largest_color_value("aba", [[0, 1], [1, 2], [2, 0]])
+Output: -1
+
+--- Snippet 8 [normal]: Directed Acyclic Graph with branching paths to find the path with maximum frequency of 'a' ---
+Code: largest_color_value("abaca", [[0, 1], [0, 2], [1, 3], [2, 3], [3, 4]])
+Output: 3
+
+--- Snippet 9 [normal]: Two nodes, one participates in a self-loop cycle (should return -1) ---
+Code: largest_color_value("ab", [[0, 1], [1, 1]])
+Output: -1
+
+--- Snippet 10 [normal]: Disjoint graph: one component is path of 'a's, other is isolated 'b' ---
+Code: largest_color_value("aab", [[0, 1]])
+Output: 2
+
+--- Snippet 11 [normal]: Star graph diverging outwards, max color frequency should be 2 ---
+Code: largest_color_value("aaaaa", [[0, 1], [0, 2], [0, 3], [0, 4]])
+Output: 2
+
+--- Snippet 12 [normal]: Star graph converging inwards, max color frequency should be 2 ---
+Code: largest_color_value("aaaaa", [[1, 0], [2, 0], [3, 0], [4, 0]])
+Output: 2
+
+--- Snippet 13 [normal]: Long path of unique colors, max frequency should be 1 ---
+Code: largest_color_value("abcdefg", [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]])
+Output: 1
+
+--- Snippet 14 [normal]: Duplicate directed edge between same nodes, should process correctly ---
+Code: largest_color_value("aa", [[0, 1], [0, 1]])
+Output: 2
+
+--- Snippet 15 [normal]: Isolated nodes spanning all 26 possible character colors ---
+Code: largest_color_value("abcdefghijklmnopqrstuvwxyz", [])
+Output: 1
+
+--- Snippet 16 [normal]: Straight line of maximum range letter 'z' ---
+Code: largest_color_value("zzzzz", [[0, 1], [1, 2], [2, 3], [3, 4]])
+Output: 5
+
+--- Snippet 17 [normal]: Binary tree structure, check frequency along tree paths ---
+Code: largest_color_value("abacaba", [[0, 1], [0, 2], [1, 3], [1, 4], [2, 5], [2, 6]])
+Output: 3
+
+--- Snippet 18 [error]: None passed as the colors argument, should raise TypeError ---
+Code: largest_color_value(None, [[0, 1]])
+RAISED TypeError: object of type 'NoneType' has no len()
+
+--- Snippet 19 [error]: None passed as the edges argument, should raise TypeError ---
+Code: largest_color_value("ab", None)
+RAISED TypeError: 'NoneType' object is not iterable
+
+--- Snippet 20 [error]: 1D list for edges instead of 2D list, should raise TypeError during unpacking u, v ---
+Code: largest_color_value("ab", [0, 1])
+RAISED TypeError: cannot unpack non-iterable int object
+
+--- Snippet 21 [error]: Edge tuple size is 3 instead of 2, should raise ValueError on unpacking ---
+Code: largest_color_value("ab", [[0, 1, 2]])
+RAISED ValueError: too many values to unpack (expected 2)
+
+--- Snippet 22 [error]: Edge targets node index larger than length of colors, should raise IndexError ---
+Code: largest_color_value("a", [[0, 5]])
+RAISED IndexError: list index out of range
+
+--- Snippet 23 [error]: Uppercase color character resulting in negative out-of-range index (IndexError) ---
+Code: largest_color_value("A", [])
+RAISED IndexError: list assignment index out of range
+
+--- Snippet 24 [error]: ASCII character with code larger than 'z' resulting in index >= 26 (IndexError) ---
+Code: largest_color_value("}", [])
+RAISED IndexError: list assignment index out of range
+
+--- Snippet 25 [normal]: Disjoint DAG components of identical color frequencies, testing correct DP aggregation across components ---
+Code: largest_color_value("aabb", [[0, 1], [2, 3]])
+Output: 2
+
+--- Snippet 26 [normal]: Negative indices in edges leveraging Python's negative backward-wrapping lookup behaviour ---
+Code: largest_color_value("ab", [[0, -1]])
+Output: 1
+
+--- Snippet 27 [normal]: Disjoint graph where one component has a high color value and another contains a cycle (should return -1) ---
+Code: largest_color_value("aaabb", [[0, 1], [1, 2], [3, 4], [4, 3]])
+Output: -1
+
+--- Snippet 28 [normal]: Reverse order path where source index is higher than target index ---
+Code: largest_color_value("aaa", [[2, 1], [1, 0]])
+Output: 3
+
+--- Snippet 29 [normal]: Colors representation using a list of single-character strings instead of standard string ---
+Code: largest_color_value(["a", "b", "a"], [[0, 1], [1, 2]])
+Output: 2
+
+--- Snippet 30 [normal]: Colors representation using a dict with correct 0-based integer keys ---
+Code: largest_color_value({0: "a", 1: "b", 2: "a"}, [[0, 1], [1, 2]])
+Output: 2
+
+--- Snippet 31 [normal]: Edges parameter supplied as a generator expression instead of a list ---
+Code: largest_color_value("abc", (e for e in [[0, 1], [1, 2]]))
+Output: 1
+
+--- Snippet 32 [normal]: Double-diamond topology with multiple paths merging into a single target node ---
+Code: largest_color_value("aaaa", [[0, 1], [0, 2], [1, 3], [2, 3]])
+Output: 3
+
+--- Snippet 33 [normal]: Branching paths where different branches contain different color majorities ---
+Code: largest_color_value("abacc", [[0, 1], [1, 2], [0, 3], [3, 4]])
+Output: 2
+
+--- Snippet 34 [normal]: Cycle of size 3 prefixed by an entry path (should return -1) ---
+Code: largest_color_value("abcd", [[0, 1], [1, 2], [2, 3], [3, 1]])
+Output: -1
+
+--- Snippet 35 [normal]: Multiple source nodes with indegree 0 merging into a single sink node ---
+Code: largest_color_value("aaa", [[0, 2], [1, 2]])
+Output: 2
+
+--- Snippet 36 [normal]: Edges parameter supplied as a nested tuple of tuples ---
+Code: largest_color_value("abc", ((0, 1), (1, 2)))
+Output: 1
+
+--- Snippet 37 [normal]: A long DAG path ending in a terminal cycle (should return -1) ---
+Code: largest_color_value("aaaa", [[0, 1], [1, 2], [2, 3], [3, 2]])
+Output: -1
+
+--- Snippet 38 [normal]: One source diverging to multiple distinct target nodes (star-like topology of size 3) ---
+Code: largest_color_value("aba", [[0, 1], [0, 2]])
+Output: 2
+
+--- Snippet 39 [normal]: Cycle with duplicate redundant edges (should return -1) ---
+Code: largest_color_value("ab", [[0, 1], [1, 0], [0, 1]])
+Output: -1
+
+--- Snippet 40 [error]: KeyError due to dictionary keys not matching expected 0-based indices up to n-1 ---
+Code: largest_color_value({0: 'a', 2: 'b'}, [[0, 1]])
+RAISED KeyError: 1
+
+--- Snippet 41 [error]: TypeError due to passing a non-string element in colors, resulting in invalid ord() call ---
+Code: largest_color_value(["a", 5], [[0, 1]])
+RAISED TypeError: ord() expected string of length 1, but int found
+
+--- Snippet 42 [error]: TypeError due to passing a string node index in edges list, causing invalid list lookup ---
+Code: largest_color_value("ab", [[0, "1"]])
+RAISED TypeError: list indices must be integers or slices, not str
+
+--- Snippet 43 [error]: TypeError due to passing an empty string as a color element, resulting in zero-length ord() call ---
+Code: largest_color_value(["a", ""], [[0, 1]])
+RAISED TypeError: ord() expected a character, but string of length 0 found
+
+--- Snippet 44 [error]: IndexError due to negative edge target index exceeding boundary limits ---
+Code: largest_color_value("ab", [[0, -3]])
+RAISED IndexError: list index out of range
