@@ -1,0 +1,170 @@
+--- Snippet 1 [normal]: Typical nested list with values at multiple nesting levels ---
+Code: flatten([1, [2, [3, 4]], 5])
+Output: [1, 2, 3, 4, 5]
+
+--- Snippet 2 [normal]: Empty outer list ---
+Code: flatten([])
+Output: []
+
+--- Snippet 3 [normal]: Flat list with no nested lists ---
+Code: flatten([1, 2, 3, 4])
+Output: [1, 2, 3, 4]
+
+--- Snippet 4 [normal]: Single-element list ---
+Code: flatten([42])
+Output: [42]
+
+--- Snippet 5 [normal]: List containing an empty nested list ---
+Code: flatten([[], [1], []])
+Output: [1]
+
+--- Snippet 6 [normal]: Deeply nested singleton path ---
+Code: flatten([[[[[7]]]]])
+Output: [7]
+
+--- Snippet 7 [normal]: Negative numbers and zero are preserved ---
+Code: flatten([[-3, 0], [2, -1]])
+Output: [-3, 0, 2, -1]
+
+--- Snippet 8 [normal]: Non-list scalar elements are kept as-is ---
+Code: flatten([1, "text", 2.5, True, None])
+Output: [1, 'text', 2.5, True, None]
+
+--- Snippet 9 [normal]: Tuple and dictionary elements remain atomic non-list values ---
+Code: flatten([(1, 2), {"a": 1}, {3, 4}])
+Output: [(1, 2), {'a': 1}, {3, 4}]
+
+--- Snippet 10 [normal]: Mixed nested and non-nested structures preserve left-to-right order ---
+Code: flatten(["a", ["b", ["c"]], "d", [], ["e", "f"]])
+Output: ['a', 'b', 'c', 'd', 'e', 'f']
+
+--- Snippet 11 [normal]: Repeated values are retained rather than deduplicated ---
+Code: flatten([[1, 1], [2, 1], 1])
+Output: [1, 1, 2, 1, 1]
+
+--- Snippet 12 [normal]: Large integer values are preserved ---
+Code: flatten([[10**100], [-10**100]])
+Output: [10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]
+
+--- Snippet 13 [normal]: Boolean values remain booleans as leaf elements ---
+Code: flatten([[True, False], [False]])
+Output: [True, False, False]
+
+--- Snippet 14 [normal]: Nested lists with heterogeneous leaf types ---
+Code: flatten([[1, "a"], [None, (2, 3)], [[4.5]]])
+Output: [1, 'a', None, (2, 3), 4.5]
+
+--- Snippet 15 [normal]: Result is a list and has the expected flattened length ---
+Code: (flatten([[1, 2], [], [3, [4, 5]]]), type(flatten([[1, 2], [], [3, [4, 5]]])))
+Output: ([1, 2, 3, 4, 5], <class 'list'>)
+
+--- Snippet 16 [normal]: Flattening an already flat list is idempotent ---
+Code: flatten([1, 2, "x"]) == flatten(flatten([1, 2, "x"]))
+Output: True
+
+--- Snippet 17 [normal]: Flattening an already flattened nested input gives the same result ---
+Code: flatten([[1, [2]], 3]) == flatten(flatten([[1, [2]], 3]))
+Output: True
+
+--- Snippet 18 [normal]: Concatenation composition matches flattening the combined list ---
+Code: flatten([[1, [2]], [3, 4]]) == flatten([[1, [2]]] + [[3, 4]])
+Output: True
+
+--- Snippet 19 [normal]: Order is preserved across nested boundaries ---
+Code: flatten([[3, 1], [2, 4]]) == [3, 1, 2, 4]
+Output: True
+
+--- Snippet 20 [normal]: A list whose leaves include None preserves the None leaf ---
+Code: flatten([[None], [[None, 1]]])
+Output: [None, None, 1]
+
+--- Snippet 21 [error]: None is rejected by the top-level list type guard ---
+Code: flatten(None)
+RAISED TypeError: TypeError: Expected list, got NoneType
+
+--- Snippet 22 [error]: An integer is rejected as a non-list input ---
+Code: flatten(123)
+RAISED TypeError: TypeError: Expected list, got int
+
+--- Snippet 23 [error]: A string is rejected as a non-list input ---
+Code: flatten("abc")
+RAISED TypeError: TypeError: Expected list, got str
+
+--- Snippet 24 [error]: A tuple is rejected even though it is iterable ---
+Code: flatten((1, 2, 3))
+RAISED TypeError: TypeError: Expected list, got tuple
+
+--- Snippet 25 [normal]: A list containing only a generator is treated as one atomic non-list leaf ---
+Code: flatten([(x for x in range(3))])
+Output: [0, 1, 2]
+
+--- Snippet 26 [error]: A list containing bytes, complex numbers, and frozensets preserves each heterogeneous leaf ---
+Code: flatten([b"abc", 2+3j, frozenset({1, 2})])
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support complex constants
+
+--- Snippet 27 [normal]: Multiple adjacent nesting levels with empty lists between populated branches preserve branch order ---
+Code: flatten([[1, [2, [3]]], [], [[4], 5], 6])
+Output: [1, 2, 3, 4, 5, 6]
+
+--- Snippet 28 [normal]: A very wide shallow list flattens every element without changing count ---
+Code: flatten(list(range(100)))
+Output: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
+
+--- Snippet 29 [normal]: A nesting depth of zero inside a list of one leaf returns that leaf unchanged ---
+Code: flatten([0])
+Output: [0]
+
+--- Snippet 30 [error]: List subclasses are accepted as lists and recursively flattened ---
+Code: class L(list):
+    pass
+flatten(L([L([1, 2]), 3]))
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 31 [error]: A custom list subclass at the nested boundary contributes its elements rather than remaining atomic ---
+Code: class TaggedList(list):
+    pass
+flatten(["left", TaggedList(["middle", ["inner"]]), "right"])
+RAISED NotImplementedError: NotImplementedError: The monty syntax parser does not yet support class definitions
+
+--- Snippet 32 [error]: Distinct mutable leaf objects retain their identity in the output ---
+Code: a = object()
+b = object()
+out = flatten([a, [b]])
+(out[0] is a, out[1] is b)
+RAISED NameError: NameError: name 'object' is not defined
+
+--- Snippet 33 [normal]: Nested empty lists on both sides of a single deep branch produce only the branch leaf ---
+Code: flatten([[], [[], [[[], 9], []], []], []])
+Output: [9]
+
+--- Snippet 34 [normal]: A list containing a dictionary whose values are lists keeps the dictionary atomic ---
+Code: d = {"nested": [1, 2]}
+out = flatten([d])
+(out, out[0] is d)
+Output: ([{'nested': [1, 2]}], True)
+
+--- Snippet 35 [normal]: A mixed list of scalar falsey leaves preserves zero-length string, false, and zero distinctly ---
+Code: flatten([["", False], [0], [None]])
+Output: ['', False, 0, None]
+
+--- Snippet 36 [error]: A float at the top level fails the list type guard with a float-specific message ---
+Code: flatten(3.14)
+RAISED TypeError: TypeError: Expected list, got float
+
+--- Snippet 37 [error]: A dictionary at the top level fails the list type guard with a dict-specific message ---
+Code: flatten({"a": 1})
+RAISED TypeError: TypeError: Expected list, got dict
+
+--- Snippet 38 [error]: A set at the top level fails the list type guard with a set-specific message ---
+Code: flatten({1, 2, 3})
+RAISED TypeError: TypeError: Expected list, got set
+
+--- Snippet 39 [error]: Bytes at the top level fail the list type guard rather than being iterated ---
+Code: flatten(b"abc")
+RAISED TypeError: TypeError: Expected list, got bytes
+
+--- Snippet 40 [error]: A cyclic list causes recursive flattening to exceed Python's recursion limit ---
+Code: x = []
+x.append(x)
+flatten(x)
+RAISED RecursionError: RecursionError: maximum recursion depth exceeded

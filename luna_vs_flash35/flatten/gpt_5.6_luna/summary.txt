@@ -1,0 +1,14 @@
+Scenario : flatten
+Spec Model : openrouter:openai/gpt-5.6-luna
+Expl Model : openrouter:openai/gpt-5.6-luna
+Success  : True
+Coverage : 100.0%
+Cases    : 44  (raises=7)
+Snippets : 40  (error_snippets=13)
+Refines  : 0
+Cost USD : 0.04558000
+Cost/Fn  : 0.04558000
+Tokens   : in=17710 out=4645 req=0
+Pricing  : logfire, costs.yml
+Time     : 36.1s
+Evals    : expected, raises

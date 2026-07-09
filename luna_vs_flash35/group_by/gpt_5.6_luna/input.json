@@ -1,0 +1,5 @@
+{
+  "scenario": "group_by",
+  "spec_model": "openrouter:openai/gpt-5.6-luna",
+  "exploration_model": "openrouter:openai/gpt-5.6-luna"
+}

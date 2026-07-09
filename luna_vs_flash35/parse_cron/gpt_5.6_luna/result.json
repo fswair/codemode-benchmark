@@ -1,0 +1,31 @@
+{
+  "scenario": "parse_cron",
+  "spec_model": "openrouter:openai/gpt-5.6-luna",
+  "exploration_model": "openrouter:openai/gpt-5.6-luna",
+  "model_slug": "gpt_5.6_luna",
+  "success": true,
+  "coverage": "100.0%",
+  "time_s": 57.81,
+  "cases": 44,
+  "raises_cases": 18,
+  "snippets": 46,
+  "error_snippets": 18,
+  "refinements": 0,
+  "cost_usd": 0.07423,
+  "cost_cents": 7.423,
+  "input_tokens": 24550,
+  "output_tokens": 8280,
+  "requests": 0,
+  "price_sources": [
+    "logfire (rounded)",
+    "costs.yml"
+  ],
+  "function_count": 1,
+  "cost_per_function_usd": 0.07423,
+  "evaluator_types": [
+    "assertion",
+    "expected",
+    "raises"
+  ],
+  "error": null
+}

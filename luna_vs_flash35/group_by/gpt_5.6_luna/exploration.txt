@@ -1,0 +1,167 @@
+--- Snippet 1 [normal]: Typical grouping of records into two value-based groups ---
+Code: group_by([{'name': 'Alice', 'dept': 'eng'}, {'name': 'Bob', 'dept': 'sales'}, {'name': 'Cara', 'dept': 'eng'}], 'dept')
+Output: {'eng': [{'name': 'Alice', 'dept': 'eng'}, {'name': 'Cara', 'dept': 'eng'}], 'sales': [{'name': 'Bob', 'dept': 'sales'}]}
+
+--- Snippet 2 [normal]: Empty input list returns an empty dictionary ---
+Code: group_by([], 'category')
+Output: {}
+
+--- Snippet 3 [normal]: Single dictionary produces a one-element group ---
+Code: group_by([{'id': 1, 'status': 'new'}], 'status')
+Output: {'new': [{'id': 1, 'status': 'new'}]}
+
+--- Snippet 4 [normal]: All records sharing one key value preserve input order ---
+Code: group_by([{'id': 1, 'team': 'red'}, {'id': 2, 'team': 'red'}, {'id': 3, 'team': 'red'}], 'team')
+Output: {'red': [{'id': 1, 'team': 'red'}, {'id': 2, 'team': 'red'}, {'id': 3, 'team': 'red'}]}
+
+--- Snippet 5 [normal]: Every record having a distinct key value creates distinct groups ---
+Code: group_by([{'id': 1, 'tag': 'a'}, {'id': 2, 'tag': 'b'}, {'id': 3, 'tag': 'c'}], 'tag')
+Output: {'a': [{'id': 1, 'tag': 'a'}], 'b': [{'id': 2, 'tag': 'b'}], 'c': [{'id': 3, 'tag': 'c'}]}
+
+--- Snippet 6 [normal]: Missing keys are collected under the None group ---
+Code: group_by([{'id': 1}, {'id': 2, 'kind': 'x'}, {'id': 3}], 'kind')
+Output: {None: [{'id': 1}, {'id': 3}], 'x': [{'id': 2, 'kind': 'x'}]}
+
+--- Snippet 7 [normal]: A mixture of missing and explicit None values shares the None group ---
+Code: group_by([{'id': 1}, {'id': 2, 'kind': None}, {'id': 3, 'kind': 'x'}], 'kind')
+Output: {None: [{'id': 1}, {'id': 2, 'kind': None}], 'x': [{'id': 3, 'kind': 'x'}]}
+
+--- Snippet 8 [normal]: False and zero are treated according to Python dictionary key equality ---
+Code: group_by([{'id': 1, 'value': False}, {'id': 2, 'value': 0}], 'value')
+Output: {False: [{'id': 1, 'value': False}, {'id': 2, 'value': 0}]}
+
+--- Snippet 9 [normal]: Integer-valued groups are supported ---
+Code: group_by([{'id': 1, 'score': -1}, {'id': 2, 'score': 0}, {'id': 3, 'score': 10}], 'score')
+Output: {-1: [{'id': 1, 'score': -1}], 0: [{'id': 2, 'score': 0}], 10: [{'id': 3, 'score': 10}]}
+
+--- Snippet 10 [normal]: Boolean-valued groups are supported ---
+Code: group_by([{'id': 1, 'active': True}, {'id': 2, 'active': False}, {'id': 3, 'active': True}], 'active')
+Output: {True: [{'id': 1, 'active': True}, {'id': 3, 'active': True}], False: [{'id': 2, 'active': False}]}
+
+--- Snippet 11 [normal]: Empty string is a valid grouping key name ---
+Code: group_by([{'': 'left'}, {'': 'right'}, {'x': 1}], '')
+Output: {'left': [{'': 'left'}], 'right': [{'': 'right'}], None: [{'x': 1}]}
+
+--- Snippet 12 [normal]: A key absent from every record yields one None group ---
+Code: group_by([{'a': 1}, {'b': 2}, {}], 'missing')
+Output: {None: [{'a': 1}, {'b': 2}, {}]}
+
+--- Snippet 13 [normal]: Values of mixed supported hashable types form groups ---
+Code: group_by([{'v': '1'}, {'v': 1}, {'v': (1, 2)}, {'v': '1'}], 'v')
+Output: {'1': [{'v': '1'}, {'v': '1'}], 1: [{'v': 1}], (1, 2): [{'v': (1, 2)}]}
+
+--- Snippet 14 [normal]: Large integer group values are preserved ---
+Code: group_by([{'v': 10**100}, {'v': -10**100}], 'v')
+Output: {10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000: [{'v': 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}], -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000: [{'v': -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}]}
+
+--- Snippet 15 [normal]: Records with extra fields are retained unchanged in their groups ---
+Code: group_by([{'id': 1, 'role': 'admin', 'meta': {'x': 1}}, {'id': 2, 'role': 'admin', 'meta': {'x': 2}}], 'role')
+Output: {'admin': [{'id': 1, 'role': 'admin', 'meta': {'x': 1}}, {'id': 2, 'role': 'admin', 'meta': {'x': 2}}]}
+
+--- Snippet 16 [normal]: Group insertion order follows first occurrence while member order follows input order ---
+Code: list(group_by([{'id': 1, 'g': 'b'}, {'id': 2, 'g': 'a'}, {'id': 3, 'g': 'b'}], 'g').items())
+Output: [('b', [{'id': 1, 'g': 'b'}, {'id': 3, 'g': 'b'}]), ('a', [{'id': 2, 'g': 'a'}])]
+
+--- Snippet 17 [normal]: Returned mapping has dictionary type and grouped values have list type ---
+Code: result = group_by([{'x': 1}, {'x': 2, 'g': 'a'}], 'g'); (type(result), type(result[None]), type(result['a']))
+Output: (<class 'dict'>, <class 'list'>, <class 'list'>)
+
+--- Snippet 18 [normal]: Input records are the same objects in the output groups ---
+Code: records = [{'id': 1, 'g': 'x'}, {'id': 2, 'g': 'x'}]; result = group_by(records, 'g'); (result['x'][0] is records[0], result['x'][1] is records[1])
+Output: (True, True)
+
+--- Snippet 19 [normal]: Grouping is stable for repeated calls with the same input ---
+Code: records = [{'id': 1, 'g': 'x'}, {'id': 2}, {'id': 3, 'g': 'x'}]; group_by(records, 'g') == group_by(records, 'g')
+Output: True
+
+--- Snippet 20 [normal]: Changing the grouping key changes the partition of the same records ---
+Code: records = [{'a': 'x', 'b': 1}, {'a': 'x', 'b': 2}, {'a': 'y', 'b': 1}]; (group_by(records, 'a'), group_by(records, 'b'))
+Output: ({'x': [{'a': 'x', 'b': 1}, {'a': 'x', 'b': 2}], 'y': [{'a': 'y', 'b': 1}]}, {1: [{'a': 'x', 'b': 1}, {'a': 'y', 'b': 1}], 2: [{'a': 'x', 'b': 2}]})
+
+--- Snippet 21 [normal]: A tuple input is iterable and is accepted despite the list annotation ---
+Code: group_by(({'g': 1}, {'g': 1}, {'g': 2}), 'g')
+Output: {1: [{'g': 1}, {'g': 1}], 2: [{'g': 2}]}
+
+--- Snippet 22 [normal]: A generator input is consumed as an iterable of dictionaries ---
+Code: group_by(({'g': n} for n in range(3)), 'g')
+Output: {0: [{'g': 0}], 1: [{'g': 1}], 2: [{'g': 2}]}
+
+--- Snippet 23 [error]: None is not a valid items iterable ---
+Code: group_by(None, 'key')
+RAISED TypeError: TypeError: 'NoneType' object is not iterable
+
+--- Snippet 24 [error]: An integer is not iterable as the items argument ---
+Code: group_by(42, 'key')
+RAISED TypeError: TypeError: 'int' object is not iterable
+
+--- Snippet 25 [error]: An item without a get method triggers an attribute error ---
+Code: group_by([{'key': 'ok'}, 7], 'key')
+RAISED AttributeError: AttributeError: 'int' object has no attribute 'get'
+
+--- Snippet 26 [error]: An unhashable list used as the grouping value cannot be a dictionary key ---
+Code: group_by([{'key': []}], 'key')
+RAISED TypeError: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+
+--- Snippet 27 [error]: An unhashable list used as the key argument cannot be passed to dict.get ---
+Code: group_by([{'key': 'value'}], [])
+RAISED TypeError: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+
+--- Snippet 28 [error]: A string item is iterable externally but lacks the required dictionary get method ---
+Code: group_by(['not-a-dict'], 'key')
+RAISED AttributeError: AttributeError: 'str' object has no attribute 'get'
+
+--- Snippet 29 [normal]: A None grouping key passed explicitly as the key name is treated as an ordinary dictionary key ---
+Code: group_by([{None: 'a'}, {None: 'b'}, {'x': 1}], None)
+Output: {'a': [{None: 'a'}], 'b': [{None: 'b'}], None: [{'x': 1}]}
+
+--- Snippet 30 [normal]: An integer grouping-key name can retrieve integer-named dictionary fields ---
+Code: group_by([{1: 'odd'}, {1: 'even'}, {2: 'other'}], 1)
+Output: {'odd': [{1: 'odd'}], 'even': [{1: 'even'}], None: [{2: 'other'}]}
+
+--- Snippet 31 [normal]: A nonempty string key containing whitespace and punctuation is used literally ---
+Code: group_by([{'first name': 'A'}, {'first name': 'B'}, {}], 'first name')
+Output: {'A': [{'first name': 'A'}], 'B': [{'first name': 'B'}], None: [{}]}
+
+--- Snippet 32 [normal]: Unicode grouping values and key names are preserved ---
+Code: group_by([{'部门': '研发'}, {'部门': '销售'}, {'部门': '研发'}], '部门')
+Output: {'研发': [{'部门': '研发'}, {'部门': '研发'}], '销售': [{'部门': '销售'}]}
+
+--- Snippet 33 [normal]: Floating-point values, including negative zero, form dictionary-compatible groups ---
+Code: group_by([{'v': -0.0}, {'v': 0.0}, {'v': 1.5}, {'v': -2.25}], 'v')
+Output: {-0.0: [{'v': -0.0}, {'v': 0.0}], 1.5: [{'v': 1.5}], -2.25: [{'v': -2.25}]}
+
+--- Snippet 34 [error]: Separate NaN objects demonstrate handling of unusual hashable float keys ---
+Code: group_by([{'v': float('nan')}, {'v': float('nan')}, {'v': 3.0}], 'v')
+RAISED KeyError: KeyError: NaN.0
+
+--- Snippet 35 [normal]: Hashable frozenset values are accepted as grouping keys ---
+Code: group_by([{'v': frozenset()}, {'v': frozenset({1})}, {'v': frozenset({1})}], 'v')
+Output: {frozenset(): [{'v': frozenset()}], frozenset({1}): [{'v': frozenset({1})}, {'v': frozenset({1})}]}
+
+--- Snippet 36 [normal]: Nested dictionaries are retained unchanged while a scalar field determines groups ---
+Code: group_by([{'group': 'a', 'payload': [1, {'x': 2}]}, {'group': 'b', 'payload': []}], 'group')
+Output: {'a': [{'group': 'a', 'payload': [1, {'x': 2}]}], 'b': [{'group': 'b', 'payload': []}]}
+
+--- Snippet 37 [error]: A custom iterable yielding dictionaries is consumed successfully ---
+Code: group_by(iter([{'g': 'left'}, {'g': 'right'}, {'g': 'left'}]), 'g')
+RAISED TypeError: TypeError: 'iterator' object is not iterable
+
+--- Snippet 38 [normal]: Mutating an input record after grouping is visible through the retained object reference ---
+Code: records = [{'g': 'x', 'n': 1}]; result = group_by(records, 'g'); records[0]['n'] = 99; result['x'][0]['n']
+Output: 99
+
+--- Snippet 39 [error]: A None item fails when the loop attempts to call its get method ---
+Code: group_by([None], 'key')
+RAISED AttributeError: AttributeError: 'NoneType' object has no attribute 'get'
+
+--- Snippet 40 [error]: A dictionary-valued grouping result is unhashable as a dictionary key ---
+Code: group_by([{'key': {'nested': 1}}], 'key')
+RAISED TypeError: TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')
+
+--- Snippet 41 [error]: A set-valued grouping result is unhashable as a dictionary key ---
+Code: group_by([{'key': {1, 2}}], 'key')
+RAISED TypeError: TypeError: cannot use 'set' as a dict key (unhashable type: 'set')
+
+--- Snippet 42 [error]: A dictionary used as the grouping-key argument is unhashable for dict.get ---
+Code: group_by([{'key': 'value'}], {})
+RAISED TypeError: TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')

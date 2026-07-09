@@ -1,0 +1,21 @@
+{
+  "id": "luna_vs_flash35",
+  "timestamp": "20260709_194528",
+  "iso": "2026-07-09T19:45:28.304096+00:00",
+  "models": {
+    "case_1": {
+      "spec": "openrouter:openai/gpt-5.6-luna",
+      "exploration": "openrouter:openai/gpt-5.6-luna"
+    },
+    "case_2": {
+      "spec": "openrouter:google/gemini-3.5-flash",
+      "exploration": "openrouter:google/gemini-3.5-flash"
+    }
+  },
+  "scenarios": [
+    "group_by",
+    "flatten",
+    "parse_cron"
+  ],
+  "python": "3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)]"
+}

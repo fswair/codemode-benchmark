@@ -1,0 +1,503 @@
+group_by:
+  evals:
+    ReturnType:
+      type: dict
+  dataset:
+  - case:
+      id: happy_path_categories
+      inputs:
+      - - category: A
+          val: 1
+        - category: B
+          val: 2
+        - category: A
+          val: 3
+      - category
+      expected:
+        A:
+        - category: A
+          val: 1
+        - category: A
+          val: 3
+        B:
+        - category: B
+          val: 2
+  - case:
+      id: handling_missing_keys
+      inputs:
+      - - id: 1
+          type: X
+        - id: 2
+        - id: 3
+          type: Y
+      - type
+      expected:
+        X:
+        - id: 1
+          type: X
+        null:
+        - id: 2
+        Y:
+        - id: 3
+          type: Y
+  - case:
+      id: empty_list_input
+      inputs:
+      - []
+      - any_key
+      expected: {}
+  - case:
+      id: all_items_missing_key
+      inputs:
+      - - a: 1
+        - b: 2
+      - c
+      expected:
+        null:
+        - a: 1
+        - b: 2
+  - case:
+      id: falsy_keys_distinct_groups
+      inputs:
+      - - val: 0
+        - val: false
+        - val: ''
+        - {}
+      - val
+      expected:
+        0:
+        - val: false
+        ? ''
+        : - val: ''
+        null:
+        - {}
+  - case:
+      id: explicit_none_vs_missing_key
+      inputs:
+      - - x: null
+        - {}
+      - x
+      expected:
+        null:
+        - x: null
+        - {}
+  - case:
+      id: single_item_string_key
+      inputs:
+      - - name: Alice
+      - name
+      expected:
+        Alice:
+        - name: Alice
+  - case:
+      id: all_items_same_key_value
+      inputs:
+      - - status: active
+        - status: active
+        - status: active
+      - status
+      expected:
+        active:
+        - status: active
+        - status: active
+        - status: active
+  - case:
+      id: identical_dicts
+      inputs:
+      - - a: 1
+        - a: 1
+      - a
+      expected:
+        1:
+        - a: 1
+        - a: 1
+  - case:
+      id: float_and_int_value_equality
+      inputs:
+      - - num: 1
+        - num: 1.0
+      - num
+      expected:
+        1:
+        - num: 1.0
+  - case:
+      id: boolean_keys_separation
+      inputs:
+      - - flag: true
+        - flag: false
+        - flag: true
+      - flag
+      expected:
+        true:
+        - flag: true
+        - flag: true
+        false:
+        - flag: false
+  - case:
+      id: empty_string_as_key_argument
+      inputs:
+      - - ? ''
+          : empty_key_val
+        - other: val
+      - ''
+      expected:
+        empty_key_val:
+        - ? ''
+          : empty_key_val
+        null:
+        - other: val
+  - case:
+      id: key_order_preservation_large
+      inputs:
+      - - k: first
+        - k: second
+        - k: third
+        - k: second
+        - k: first
+      - k
+      expected:
+        first:
+        - k: first
+        - k: first
+        second:
+        - k: second
+        - k: second
+        third:
+        - k: third
+  - case:
+      id: identity_preservation
+      inputs:
+      - - id: 1
+          k: a
+      - k
+      expected:
+        a:
+        - id: 1
+          k: a
+      assertion: output['a'][0] is input[0][0]
+  - case:
+      id: boolean_true_and_int_1_group
+      inputs:
+      - - v: true
+        - v: 1
+      - v
+      expected:
+        true:
+        - v: 1
+  - case:
+      id: single_item_integer_key
+      inputs:
+      - - id: 42
+      - id
+      expected:
+        42:
+        - id: 42
+  - case:
+      id: single_item_missing_key
+      inputs:
+      - - id: 42
+      - name
+      expected:
+        null:
+        - id: 42
+  - case:
+      id: single_item_none_value
+      inputs:
+      - - name: null
+      - name
+      expected:
+        null:
+        - name: null
+  - case:
+      id: single_item_bool_key
+      inputs:
+      - - active: true
+      - active
+      expected:
+        true:
+        - active: true
+  - case:
+      id: empty_string_as_value
+      inputs:
+      - - status: ''
+        - status: active
+      - status
+      expected:
+        ? ''
+        : - status: ''
+        active:
+        - status: active
+  - case:
+      id: case_sensitivity_keys
+      inputs:
+      - - tag: test
+        - tag: Test
+        - tag: TEST
+      - tag
+      expected:
+        test:
+        - tag: test
+        Test:
+        - tag: Test
+        TEST:
+        - tag: TEST
+  - case:
+      id: whitespace_keys
+      inputs:
+      - - k: ' a '
+        - k: a
+        - k: ' a'
+      - k
+      expected:
+        ' a ':
+        - k: ' a '
+        a:
+        - k: a
+        ' a':
+        - k: ' a'
+  - case:
+      id: multiple_none_values
+      inputs:
+      - - k: null
+        - k: null
+        - {}
+      - k
+      expected:
+        null:
+        - k: null
+        - k: null
+        - {}
+  - case:
+      id: empty_dict_items
+      inputs:
+      - - {}
+        - {}
+        - {}
+      - any_key
+      expected:
+        null:
+        - {}
+        - {}
+        - {}
+  - case:
+      id: boolean_true_false_and_ints
+      inputs:
+      - - v: true
+        - v: 1
+        - v: false
+        - v: 0
+      - v
+      expected:
+        true:
+        - v: 1
+        false:
+        - v: 0
+  - case:
+      id: complex_numeric_values
+      inputs:
+      - - v: 1.5
+        - v: 1.5
+        - v: 2.5
+      - v
+      expected:
+        1.5:
+        - v: 1.5
+        - v: 1.5
+        2.5:
+        - v: 2.5
+  - case:
+      id: negative_numeric_keys
+      inputs:
+      - - v: -1
+        - v: -1.0
+        - v: -2
+      - v
+      expected:
+        -1:
+        - v: -1.0
+        -2:
+        - v: -2
+  - case:
+      id: zero_modes_intertwined
+      inputs:
+      - - v: 0.0
+        - v: -0.0
+        - v: 0
+      - v
+      expected:
+        0.0:
+        - v: 0
+  - case:
+      id: integer_key_argument
+      inputs:
+      - - 1: a
+        - 1: b
+        - 2: c
+      - 1
+      expected:
+        a:
+        - 1: a
+        b:
+        - 1: b
+        null:
+        - 2: c
+  - case:
+      id: none_key_argument
+      inputs:
+      - - null: apple
+        - null: banana
+      - null
+      expected:
+        apple:
+        - null: apple
+        banana:
+        - null: banana
+  - case:
+      id: bool_key_argument
+      inputs:
+      - - true: 'yes'
+        - false: 'no'
+        - true: yep
+      - true
+      expected:
+        'yes':
+        - true: 'yes'
+        null:
+        - false: 'no'
+        yep:
+        - true: yep
+  - case:
+      id: large_sequential_list
+      inputs:
+      - - k: 1
+        - k: 2
+        - k: 3
+        - k: 1
+        - k: 2
+        - k: 3
+        - k: 1
+        - k: 2
+        - k: 3
+      - k
+      expected:
+        1:
+        - k: 1
+        - k: 1
+        - k: 1
+        2:
+        - k: 2
+        - k: 2
+        - k: 2
+        3:
+        - k: 3
+        - k: 3
+        - k: 3
+  - case:
+      id: mixed_types_values_for_key
+      inputs:
+      - - k: a
+        - k: 123
+        - k: true
+        - k: null
+      - k
+      expected:
+        a:
+        - k: a
+        123:
+        - k: 123
+        true:
+        - k: true
+        null:
+        - k: null
+  - case:
+      id: deeply_nested_values_as_grouped
+      inputs:
+      - - k: a
+          data:
+            x: 1
+        - k: a
+          data:
+            y: 2
+      - k
+      expected:
+        a:
+        - k: a
+          data:
+            x: 1
+        - k: a
+          data:
+            y: 2
+  - case:
+      id: redundant_keys_in_dict
+      inputs:
+      - - k: a
+          other: 1
+        - k: b
+          other: 2
+          extra: 3
+      - k
+      expected:
+        a:
+        - k: a
+          other: 1
+        b:
+        - k: b
+          other: 2
+          extra: 3
+  - case:
+      id: large_scale_empty_groups
+      inputs:
+      - - k: null
+        - k: null
+        - k: null
+        - k: null
+        - k: null
+      - k
+      expected:
+        null:
+        - k: null
+        - k: null
+        - k: null
+        - k: null
+        - k: null
+  - case:
+      id: heterogeneous_number_shapes
+      inputs:
+      - - v: 10
+        - v: 10.0
+        - v: 10.0
+      - v
+      expected:
+        10:
+        - v: 10.0
+        - v: 10.0
+  - case:
+      id: non_dict_in_list_int
+      inputs:
+      - - key: val
+        - 42
+      - key
+      raises: AttributeError
+      match: has no attribute 'get'
+  - case:
+      id: non_dict_in_list_none
+      inputs:
+      - - null
+      - key
+      raises: AttributeError
+      match: has no attribute 'get'
+  - case:
+      id: error_typeerror_0
+      inputs:
+      - null
+      - key
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      inputs:
+      - - key:
+          - 1
+          - 2
+          - 3
+      - key
+      raises: TypeError

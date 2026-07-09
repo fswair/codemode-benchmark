@@ -1,0 +1,14 @@
+Scenario : parse_cron
+Spec Model : openrouter:openai/gpt-5.6-luna
+Expl Model : openrouter:openai/gpt-5.6-luna
+Success  : True
+Coverage : 100.0%
+Cases    : 44  (raises=18)
+Snippets : 46  (error_snippets=18)
+Refines  : 0
+Cost USD : 0.07423000
+Cost/Fn  : 0.07423000
+Tokens   : in=24550 out=8280 req=0
+Pricing  : logfire (rounded), costs.yml
+Time     : 57.8s
+Evals    : assertion, expected, raises

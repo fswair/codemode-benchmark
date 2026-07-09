@@ -1,0 +1,659 @@
+flatten:
+  evals:
+    ReturnType:
+      type: list
+    PreservesFlattenedLength:
+      assertion: isinstance(output, list)
+  dataset:
+  - case:
+      id: typical_multiple_nesting_levels
+      input:
+      - 1
+      - - 2
+        - - 3
+          - 4
+      - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - case:
+      id: empty_outer_list
+      input: []
+      expected: []
+  - case:
+      id: flat_list
+      input:
+      - 1
+      - 2
+      - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: single_element
+      input:
+      - 42
+      expected:
+      - 42
+  - case:
+      id: empty_nested_lists
+      input:
+      - []
+      - - 1
+      - []
+      expected:
+      - 1
+  - case:
+      id: deeply_nested_singleton
+      input:
+      - - - - - 7
+      expected:
+      - 7
+  - case:
+      id: negative_numbers_and_zero
+      input:
+      - - -3
+        - 0
+      - - 2
+        - -1
+      expected:
+      - -3
+      - 0
+      - 2
+      - -1
+  - case:
+      id: heterogeneous_scalar_leaves
+      input:
+      - 1
+      - text
+      - 2.5
+      - true
+      - null
+      expected:
+      - 1
+      - text
+      - 2.5
+      - true
+      - null
+  - case:
+      id: mixed_strings_and_nested_values
+      input:
+      - a
+      - - b
+        - - c
+      - d
+      - []
+      - - e
+        - f
+      expected:
+      - a
+      - b
+      - c
+      - d
+      - e
+      - f
+  - case:
+      id: repeated_values_retained
+      input:
+      - - 1
+        - 1
+      - - 2
+        - 1
+      - 1
+      expected:
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+  - case:
+      id: large_integer_values
+      input:
+      - - 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      - - -100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      expected:
+      - 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      - -100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  - case:
+      id: boolean_leaves
+      input:
+      - - true
+        - false
+      - - false
+      expected:
+      - true
+      - false
+      - false
+  - case:
+      id: heterogeneous_nested_leaves
+      input:
+      - - 1
+        - a
+      - - null
+        - - 2
+          - 3
+      - - - 4.5
+      expected:
+      - 1
+      - a
+      - null
+      - 2
+      - 3
+      - 4.5
+  - case:
+      id: nested_branch_order
+      input:
+      - - 1
+        - - 2
+          - - 3
+      - []
+      - - - 4
+        - 5
+      - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: single_zero_leaf
+      input:
+      - 0
+      expected:
+      - 0
+  - case:
+      id: deep_empty_boundaries
+      input:
+      - []
+      - - []
+        - - - []
+            - 9
+          - []
+        - []
+      - []
+      expected:
+      - 9
+  - case:
+      id: dictionary_leaf_is_atomic
+      input:
+      - nested:
+        - 1
+        - 2
+      expected:
+      - nested:
+        - 1
+        - 2
+  - case:
+      id: falsey_leaf_values
+      input:
+      - - ''
+        - false
+      - - 0
+      - - null
+      expected:
+      - ''
+      - false
+      - 0
+      - null
+  - case:
+      id: two_level_consecutive_lists
+      input:
+      - - 1
+      - - 2
+      - - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: nested_lists_with_strings
+      input:
+      - - one
+        - - two
+      - three
+      expected:
+      - one
+      - two
+      - three
+  - case:
+      id: all_empty_nested_lists
+      input:
+      - []
+      - - []
+      - - []
+        - - []
+      expected: []
+  - case:
+      id: negative_float_leaves
+      input:
+      - - -1.5
+      - - 0.0
+        - 2.25
+      expected:
+      - -1.5
+      - 0.0
+      - 2.25
+  - case:
+      id: null_at_multiple_depths
+      input:
+      - null
+      - - null
+        - - null
+      expected:
+      - null
+      - null
+      - null
+  - case:
+      id: alternating_scalar_and_branch
+      input:
+      - 1
+      - - 2
+      - 3
+      - - 4
+        - - 5
+      - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+  - case:
+      id: nested_boolean_branches
+      input:
+      - - true
+      - - - false
+          - true
+      - false
+      expected:
+      - true
+      - false
+      - true
+      - false
+  - case:
+      id: duplicate_nested_branches
+      input:
+      - - x
+        - - x
+      - - y
+        - - x
+      expected:
+      - x
+      - x
+      - y
+      - x
+  - case:
+      id: shallow_mixed_types
+      input:
+      - 1
+      - x
+      - false
+      - 3.5
+      - null
+      - key: value
+      expected:
+      - 1
+      - x
+      - false
+      - 3.5
+      - null
+      - key: value
+  - case:
+      id: nested_dictionary_values_remain_inside_dictionary
+      input:
+      - - values:
+          - 1
+          - 2
+      - other:
+        - 3
+      expected:
+      - values:
+        - 1
+        - 2
+      - other:
+        - 3
+  - case:
+      id: multiple_deep_singletons
+      input:
+      - - - - 1
+      - - - - - 2
+      - - - - 3
+      expected:
+      - 1
+      - 2
+      - 3
+  - case:
+      id: empty_lists_between_values
+      input:
+      - 1
+      - []
+      - - 2
+        - []
+      - []
+      - - - 3
+      - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: order_across_nested_boundaries
+      input:
+      - - 3
+        - 1
+      - - 2
+        - 4
+      expected:
+      - 3
+      - 1
+      - 2
+      - 4
+  - case:
+      id: nested_negative_and_positive_values
+      input:
+      - - -5
+        - - -4
+      - - 0
+        - - 4
+          - 5
+      expected:
+      - -5
+      - -4
+      - 0
+      - 4
+      - 5
+  - case:
+      id: list_of_singleton_branches
+      input:
+      - - 1
+      - - - 2
+      - - - - 3
+      - - - - - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+  - case:
+      id: whitespace_strings_preserved
+      input:
+      - - ' '
+        - hello world
+      - - ''
+        - end
+      expected:
+      - ' '
+      - hello world
+      - ''
+      - end
+  - case:
+      id: nested_float_and_integer_values
+      input:
+      - - 1.0
+        - - 2
+      - - - 3.5
+          - 4
+      expected:
+      - 1.0
+      - 2
+      - 3.5
+      - 4
+  - case:
+      id: branch_with_only_empty_children
+      input:
+      - - - []
+      - []
+      - - []
+      expected: []
+  - case:
+      id: wide_shallow_list
+      input:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+      - 54
+      - 55
+      - 56
+      - 57
+      - 58
+      - 59
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      - 73
+      - 74
+      - 75
+      - 76
+      - 77
+      - 78
+      - 79
+      - 80
+      - 81
+      - 82
+      - 83
+      - 84
+      - 85
+      - 86
+      - 87
+      - 88
+      - 89
+      - 90
+      - 91
+      - 92
+      - 93
+      - 94
+      - 95
+      - 96
+      - 97
+      - 98
+      - 99
+      expected:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+      - 54
+      - 55
+      - 56
+      - 57
+      - 58
+      - 59
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      - 73
+      - 74
+      - 75
+      - 76
+      - 77
+      - 78
+      - 79
+      - 80
+      - 81
+      - 82
+      - 83
+      - 84
+      - 85
+      - 86
+      - 87
+      - 88
+      - 89
+      - 90
+      - 91
+      - 92
+      - 93
+      - 94
+      - 95
+      - 96
+      - 97
+      - 98
+      - 99
+  - case:
+      id: top_level_none
+      input: null
+      raises: TypeError
+      match: Expected list, got NoneType
+  - case:
+      id: top_level_integer
+      input: 123
+      raises: TypeError
+      match: Expected list, got int
+  - case:
+      id: top_level_string
+      input: abc
+      raises: TypeError
+      match: Expected list, got str
+  - case:
+      id: top_level_float
+      input: 3.14
+      raises: TypeError
+      match: Expected list, got float
+  - case:
+      id: top_level_dictionary
+      input:
+        a: 1
+      raises: TypeError
+      match: Expected list, got dict
+  - case:
+      id: error_typeerror_0
+      input: !!set
+        1: null
+        2: null
+        3: null
+      raises: TypeError
+  - case:
+      id: error_typeerror_1
+      input: !!binary |
+        YWJj
+      raises: TypeError
